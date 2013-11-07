@@ -1,0 +1,9 @@
+{
+    "Visit %s overview" : "Zur %s Übersicht",
+    "An error occured, please reload." : "",
+    "Order successfully saved" : "",
+    "Your browser doesnt support the following technologies: %s <br>Please update your browser!" : "",
+    "Close" : "Schließen",
+    "When asynchronously trying to load a ressource, I came across an error: %s" : "",
+    "You are using an outdated web browser. Please consider an update!" : ""
+}
