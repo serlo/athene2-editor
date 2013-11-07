@@ -28,7 +28,9 @@ require.config({
         "support" : "modules/serlo_supporter",
         "modals" : "modules/serlo_modals",
         "codemirror" : "codemirror/codemirror",
-        "markdownmode" : "codemirror/mode/markdown/markdown"
+        "markdownmode" : "codemirror/mode/markdown/markdown",
+        "markdownparser" : "modules/serlo_markdown_parser",
+        "editor_previewer" : "modules/serlo_editor_previewer"
     },
     shim: {
         underscore: {

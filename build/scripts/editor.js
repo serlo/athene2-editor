@@ -19703,6 +19703,37 @@ CodeMirror.defineMIME("text/x-markdown", "markdown");
 
 define("markdownmode", ["codemirror"], function(){});
 
+/*global define*/
+define('markdownparser',[], function () {
+    
+    var Parser = function () {};
+
+    function parse(value) {
+        // do the actual parsing
+        return value;
+    }
+
+    Parser.prototype.parse = function (value) {
+        return parse(value);
+    };
+
+    return Parser;
+});
+/*global define*/
+define('editor_previewer',['jquery'], function ($) {
+    
+    var Previewer;
+
+    Previewer = function (options) {
+        this.$el = $(options.selector);
+    };
+
+    Previewer.prototype.show = function (value) {
+        this.$el.html(value);
+    };
+
+    return Previewer;
+});
 /**
  * 
  * Athene2 - Advanced Learning Resources Manager
@@ -19714,51 +19745,93 @@ define("markdownmode", ["codemirror"], function(){});
  * @copyright Copyright (c) 2013 Gesellschaft für freie Bildung e.V. (http://www.open-education.eu/)
  */
 /*global define, require*/
-define("ATHENE2-EDITOR", ['jquery', 'codemirror'],
-    function ($, CodeMirror) {
+define("ATHENE2-EDITOR", ['jquery'],
+    function ($) {
         
-        var editor,
-            $window,
-            $code,
-            $preview;
+        var $window = $(window),
+            Editor;
 
-        function onChange(editor) {
-            $preview.html(editor.getValue());
-        }
+        Editor = function () {
+            var self = this;
+            self.plugins = [];
+            $window.resize(function () {
+                self.resize();
+            });
+        };
 
-        function init($context) {
-            $window = $(window);
-            $code = $('#code', $context);
-            $preview = $('#preview .editor-main-inner');
+        Editor.prototype.addPlugin = function (plugin) {
+            this.plugins.push(plugin);
+        };
 
-            editor = CodeMirror.fromTextArea($code[0], {
-                lineNumbers: true,
-                styleActiveLine: true,
-                matchBrackets: true
+        Editor.prototype.setTextEditor = function (textEditor) {
+            this.editor = textEditor;
+            return this;
+        };
+
+        Editor.prototype.initTextEditor = function () {
+            var self = this;
+            self.resize();
+
+            self.editor.on('change', function () {
+                self.onEditorChange();
             });
 
-            editor.setSize($window.width() / 2, $window.height() - 32);
+            return this;
+        };
 
-            editor.on('change', function () {
-                onChange.apply(this, arguments);
-            });
-        }
+        Editor.prototype.resize = function () {
+            if (this.editor) {
+                this.editor.setSize($window.width() / 2, $window.height() - 32);
+            }
+            return this;
+        };
 
-        // function initContextuals($context) {
-            
-        // }
+        Editor.prototype.setParser = function (textParser) {
+            this.parser = textParser;
+            return this;
+        };
 
-        return {
-            initialize: function ($context) {
-                init($context);
+        Editor.prototype.setPreviewer = function (preview) {
+            this.preview = preview;
+            return this;
+        };
+
+        Editor.prototype.onEditorChange = function () {
+            var value = this.editor.getValue();
+
+            if (this.parser) {
+                value = this.parser.parse(value);
+            }
+
+            if (this.preview) {
+                this.preview.show(value);
             }
         };
+
+        return new Editor();
     });
 
-require(['jquery', 'ATHENE2-EDITOR'], function ($, Editor) {
+require(['jquery', 'ATHENE2-EDITOR', 'codemirror', 'markdownparser', 'editor_previewer'], function ($, Editor, CodeMirror, MarkdownParser, EditorPreviewer) {
     
 
     $(function () {
-        Editor.initialize($('body'));
+
+        function init($context) {
+
+            Editor
+                .setTextEditor(CodeMirror.fromTextArea($('#code', $context)[0], {
+                    lineNumbers: true,
+                    styleActiveLine: true,
+                    matchBrackets: true
+                }))
+                .initTextEditor()
+                .setParser(new MarkdownParser())
+                .setPreviewer(new EditorPreviewer({
+                    selector: '#preview .editor-main-inner'
+                }));
+            Editor.onEditorChange();
+        }
+
+        init($('body'));
     });
 });
