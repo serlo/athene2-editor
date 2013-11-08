@@ -1,3 +1,11 @@
+%clearfix {
+    &:after {
+        content: " ";
+        display: block;
+        clear: both;
+    }
+}
+
 @mixin theme-font($weight: normal) {
     font-family: $themeFont;
     font-weight: $weight;

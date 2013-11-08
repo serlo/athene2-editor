@@ -9,6 +9,8 @@
     "underscore" : "~1.5.2",
     "requirejs": "~2.1.8",
     "momentjs" : "~2.3.1",
+    "showdown" : "~0.3.1",
+    "markdown" : "~0.6.0-beta1",
     "bootstrap-datepicker" : "https://github.com/eternicode/bootstrap-datepicker/archive/bs3.zip"
   },
   "devDependencies": {

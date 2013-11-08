@@ -29,8 +29,12 @@ require.config({
         "modals" : "modules/serlo_modals",
         "codemirror" : "codemirror/codemirror",
         "markdownmode" : "codemirror/mode/markdown/markdown",
-        "markdownparser" : "modules/serlo_markdown_parser",
-        "editor_previewer" : "modules/serlo_editor_previewer"
+        "showdown": "../bower_components/showdown/src/showdown",
+        "parser" : "editor/serlo_parser",
+        "preview" : "editor/serlo_editor_previewer",
+        "layout_builder" : "editor/serlo_layout_builder",
+        "layout_builder_configuration" : "editor/serlo_layout_builder_configuration",
+        "formfield" : "editor/serlo_formfield"
     },
     shim: {
         underscore: {

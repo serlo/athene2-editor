@@ -1,0 +1,33 @@
+@mixin contentColumnWidth($num, $grid, $gutter) {
+    width: (100 / $grid) * $num * 1%;
+    box-sizing: border-box;
+    padding: 0 ($gutter/2);
+    float: left;
+
+    .content-editor & {
+        min-height: 20px;
+        &:hover {
+            outline: 1px dotted #C5C5C5;
+        }
+        &.active {
+            background: #F8F8F8;
+        }
+    }
+}
+
+.content {
+    $gutter: 12px;
+    $grid: 24;
+
+    .r {
+        margin-left: $gutter / -2;
+        margin-right: $gutter / -2;
+        @extend %clearfix;
+    }
+
+    @for $i from 1 through $grid {
+        .c#{$i} {
+            @include contentColumnWidth($i, $grid, $gutter);
+        }
+    }
+}

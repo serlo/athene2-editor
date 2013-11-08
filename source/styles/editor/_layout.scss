@@ -1,4 +1,5 @@
 $action-height: 48px;
+$gray: #C5C5C5;
 
 body {
     overflow-y: hidden;
@@ -12,17 +13,17 @@ body {
     right: 0;
 }
 
-#editor-actions {
-
-}
-
 #preview {
-    outline: 1px solid #C5C5C5;
+    outline: 1px solid $gray;
     background: white;
 
     .editor-main-inner {
-        padding-bottom: $action-height;
+        padding: 1px 10px $action-height 10px;
     }
+}
+
+#editor-form {
+    display: none;
 }
 
 #editor-actions {
@@ -35,6 +36,10 @@ body {
     background: #F8F8F8;
 }
 
+#main {
+    overflow-x: hidden;
+}
+
 .editor-main {
     width: 50%;
     height: 100%;
@@ -44,4 +49,48 @@ body {
 
 .editor-main-inner {
     margin-top: 32px;
+}
+
+.add-layout {
+    margin: 0 40px;
+    padding-top: 20px;
+    height: 0;
+    border-bottom: 4px solid $gray;
+
+    text-align: center;
+
+    &:hover {
+        border-color: darken($gray, 30%);
+        .plus {
+            color: darken($gray, 30%);
+        }
+    }
+
+    .plus {
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        height: 60px;
+        top: -22px;
+
+        font-size: 50px;
+        line-height: 1;
+
+        color: #A5A5A5;
+        text-shadow: 5px  0px 0 white,
+                    -5px  0px 0 white,
+                     5px  5px 0 white,
+                    -5px  5px 0 white,
+                     5px -5px 0 white,
+                    -5px -5px 0 white;
+
+        cursor: pointer;
+        user-drag: none;
+        -webkit-user-drag: none;
+        user-select: none;
+
+        &:hover {
+            text-decoration: none;
+        }
+    }
 }

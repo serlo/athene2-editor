@@ -15,87 +15,96 @@ define("ATHENE2-EDITOR", ['jquery'],
         var $window = $(window),
             Editor;
 
-        Editor = function () {
+        Editor = function (settings) {
+            return this.updateSettings(settings);
+        };
+
+        Editor.prototype.updateSettings = function (settings) {
+            return $.extend(this, settings);
+        };
+
+        Editor.prototype.initialize = function () {
             var self = this;
-            self.plugins = [];
+
             $window.resize(function () {
                 self.resize();
-            });
-        };
+            }).resize();
 
-        Editor.prototype.addPlugin = function (plugin) {
-            this.plugins.push(plugin);
-        };
+            self.preview.setLayoutBuilderConfiguration(self.layoutBuilderConfiguration);
+            self.preview.createFromForm(self.$form);
 
-        Editor.prototype.setTextEditor = function (textEditor) {
-            this.editor = textEditor;
-            return this;
-        };
-
-        Editor.prototype.initTextEditor = function () {
-            var self = this;
-            self.resize();
-
-            self.editor.on('change', function () {
-                self.onEditorChange();
+            self.textEditor.on('change', function () {
+                if (self.editable) {
+                    self.editable.data = self.textEditor.getValue();
+                    self.editable.$el.html(self.parser.parse(self.editable.data));
+                }
             });
 
-            return this;
+            self.preview.addEventListener('field-select', function (field, column) {
+                if (self.editable) {
+                    self.editable.$el.removeClass('active');
+                }
+
+                if (field.type === 'textarea' && column) {
+                    self.editable = column;
+                    column.$el.addClass('active');
+                    self.textEditor.setValue(column.data);
+                    self.textEditor.options.readOnly = false;
+                    self.textEditor.focus();
+
+                }
+            });
         };
 
         Editor.prototype.resize = function () {
-            if (this.editor) {
-                this.editor.setSize($window.width() / 2, $window.height() - 32);
+            if (this.textEditor) {
+                this.textEditor.setSize($window.width() / 2, $window.height() - 32);
             }
             return this;
         };
 
-        Editor.prototype.setParser = function (textParser) {
-            this.parser = textParser;
-            return this;
-        };
-
-        Editor.prototype.setPreviewer = function (preview) {
-            this.preview = preview;
-            return this;
-        };
-
-        Editor.prototype.onEditorChange = function () {
-            var value = this.editor.getValue();
-
-            if (this.parser) {
-                value = this.parser.parse(value);
-            }
-
-            if (this.preview) {
-                this.preview.show(value);
-            }
-        };
-
-        return new Editor();
+        return Editor;
     });
 
-require(['jquery', 'ATHENE2-EDITOR', 'codemirror', 'markdownparser', 'editor_previewer'], function ($, Editor, CodeMirror, MarkdownParser, EditorPreviewer) {
-    "use strict";
+require(['jquery', 'ATHENE2-EDITOR', 'codemirror', 'parser', 'preview', 'showdown', 'layout_builder_configuration'],
+    function ($, Editor, CodeMirror, Parser, Preview, Showdown, LayoutBuilderConfiguration) {
+        "use strict";
 
-    $(function () {
+        $(function () {
 
-        function init($context) {
+            function init() {
+                var editor,
+                    layoutBuilderConfiguration = new LayoutBuilderConfiguration(),
+                    parser = new Parser(),
+                    converter = new Showdown.converter();
 
-            Editor
-                .setTextEditor(CodeMirror.fromTextArea($('#code', $context)[0], {
-                    lineNumbers: true,
-                    styleActiveLine: true,
-                    matchBrackets: true
-                }))
-                .initTextEditor()
-                .setParser(new MarkdownParser())
-                .setPreviewer(new EditorPreviewer({
-                    selector: '#preview .editor-main-inner'
-                }));
-            Editor.onEditorChange();
-        }
+                parser.setConverter(converter, 'makeHtml');
 
-        init($('body'));
+                layoutBuilderConfiguration
+                    .addLayout([24])
+                    .addLayout([12, 12])
+                    .addLayout([8, 8, 8])
+                    .addLayout([12, 6, 6]);
+
+                editor = editor || new Editor({
+                    $form: $('#editor-form').first(),
+                    parser: parser,
+                    layoutBuilderConfiguration: layoutBuilderConfiguration,
+                    textEditor: new CodeMirror($('#main .editor-main-inner')[0], {
+                        lineNumbers: true,
+                        styleActiveLine: true,
+                        matchBrackets: true,
+                        lineWrapping: true,
+                        readOnly: true
+                    }),
+                    preview: new Preview({
+                        $el: $('#preview .editor-main-inner')
+                    })
+                });
+
+                editor.initialize();
+            }
+
+            init($('body'));
+        });
     });
-});

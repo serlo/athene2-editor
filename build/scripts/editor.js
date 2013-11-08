@@ -19704,35 +19704,3088 @@ CodeMirror.defineMIME("text/x-markdown", "markdown");
 define("markdownmode", ["codemirror"], function(){});
 
 /*global define*/
-define('markdownparser',[], function () {
+define('parser',[], function () {
     
     var Parser = function () {};
 
-    function parse(value) {
-        // do the actual parsing
-        return value;
-    }
+    Parser.prototype.setConverter = function (converter, convertFunctionName) {
+        this.converter = function (value) {
+            return converter[convertFunctionName](value);
+        };
+    };
 
     Parser.prototype.parse = function (value) {
-        return parse(value);
+        return this.converter ? this.converter(value) : value;
     };
 
     return Parser;
 });
+//     Underscore.js 1.5.2
+//     http://underscorejs.org
+//     (c) 2009-2013 Jeremy Ashkenas, DocumentCloud and Investigative Reporters & Editors
+//     Underscore may be freely distributed under the MIT license.
+
+(function() {
+
+  // Baseline setup
+  // --------------
+
+  // Establish the root object, `window` in the browser, or `exports` on the server.
+  var root = this;
+
+  // Save the previous value of the `_` variable.
+  var previousUnderscore = root._;
+
+  // Establish the object that gets returned to break out of a loop iteration.
+  var breaker = {};
+
+  // Save bytes in the minified (but not gzipped) version:
+  var ArrayProto = Array.prototype, ObjProto = Object.prototype, FuncProto = Function.prototype;
+
+  // Create quick reference variables for speed access to core prototypes.
+  var
+    push             = ArrayProto.push,
+    slice            = ArrayProto.slice,
+    concat           = ArrayProto.concat,
+    toString         = ObjProto.toString,
+    hasOwnProperty   = ObjProto.hasOwnProperty;
+
+  // All **ECMAScript 5** native function implementations that we hope to use
+  // are declared here.
+  var
+    nativeForEach      = ArrayProto.forEach,
+    nativeMap          = ArrayProto.map,
+    nativeReduce       = ArrayProto.reduce,
+    nativeReduceRight  = ArrayProto.reduceRight,
+    nativeFilter       = ArrayProto.filter,
+    nativeEvery        = ArrayProto.every,
+    nativeSome         = ArrayProto.some,
+    nativeIndexOf      = ArrayProto.indexOf,
+    nativeLastIndexOf  = ArrayProto.lastIndexOf,
+    nativeIsArray      = Array.isArray,
+    nativeKeys         = Object.keys,
+    nativeBind         = FuncProto.bind;
+
+  // Create a safe reference to the Underscore object for use below.
+  var _ = function(obj) {
+    if (obj instanceof _) return obj;
+    if (!(this instanceof _)) return new _(obj);
+    this._wrapped = obj;
+  };
+
+  // Export the Underscore object for **Node.js**, with
+  // backwards-compatibility for the old `require()` API. If we're in
+  // the browser, add `_` as a global object via a string identifier,
+  // for Closure Compiler "advanced" mode.
+  if (typeof exports !== 'undefined') {
+    if (typeof module !== 'undefined' && module.exports) {
+      exports = module.exports = _;
+    }
+    exports._ = _;
+  } else {
+    root._ = _;
+  }
+
+  // Current version.
+  _.VERSION = '1.5.2';
+
+  // Collection Functions
+  // --------------------
+
+  // The cornerstone, an `each` implementation, aka `forEach`.
+  // Handles objects with the built-in `forEach`, arrays, and raw objects.
+  // Delegates to **ECMAScript 5**'s native `forEach` if available.
+  var each = _.each = _.forEach = function(obj, iterator, context) {
+    if (obj == null) return;
+    if (nativeForEach && obj.forEach === nativeForEach) {
+      obj.forEach(iterator, context);
+    } else if (obj.length === +obj.length) {
+      for (var i = 0, length = obj.length; i < length; i++) {
+        if (iterator.call(context, obj[i], i, obj) === breaker) return;
+      }
+    } else {
+      var keys = _.keys(obj);
+      for (var i = 0, length = keys.length; i < length; i++) {
+        if (iterator.call(context, obj[keys[i]], keys[i], obj) === breaker) return;
+      }
+    }
+  };
+
+  // Return the results of applying the iterator to each element.
+  // Delegates to **ECMAScript 5**'s native `map` if available.
+  _.map = _.collect = function(obj, iterator, context) {
+    var results = [];
+    if (obj == null) return results;
+    if (nativeMap && obj.map === nativeMap) return obj.map(iterator, context);
+    each(obj, function(value, index, list) {
+      results.push(iterator.call(context, value, index, list));
+    });
+    return results;
+  };
+
+  var reduceError = 'Reduce of empty array with no initial value';
+
+  // **Reduce** builds up a single result from a list of values, aka `inject`,
+  // or `foldl`. Delegates to **ECMAScript 5**'s native `reduce` if available.
+  _.reduce = _.foldl = _.inject = function(obj, iterator, memo, context) {
+    var initial = arguments.length > 2;
+    if (obj == null) obj = [];
+    if (nativeReduce && obj.reduce === nativeReduce) {
+      if (context) iterator = _.bind(iterator, context);
+      return initial ? obj.reduce(iterator, memo) : obj.reduce(iterator);
+    }
+    each(obj, function(value, index, list) {
+      if (!initial) {
+        memo = value;
+        initial = true;
+      } else {
+        memo = iterator.call(context, memo, value, index, list);
+      }
+    });
+    if (!initial) throw new TypeError(reduceError);
+    return memo;
+  };
+
+  // The right-associative version of reduce, also known as `foldr`.
+  // Delegates to **ECMAScript 5**'s native `reduceRight` if available.
+  _.reduceRight = _.foldr = function(obj, iterator, memo, context) {
+    var initial = arguments.length > 2;
+    if (obj == null) obj = [];
+    if (nativeReduceRight && obj.reduceRight === nativeReduceRight) {
+      if (context) iterator = _.bind(iterator, context);
+      return initial ? obj.reduceRight(iterator, memo) : obj.reduceRight(iterator);
+    }
+    var length = obj.length;
+    if (length !== +length) {
+      var keys = _.keys(obj);
+      length = keys.length;
+    }
+    each(obj, function(value, index, list) {
+      index = keys ? keys[--length] : --length;
+      if (!initial) {
+        memo = obj[index];
+        initial = true;
+      } else {
+        memo = iterator.call(context, memo, obj[index], index, list);
+      }
+    });
+    if (!initial) throw new TypeError(reduceError);
+    return memo;
+  };
+
+  // Return the first value which passes a truth test. Aliased as `detect`.
+  _.find = _.detect = function(obj, iterator, context) {
+    var result;
+    any(obj, function(value, index, list) {
+      if (iterator.call(context, value, index, list)) {
+        result = value;
+        return true;
+      }
+    });
+    return result;
+  };
+
+  // Return all the elements that pass a truth test.
+  // Delegates to **ECMAScript 5**'s native `filter` if available.
+  // Aliased as `select`.
+  _.filter = _.select = function(obj, iterator, context) {
+    var results = [];
+    if (obj == null) return results;
+    if (nativeFilter && obj.filter === nativeFilter) return obj.filter(iterator, context);
+    each(obj, function(value, index, list) {
+      if (iterator.call(context, value, index, list)) results.push(value);
+    });
+    return results;
+  };
+
+  // Return all the elements for which a truth test fails.
+  _.reject = function(obj, iterator, context) {
+    return _.filter(obj, function(value, index, list) {
+      return !iterator.call(context, value, index, list);
+    }, context);
+  };
+
+  // Determine whether all of the elements match a truth test.
+  // Delegates to **ECMAScript 5**'s native `every` if available.
+  // Aliased as `all`.
+  _.every = _.all = function(obj, iterator, context) {
+    iterator || (iterator = _.identity);
+    var result = true;
+    if (obj == null) return result;
+    if (nativeEvery && obj.every === nativeEvery) return obj.every(iterator, context);
+    each(obj, function(value, index, list) {
+      if (!(result = result && iterator.call(context, value, index, list))) return breaker;
+    });
+    return !!result;
+  };
+
+  // Determine if at least one element in the object matches a truth test.
+  // Delegates to **ECMAScript 5**'s native `some` if available.
+  // Aliased as `any`.
+  var any = _.some = _.any = function(obj, iterator, context) {
+    iterator || (iterator = _.identity);
+    var result = false;
+    if (obj == null) return result;
+    if (nativeSome && obj.some === nativeSome) return obj.some(iterator, context);
+    each(obj, function(value, index, list) {
+      if (result || (result = iterator.call(context, value, index, list))) return breaker;
+    });
+    return !!result;
+  };
+
+  // Determine if the array or object contains a given value (using `===`).
+  // Aliased as `include`.
+  _.contains = _.include = function(obj, target) {
+    if (obj == null) return false;
+    if (nativeIndexOf && obj.indexOf === nativeIndexOf) return obj.indexOf(target) != -1;
+    return any(obj, function(value) {
+      return value === target;
+    });
+  };
+
+  // Invoke a method (with arguments) on every item in a collection.
+  _.invoke = function(obj, method) {
+    var args = slice.call(arguments, 2);
+    var isFunc = _.isFunction(method);
+    return _.map(obj, function(value) {
+      return (isFunc ? method : value[method]).apply(value, args);
+    });
+  };
+
+  // Convenience version of a common use case of `map`: fetching a property.
+  _.pluck = function(obj, key) {
+    return _.map(obj, function(value){ return value[key]; });
+  };
+
+  // Convenience version of a common use case of `filter`: selecting only objects
+  // containing specific `key:value` pairs.
+  _.where = function(obj, attrs, first) {
+    if (_.isEmpty(attrs)) return first ? void 0 : [];
+    return _[first ? 'find' : 'filter'](obj, function(value) {
+      for (var key in attrs) {
+        if (attrs[key] !== value[key]) return false;
+      }
+      return true;
+    });
+  };
+
+  // Convenience version of a common use case of `find`: getting the first object
+  // containing specific `key:value` pairs.
+  _.findWhere = function(obj, attrs) {
+    return _.where(obj, attrs, true);
+  };
+
+  // Return the maximum element or (element-based computation).
+  // Can't optimize arrays of integers longer than 65,535 elements.
+  // See [WebKit Bug 80797](https://bugs.webkit.org/show_bug.cgi?id=80797)
+  _.max = function(obj, iterator, context) {
+    if (!iterator && _.isArray(obj) && obj[0] === +obj[0] && obj.length < 65535) {
+      return Math.max.apply(Math, obj);
+    }
+    if (!iterator && _.isEmpty(obj)) return -Infinity;
+    var result = {computed : -Infinity, value: -Infinity};
+    each(obj, function(value, index, list) {
+      var computed = iterator ? iterator.call(context, value, index, list) : value;
+      computed > result.computed && (result = {value : value, computed : computed});
+    });
+    return result.value;
+  };
+
+  // Return the minimum element (or element-based computation).
+  _.min = function(obj, iterator, context) {
+    if (!iterator && _.isArray(obj) && obj[0] === +obj[0] && obj.length < 65535) {
+      return Math.min.apply(Math, obj);
+    }
+    if (!iterator && _.isEmpty(obj)) return Infinity;
+    var result = {computed : Infinity, value: Infinity};
+    each(obj, function(value, index, list) {
+      var computed = iterator ? iterator.call(context, value, index, list) : value;
+      computed < result.computed && (result = {value : value, computed : computed});
+    });
+    return result.value;
+  };
+
+  // Shuffle an array, using the modern version of the 
+  // [Fisher-Yates shuffle](http://en.wikipedia.org/wiki/Fisher–Yates_shuffle).
+  _.shuffle = function(obj) {
+    var rand;
+    var index = 0;
+    var shuffled = [];
+    each(obj, function(value) {
+      rand = _.random(index++);
+      shuffled[index - 1] = shuffled[rand];
+      shuffled[rand] = value;
+    });
+    return shuffled;
+  };
+
+  // Sample **n** random values from an array.
+  // If **n** is not specified, returns a single random element from the array.
+  // The internal `guard` argument allows it to work with `map`.
+  _.sample = function(obj, n, guard) {
+    if (arguments.length < 2 || guard) {
+      return obj[_.random(obj.length - 1)];
+    }
+    return _.shuffle(obj).slice(0, Math.max(0, n));
+  };
+
+  // An internal function to generate lookup iterators.
+  var lookupIterator = function(value) {
+    return _.isFunction(value) ? value : function(obj){ return obj[value]; };
+  };
+
+  // Sort the object's values by a criterion produced by an iterator.
+  _.sortBy = function(obj, value, context) {
+    var iterator = lookupIterator(value);
+    return _.pluck(_.map(obj, function(value, index, list) {
+      return {
+        value: value,
+        index: index,
+        criteria: iterator.call(context, value, index, list)
+      };
+    }).sort(function(left, right) {
+      var a = left.criteria;
+      var b = right.criteria;
+      if (a !== b) {
+        if (a > b || a === void 0) return 1;
+        if (a < b || b === void 0) return -1;
+      }
+      return left.index - right.index;
+    }), 'value');
+  };
+
+  // An internal function used for aggregate "group by" operations.
+  var group = function(behavior) {
+    return function(obj, value, context) {
+      var result = {};
+      var iterator = value == null ? _.identity : lookupIterator(value);
+      each(obj, function(value, index) {
+        var key = iterator.call(context, value, index, obj);
+        behavior(result, key, value);
+      });
+      return result;
+    };
+  };
+
+  // Groups the object's values by a criterion. Pass either a string attribute
+  // to group by, or a function that returns the criterion.
+  _.groupBy = group(function(result, key, value) {
+    (_.has(result, key) ? result[key] : (result[key] = [])).push(value);
+  });
+
+  // Indexes the object's values by a criterion, similar to `groupBy`, but for
+  // when you know that your index values will be unique.
+  _.indexBy = group(function(result, key, value) {
+    result[key] = value;
+  });
+
+  // Counts instances of an object that group by a certain criterion. Pass
+  // either a string attribute to count by, or a function that returns the
+  // criterion.
+  _.countBy = group(function(result, key) {
+    _.has(result, key) ? result[key]++ : result[key] = 1;
+  });
+
+  // Use a comparator function to figure out the smallest index at which
+  // an object should be inserted so as to maintain order. Uses binary search.
+  _.sortedIndex = function(array, obj, iterator, context) {
+    iterator = iterator == null ? _.identity : lookupIterator(iterator);
+    var value = iterator.call(context, obj);
+    var low = 0, high = array.length;
+    while (low < high) {
+      var mid = (low + high) >>> 1;
+      iterator.call(context, array[mid]) < value ? low = mid + 1 : high = mid;
+    }
+    return low;
+  };
+
+  // Safely create a real, live array from anything iterable.
+  _.toArray = function(obj) {
+    if (!obj) return [];
+    if (_.isArray(obj)) return slice.call(obj);
+    if (obj.length === +obj.length) return _.map(obj, _.identity);
+    return _.values(obj);
+  };
+
+  // Return the number of elements in an object.
+  _.size = function(obj) {
+    if (obj == null) return 0;
+    return (obj.length === +obj.length) ? obj.length : _.keys(obj).length;
+  };
+
+  // Array Functions
+  // ---------------
+
+  // Get the first element of an array. Passing **n** will return the first N
+  // values in the array. Aliased as `head` and `take`. The **guard** check
+  // allows it to work with `_.map`.
+  _.first = _.head = _.take = function(array, n, guard) {
+    if (array == null) return void 0;
+    return (n == null) || guard ? array[0] : slice.call(array, 0, n);
+  };
+
+  // Returns everything but the last entry of the array. Especially useful on
+  // the arguments object. Passing **n** will return all the values in
+  // the array, excluding the last N. The **guard** check allows it to work with
+  // `_.map`.
+  _.initial = function(array, n, guard) {
+    return slice.call(array, 0, array.length - ((n == null) || guard ? 1 : n));
+  };
+
+  // Get the last element of an array. Passing **n** will return the last N
+  // values in the array. The **guard** check allows it to work with `_.map`.
+  _.last = function(array, n, guard) {
+    if (array == null) return void 0;
+    if ((n == null) || guard) {
+      return array[array.length - 1];
+    } else {
+      return slice.call(array, Math.max(array.length - n, 0));
+    }
+  };
+
+  // Returns everything but the first entry of the array. Aliased as `tail` and `drop`.
+  // Especially useful on the arguments object. Passing an **n** will return
+  // the rest N values in the array. The **guard**
+  // check allows it to work with `_.map`.
+  _.rest = _.tail = _.drop = function(array, n, guard) {
+    return slice.call(array, (n == null) || guard ? 1 : n);
+  };
+
+  // Trim out all falsy values from an array.
+  _.compact = function(array) {
+    return _.filter(array, _.identity);
+  };
+
+  // Internal implementation of a recursive `flatten` function.
+  var flatten = function(input, shallow, output) {
+    if (shallow && _.every(input, _.isArray)) {
+      return concat.apply(output, input);
+    }
+    each(input, function(value) {
+      if (_.isArray(value) || _.isArguments(value)) {
+        shallow ? push.apply(output, value) : flatten(value, shallow, output);
+      } else {
+        output.push(value);
+      }
+    });
+    return output;
+  };
+
+  // Flatten out an array, either recursively (by default), or just one level.
+  _.flatten = function(array, shallow) {
+    return flatten(array, shallow, []);
+  };
+
+  // Return a version of the array that does not contain the specified value(s).
+  _.without = function(array) {
+    return _.difference(array, slice.call(arguments, 1));
+  };
+
+  // Produce a duplicate-free version of the array. If the array has already
+  // been sorted, you have the option of using a faster algorithm.
+  // Aliased as `unique`.
+  _.uniq = _.unique = function(array, isSorted, iterator, context) {
+    if (_.isFunction(isSorted)) {
+      context = iterator;
+      iterator = isSorted;
+      isSorted = false;
+    }
+    var initial = iterator ? _.map(array, iterator, context) : array;
+    var results = [];
+    var seen = [];
+    each(initial, function(value, index) {
+      if (isSorted ? (!index || seen[seen.length - 1] !== value) : !_.contains(seen, value)) {
+        seen.push(value);
+        results.push(array[index]);
+      }
+    });
+    return results;
+  };
+
+  // Produce an array that contains the union: each distinct element from all of
+  // the passed-in arrays.
+  _.union = function() {
+    return _.uniq(_.flatten(arguments, true));
+  };
+
+  // Produce an array that contains every item shared between all the
+  // passed-in arrays.
+  _.intersection = function(array) {
+    var rest = slice.call(arguments, 1);
+    return _.filter(_.uniq(array), function(item) {
+      return _.every(rest, function(other) {
+        return _.indexOf(other, item) >= 0;
+      });
+    });
+  };
+
+  // Take the difference between one array and a number of other arrays.
+  // Only the elements present in just the first array will remain.
+  _.difference = function(array) {
+    var rest = concat.apply(ArrayProto, slice.call(arguments, 1));
+    return _.filter(array, function(value){ return !_.contains(rest, value); });
+  };
+
+  // Zip together multiple lists into a single array -- elements that share
+  // an index go together.
+  _.zip = function() {
+    var length = _.max(_.pluck(arguments, "length").concat(0));
+    var results = new Array(length);
+    for (var i = 0; i < length; i++) {
+      results[i] = _.pluck(arguments, '' + i);
+    }
+    return results;
+  };
+
+  // Converts lists into objects. Pass either a single array of `[key, value]`
+  // pairs, or two parallel arrays of the same length -- one of keys, and one of
+  // the corresponding values.
+  _.object = function(list, values) {
+    if (list == null) return {};
+    var result = {};
+    for (var i = 0, length = list.length; i < length; i++) {
+      if (values) {
+        result[list[i]] = values[i];
+      } else {
+        result[list[i][0]] = list[i][1];
+      }
+    }
+    return result;
+  };
+
+  // If the browser doesn't supply us with indexOf (I'm looking at you, **MSIE**),
+  // we need this function. Return the position of the first occurrence of an
+  // item in an array, or -1 if the item is not included in the array.
+  // Delegates to **ECMAScript 5**'s native `indexOf` if available.
+  // If the array is large and already in sort order, pass `true`
+  // for **isSorted** to use binary search.
+  _.indexOf = function(array, item, isSorted) {
+    if (array == null) return -1;
+    var i = 0, length = array.length;
+    if (isSorted) {
+      if (typeof isSorted == 'number') {
+        i = (isSorted < 0 ? Math.max(0, length + isSorted) : isSorted);
+      } else {
+        i = _.sortedIndex(array, item);
+        return array[i] === item ? i : -1;
+      }
+    }
+    if (nativeIndexOf && array.indexOf === nativeIndexOf) return array.indexOf(item, isSorted);
+    for (; i < length; i++) if (array[i] === item) return i;
+    return -1;
+  };
+
+  // Delegates to **ECMAScript 5**'s native `lastIndexOf` if available.
+  _.lastIndexOf = function(array, item, from) {
+    if (array == null) return -1;
+    var hasIndex = from != null;
+    if (nativeLastIndexOf && array.lastIndexOf === nativeLastIndexOf) {
+      return hasIndex ? array.lastIndexOf(item, from) : array.lastIndexOf(item);
+    }
+    var i = (hasIndex ? from : array.length);
+    while (i--) if (array[i] === item) return i;
+    return -1;
+  };
+
+  // Generate an integer Array containing an arithmetic progression. A port of
+  // the native Python `range()` function. See
+  // [the Python documentation](http://docs.python.org/library/functions.html#range).
+  _.range = function(start, stop, step) {
+    if (arguments.length <= 1) {
+      stop = start || 0;
+      start = 0;
+    }
+    step = arguments[2] || 1;
+
+    var length = Math.max(Math.ceil((stop - start) / step), 0);
+    var idx = 0;
+    var range = new Array(length);
+
+    while(idx < length) {
+      range[idx++] = start;
+      start += step;
+    }
+
+    return range;
+  };
+
+  // Function (ahem) Functions
+  // ------------------
+
+  // Reusable constructor function for prototype setting.
+  var ctor = function(){};
+
+  // Create a function bound to a given object (assigning `this`, and arguments,
+  // optionally). Delegates to **ECMAScript 5**'s native `Function.bind` if
+  // available.
+  _.bind = function(func, context) {
+    var args, bound;
+    if (nativeBind && func.bind === nativeBind) return nativeBind.apply(func, slice.call(arguments, 1));
+    if (!_.isFunction(func)) throw new TypeError;
+    args = slice.call(arguments, 2);
+    return bound = function() {
+      if (!(this instanceof bound)) return func.apply(context, args.concat(slice.call(arguments)));
+      ctor.prototype = func.prototype;
+      var self = new ctor;
+      ctor.prototype = null;
+      var result = func.apply(self, args.concat(slice.call(arguments)));
+      if (Object(result) === result) return result;
+      return self;
+    };
+  };
+
+  // Partially apply a function by creating a version that has had some of its
+  // arguments pre-filled, without changing its dynamic `this` context.
+  _.partial = function(func) {
+    var args = slice.call(arguments, 1);
+    return function() {
+      return func.apply(this, args.concat(slice.call(arguments)));
+    };
+  };
+
+  // Bind all of an object's methods to that object. Useful for ensuring that
+  // all callbacks defined on an object belong to it.
+  _.bindAll = function(obj) {
+    var funcs = slice.call(arguments, 1);
+    if (funcs.length === 0) throw new Error("bindAll must be passed function names");
+    each(funcs, function(f) { obj[f] = _.bind(obj[f], obj); });
+    return obj;
+  };
+
+  // Memoize an expensive function by storing its results.
+  _.memoize = function(func, hasher) {
+    var memo = {};
+    hasher || (hasher = _.identity);
+    return function() {
+      var key = hasher.apply(this, arguments);
+      return _.has(memo, key) ? memo[key] : (memo[key] = func.apply(this, arguments));
+    };
+  };
+
+  // Delays a function for the given number of milliseconds, and then calls
+  // it with the arguments supplied.
+  _.delay = function(func, wait) {
+    var args = slice.call(arguments, 2);
+    return setTimeout(function(){ return func.apply(null, args); }, wait);
+  };
+
+  // Defers a function, scheduling it to run after the current call stack has
+  // cleared.
+  _.defer = function(func) {
+    return _.delay.apply(_, [func, 1].concat(slice.call(arguments, 1)));
+  };
+
+  // Returns a function, that, when invoked, will only be triggered at most once
+  // during a given window of time. Normally, the throttled function will run
+  // as much as it can, without ever going more than once per `wait` duration;
+  // but if you'd like to disable the execution on the leading edge, pass
+  // `{leading: false}`. To disable execution on the trailing edge, ditto.
+  _.throttle = function(func, wait, options) {
+    var context, args, result;
+    var timeout = null;
+    var previous = 0;
+    options || (options = {});
+    var later = function() {
+      previous = options.leading === false ? 0 : new Date;
+      timeout = null;
+      result = func.apply(context, args);
+    };
+    return function() {
+      var now = new Date;
+      if (!previous && options.leading === false) previous = now;
+      var remaining = wait - (now - previous);
+      context = this;
+      args = arguments;
+      if (remaining <= 0) {
+        clearTimeout(timeout);
+        timeout = null;
+        previous = now;
+        result = func.apply(context, args);
+      } else if (!timeout && options.trailing !== false) {
+        timeout = setTimeout(later, remaining);
+      }
+      return result;
+    };
+  };
+
+  // Returns a function, that, as long as it continues to be invoked, will not
+  // be triggered. The function will be called after it stops being called for
+  // N milliseconds. If `immediate` is passed, trigger the function on the
+  // leading edge, instead of the trailing.
+  _.debounce = function(func, wait, immediate) {
+    var timeout, args, context, timestamp, result;
+    return function() {
+      context = this;
+      args = arguments;
+      timestamp = new Date();
+      var later = function() {
+        var last = (new Date()) - timestamp;
+        if (last < wait) {
+          timeout = setTimeout(later, wait - last);
+        } else {
+          timeout = null;
+          if (!immediate) result = func.apply(context, args);
+        }
+      };
+      var callNow = immediate && !timeout;
+      if (!timeout) {
+        timeout = setTimeout(later, wait);
+      }
+      if (callNow) result = func.apply(context, args);
+      return result;
+    };
+  };
+
+  // Returns a function that will be executed at most one time, no matter how
+  // often you call it. Useful for lazy initialization.
+  _.once = function(func) {
+    var ran = false, memo;
+    return function() {
+      if (ran) return memo;
+      ran = true;
+      memo = func.apply(this, arguments);
+      func = null;
+      return memo;
+    };
+  };
+
+  // Returns the first function passed as an argument to the second,
+  // allowing you to adjust arguments, run code before and after, and
+  // conditionally execute the original function.
+  _.wrap = function(func, wrapper) {
+    return function() {
+      var args = [func];
+      push.apply(args, arguments);
+      return wrapper.apply(this, args);
+    };
+  };
+
+  // Returns a function that is the composition of a list of functions, each
+  // consuming the return value of the function that follows.
+  _.compose = function() {
+    var funcs = arguments;
+    return function() {
+      var args = arguments;
+      for (var i = funcs.length - 1; i >= 0; i--) {
+        args = [funcs[i].apply(this, args)];
+      }
+      return args[0];
+    };
+  };
+
+  // Returns a function that will only be executed after being called N times.
+  _.after = function(times, func) {
+    return function() {
+      if (--times < 1) {
+        return func.apply(this, arguments);
+      }
+    };
+  };
+
+  // Object Functions
+  // ----------------
+
+  // Retrieve the names of an object's properties.
+  // Delegates to **ECMAScript 5**'s native `Object.keys`
+  _.keys = nativeKeys || function(obj) {
+    if (obj !== Object(obj)) throw new TypeError('Invalid object');
+    var keys = [];
+    for (var key in obj) if (_.has(obj, key)) keys.push(key);
+    return keys;
+  };
+
+  // Retrieve the values of an object's properties.
+  _.values = function(obj) {
+    var keys = _.keys(obj);
+    var length = keys.length;
+    var values = new Array(length);
+    for (var i = 0; i < length; i++) {
+      values[i] = obj[keys[i]];
+    }
+    return values;
+  };
+
+  // Convert an object into a list of `[key, value]` pairs.
+  _.pairs = function(obj) {
+    var keys = _.keys(obj);
+    var length = keys.length;
+    var pairs = new Array(length);
+    for (var i = 0; i < length; i++) {
+      pairs[i] = [keys[i], obj[keys[i]]];
+    }
+    return pairs;
+  };
+
+  // Invert the keys and values of an object. The values must be serializable.
+  _.invert = function(obj) {
+    var result = {};
+    var keys = _.keys(obj);
+    for (var i = 0, length = keys.length; i < length; i++) {
+      result[obj[keys[i]]] = keys[i];
+    }
+    return result;
+  };
+
+  // Return a sorted list of the function names available on the object.
+  // Aliased as `methods`
+  _.functions = _.methods = function(obj) {
+    var names = [];
+    for (var key in obj) {
+      if (_.isFunction(obj[key])) names.push(key);
+    }
+    return names.sort();
+  };
+
+  // Extend a given object with all the properties in passed-in object(s).
+  _.extend = function(obj) {
+    each(slice.call(arguments, 1), function(source) {
+      if (source) {
+        for (var prop in source) {
+          obj[prop] = source[prop];
+        }
+      }
+    });
+    return obj;
+  };
+
+  // Return a copy of the object only containing the whitelisted properties.
+  _.pick = function(obj) {
+    var copy = {};
+    var keys = concat.apply(ArrayProto, slice.call(arguments, 1));
+    each(keys, function(key) {
+      if (key in obj) copy[key] = obj[key];
+    });
+    return copy;
+  };
+
+   // Return a copy of the object without the blacklisted properties.
+  _.omit = function(obj) {
+    var copy = {};
+    var keys = concat.apply(ArrayProto, slice.call(arguments, 1));
+    for (var key in obj) {
+      if (!_.contains(keys, key)) copy[key] = obj[key];
+    }
+    return copy;
+  };
+
+  // Fill in a given object with default properties.
+  _.defaults = function(obj) {
+    each(slice.call(arguments, 1), function(source) {
+      if (source) {
+        for (var prop in source) {
+          if (obj[prop] === void 0) obj[prop] = source[prop];
+        }
+      }
+    });
+    return obj;
+  };
+
+  // Create a (shallow-cloned) duplicate of an object.
+  _.clone = function(obj) {
+    if (!_.isObject(obj)) return obj;
+    return _.isArray(obj) ? obj.slice() : _.extend({}, obj);
+  };
+
+  // Invokes interceptor with the obj, and then returns obj.
+  // The primary purpose of this method is to "tap into" a method chain, in
+  // order to perform operations on intermediate results within the chain.
+  _.tap = function(obj, interceptor) {
+    interceptor(obj);
+    return obj;
+  };
+
+  // Internal recursive comparison function for `isEqual`.
+  var eq = function(a, b, aStack, bStack) {
+    // Identical objects are equal. `0 === -0`, but they aren't identical.
+    // See the [Harmony `egal` proposal](http://wiki.ecmascript.org/doku.php?id=harmony:egal).
+    if (a === b) return a !== 0 || 1 / a == 1 / b;
+    // A strict comparison is necessary because `null == undefined`.
+    if (a == null || b == null) return a === b;
+    // Unwrap any wrapped objects.
+    if (a instanceof _) a = a._wrapped;
+    if (b instanceof _) b = b._wrapped;
+    // Compare `[[Class]]` names.
+    var className = toString.call(a);
+    if (className != toString.call(b)) return false;
+    switch (className) {
+      // Strings, numbers, dates, and booleans are compared by value.
+      case '[object String]':
+        // Primitives and their corresponding object wrappers are equivalent; thus, `"5"` is
+        // equivalent to `new String("5")`.
+        return a == String(b);
+      case '[object Number]':
+        // `NaN`s are equivalent, but non-reflexive. An `egal` comparison is performed for
+        // other numeric values.
+        return a != +a ? b != +b : (a == 0 ? 1 / a == 1 / b : a == +b);
+      case '[object Date]':
+      case '[object Boolean]':
+        // Coerce dates and booleans to numeric primitive values. Dates are compared by their
+        // millisecond representations. Note that invalid dates with millisecond representations
+        // of `NaN` are not equivalent.
+        return +a == +b;
+      // RegExps are compared by their source patterns and flags.
+      case '[object RegExp]':
+        return a.source == b.source &&
+               a.global == b.global &&
+               a.multiline == b.multiline &&
+               a.ignoreCase == b.ignoreCase;
+    }
+    if (typeof a != 'object' || typeof b != 'object') return false;
+    // Assume equality for cyclic structures. The algorithm for detecting cyclic
+    // structures is adapted from ES 5.1 section 15.12.3, abstract operation `JO`.
+    var length = aStack.length;
+    while (length--) {
+      // Linear search. Performance is inversely proportional to the number of
+      // unique nested structures.
+      if (aStack[length] == a) return bStack[length] == b;
+    }
+    // Objects with different constructors are not equivalent, but `Object`s
+    // from different frames are.
+    var aCtor = a.constructor, bCtor = b.constructor;
+    if (aCtor !== bCtor && !(_.isFunction(aCtor) && (aCtor instanceof aCtor) &&
+                             _.isFunction(bCtor) && (bCtor instanceof bCtor))) {
+      return false;
+    }
+    // Add the first object to the stack of traversed objects.
+    aStack.push(a);
+    bStack.push(b);
+    var size = 0, result = true;
+    // Recursively compare objects and arrays.
+    if (className == '[object Array]') {
+      // Compare array lengths to determine if a deep comparison is necessary.
+      size = a.length;
+      result = size == b.length;
+      if (result) {
+        // Deep compare the contents, ignoring non-numeric properties.
+        while (size--) {
+          if (!(result = eq(a[size], b[size], aStack, bStack))) break;
+        }
+      }
+    } else {
+      // Deep compare objects.
+      for (var key in a) {
+        if (_.has(a, key)) {
+          // Count the expected number of properties.
+          size++;
+          // Deep compare each member.
+          if (!(result = _.has(b, key) && eq(a[key], b[key], aStack, bStack))) break;
+        }
+      }
+      // Ensure that both objects contain the same number of properties.
+      if (result) {
+        for (key in b) {
+          if (_.has(b, key) && !(size--)) break;
+        }
+        result = !size;
+      }
+    }
+    // Remove the first object from the stack of traversed objects.
+    aStack.pop();
+    bStack.pop();
+    return result;
+  };
+
+  // Perform a deep comparison to check if two objects are equal.
+  _.isEqual = function(a, b) {
+    return eq(a, b, [], []);
+  };
+
+  // Is a given array, string, or object empty?
+  // An "empty" object has no enumerable own-properties.
+  _.isEmpty = function(obj) {
+    if (obj == null) return true;
+    if (_.isArray(obj) || _.isString(obj)) return obj.length === 0;
+    for (var key in obj) if (_.has(obj, key)) return false;
+    return true;
+  };
+
+  // Is a given value a DOM element?
+  _.isElement = function(obj) {
+    return !!(obj && obj.nodeType === 1);
+  };
+
+  // Is a given value an array?
+  // Delegates to ECMA5's native Array.isArray
+  _.isArray = nativeIsArray || function(obj) {
+    return toString.call(obj) == '[object Array]';
+  };
+
+  // Is a given variable an object?
+  _.isObject = function(obj) {
+    return obj === Object(obj);
+  };
+
+  // Add some isType methods: isArguments, isFunction, isString, isNumber, isDate, isRegExp.
+  each(['Arguments', 'Function', 'String', 'Number', 'Date', 'RegExp'], function(name) {
+    _['is' + name] = function(obj) {
+      return toString.call(obj) == '[object ' + name + ']';
+    };
+  });
+
+  // Define a fallback version of the method in browsers (ahem, IE), where
+  // there isn't any inspectable "Arguments" type.
+  if (!_.isArguments(arguments)) {
+    _.isArguments = function(obj) {
+      return !!(obj && _.has(obj, 'callee'));
+    };
+  }
+
+  // Optimize `isFunction` if appropriate.
+  if (typeof (/./) !== 'function') {
+    _.isFunction = function(obj) {
+      return typeof obj === 'function';
+    };
+  }
+
+  // Is a given object a finite number?
+  _.isFinite = function(obj) {
+    return isFinite(obj) && !isNaN(parseFloat(obj));
+  };
+
+  // Is the given value `NaN`? (NaN is the only number which does not equal itself).
+  _.isNaN = function(obj) {
+    return _.isNumber(obj) && obj != +obj;
+  };
+
+  // Is a given value a boolean?
+  _.isBoolean = function(obj) {
+    return obj === true || obj === false || toString.call(obj) == '[object Boolean]';
+  };
+
+  // Is a given value equal to null?
+  _.isNull = function(obj) {
+    return obj === null;
+  };
+
+  // Is a given variable undefined?
+  _.isUndefined = function(obj) {
+    return obj === void 0;
+  };
+
+  // Shortcut function for checking if an object has a given property directly
+  // on itself (in other words, not on a prototype).
+  _.has = function(obj, key) {
+    return hasOwnProperty.call(obj, key);
+  };
+
+  // Utility Functions
+  // -----------------
+
+  // Run Underscore.js in *noConflict* mode, returning the `_` variable to its
+  // previous owner. Returns a reference to the Underscore object.
+  _.noConflict = function() {
+    root._ = previousUnderscore;
+    return this;
+  };
+
+  // Keep the identity function around for default iterators.
+  _.identity = function(value) {
+    return value;
+  };
+
+  // Run a function **n** times.
+  _.times = function(n, iterator, context) {
+    var accum = Array(Math.max(0, n));
+    for (var i = 0; i < n; i++) accum[i] = iterator.call(context, i);
+    return accum;
+  };
+
+  // Return a random integer between min and max (inclusive).
+  _.random = function(min, max) {
+    if (max == null) {
+      max = min;
+      min = 0;
+    }
+    return min + Math.floor(Math.random() * (max - min + 1));
+  };
+
+  // List of HTML entities for escaping.
+  var entityMap = {
+    escape: {
+      '&': '&amp;',
+      '<': '&lt;',
+      '>': '&gt;',
+      '"': '&quot;',
+      "'": '&#x27;'
+    }
+  };
+  entityMap.unescape = _.invert(entityMap.escape);
+
+  // Regexes containing the keys and values listed immediately above.
+  var entityRegexes = {
+    escape:   new RegExp('[' + _.keys(entityMap.escape).join('') + ']', 'g'),
+    unescape: new RegExp('(' + _.keys(entityMap.unescape).join('|') + ')', 'g')
+  };
+
+  // Functions for escaping and unescaping strings to/from HTML interpolation.
+  _.each(['escape', 'unescape'], function(method) {
+    _[method] = function(string) {
+      if (string == null) return '';
+      return ('' + string).replace(entityRegexes[method], function(match) {
+        return entityMap[method][match];
+      });
+    };
+  });
+
+  // If the value of the named `property` is a function then invoke it with the
+  // `object` as context; otherwise, return it.
+  _.result = function(object, property) {
+    if (object == null) return void 0;
+    var value = object[property];
+    return _.isFunction(value) ? value.call(object) : value;
+  };
+
+  // Add your own custom functions to the Underscore object.
+  _.mixin = function(obj) {
+    each(_.functions(obj), function(name) {
+      var func = _[name] = obj[name];
+      _.prototype[name] = function() {
+        var args = [this._wrapped];
+        push.apply(args, arguments);
+        return result.call(this, func.apply(_, args));
+      };
+    });
+  };
+
+  // Generate a unique integer id (unique within the entire client session).
+  // Useful for temporary DOM ids.
+  var idCounter = 0;
+  _.uniqueId = function(prefix) {
+    var id = ++idCounter + '';
+    return prefix ? prefix + id : id;
+  };
+
+  // By default, Underscore uses ERB-style template delimiters, change the
+  // following template settings to use alternative delimiters.
+  _.templateSettings = {
+    evaluate    : /<%([\s\S]+?)%>/g,
+    interpolate : /<%=([\s\S]+?)%>/g,
+    escape      : /<%-([\s\S]+?)%>/g
+  };
+
+  // When customizing `templateSettings`, if you don't want to define an
+  // interpolation, evaluation or escaping regex, we need one that is
+  // guaranteed not to match.
+  var noMatch = /(.)^/;
+
+  // Certain characters need to be escaped so that they can be put into a
+  // string literal.
+  var escapes = {
+    "'":      "'",
+    '\\':     '\\',
+    '\r':     'r',
+    '\n':     'n',
+    '\t':     't',
+    '\u2028': 'u2028',
+    '\u2029': 'u2029'
+  };
+
+  var escaper = /\\|'|\r|\n|\t|\u2028|\u2029/g;
+
+  // JavaScript micro-templating, similar to John Resig's implementation.
+  // Underscore templating handles arbitrary delimiters, preserves whitespace,
+  // and correctly escapes quotes within interpolated code.
+  _.template = function(text, data, settings) {
+    var render;
+    settings = _.defaults({}, settings, _.templateSettings);
+
+    // Combine delimiters into one regular expression via alternation.
+    var matcher = new RegExp([
+      (settings.escape || noMatch).source,
+      (settings.interpolate || noMatch).source,
+      (settings.evaluate || noMatch).source
+    ].join('|') + '|$', 'g');
+
+    // Compile the template source, escaping string literals appropriately.
+    var index = 0;
+    var source = "__p+='";
+    text.replace(matcher, function(match, escape, interpolate, evaluate, offset) {
+      source += text.slice(index, offset)
+        .replace(escaper, function(match) { return '\\' + escapes[match]; });
+
+      if (escape) {
+        source += "'+\n((__t=(" + escape + "))==null?'':_.escape(__t))+\n'";
+      }
+      if (interpolate) {
+        source += "'+\n((__t=(" + interpolate + "))==null?'':__t)+\n'";
+      }
+      if (evaluate) {
+        source += "';\n" + evaluate + "\n__p+='";
+      }
+      index = offset + match.length;
+      return match;
+    });
+    source += "';\n";
+
+    // If a variable is not specified, place data values in local scope.
+    if (!settings.variable) source = 'with(obj||{}){\n' + source + '}\n';
+
+    source = "var __t,__p='',__j=Array.prototype.join," +
+      "print=function(){__p+=__j.call(arguments,'');};\n" +
+      source + "return __p;\n";
+
+    try {
+      render = new Function(settings.variable || 'obj', '_', source);
+    } catch (e) {
+      e.source = source;
+      throw e;
+    }
+
+    if (data) return render(data, _);
+    var template = function(data) {
+      return render.call(this, data, _);
+    };
+
+    // Provide the compiled function source as a convenience for precompilation.
+    template.source = 'function(' + (settings.variable || 'obj') + '){\n' + source + '}';
+
+    return template;
+  };
+
+  // Add a "chain" function, which will delegate to the wrapper.
+  _.chain = function(obj) {
+    return _(obj).chain();
+  };
+
+  // OOP
+  // ---------------
+  // If Underscore is called as a function, it returns a wrapped object that
+  // can be used OO-style. This wrapper holds altered versions of all the
+  // underscore functions. Wrapped objects may be chained.
+
+  // Helper function to continue chaining intermediate results.
+  var result = function(obj) {
+    return this._chain ? _(obj).chain() : obj;
+  };
+
+  // Add all of the Underscore functions to the wrapper object.
+  _.mixin(_);
+
+  // Add all mutator Array functions to the wrapper.
+  each(['pop', 'push', 'reverse', 'shift', 'sort', 'splice', 'unshift'], function(name) {
+    var method = ArrayProto[name];
+    _.prototype[name] = function() {
+      var obj = this._wrapped;
+      method.apply(obj, arguments);
+      if ((name == 'shift' || name == 'splice') && obj.length === 0) delete obj[0];
+      return result.call(this, obj);
+    };
+  });
+
+  // Add all accessor Array functions to the wrapper.
+  each(['concat', 'join', 'slice'], function(name) {
+    var method = ArrayProto[name];
+    _.prototype[name] = function() {
+      return result.call(this, method.apply(this._wrapped, arguments));
+    };
+  });
+
+  _.extend(_.prototype, {
+
+    // Start chaining a wrapped Underscore object.
+    chain: function() {
+      this._chain = true;
+      return this;
+    },
+
+    // Extracts the result from a wrapped and chained object.
+    value: function() {
+      return this._wrapped;
+    }
+
+  });
+
+}).call(this);
+
+define("underscore", (function (global) {
+    return function () {
+        var ret, fn;
+        return ret || global._;
+    };
+}(this)));
+
+/**
+ * 
+ * Athene2 - Advanced Learning Resources Manager
+ *
+ * @author  Julian Kempff (julian.kempff@serlo.org)
+ * @license LGPL-3.0
+ * @license http://opensource.org/licenses/LGPL-3.0 The GNU Lesser General Public License, version 3.0
+ * @link        https://github.com/serlo-org/athene2 for the canonical source repository
+ * @copyright Copyright (c) 2013 Gesellschaft für freie Bildung e.V. (http://www.open-education.eu/)
+ */
+
 /*global define*/
-define('editor_previewer',['jquery'], function ($) {
+define('events',['underscore'], function (_) {
     
-    var Previewer;
+    function eventScope(element) {
+        var Events = {},
+            fn = {};
 
-    Previewer = function (options) {
-        this.$el = $(options.selector);
+        fn.addEventListener = function (type, fn) {
+            Events[type] = Events[type] || [];
+            Events[type].push(fn);
+            return true;
+        };
+
+        fn.removeEventListener = function (type, fn) {
+            return !Events[type] || (function () {
+                if (fn === undefined) {
+                    delete Events[type];
+                    return true;
+                }
+
+                _.each(Events[type], function (i) {
+                    if (Events[type][i] === fn) {
+                        Events[type].splice(i, 1);
+                        return false;
+                    }
+                });
+            }());
+        };
+
+        fn.trigger = function (type) {
+            var self = this,
+                slice = Array.prototype.slice.bind(arguments);
+
+            if (!Events.hasOwnProperty(type)) {
+                return true;
+            }
+
+            _.each(Events[type], function (fn) {
+                fn.apply(self, slice(1));
+            });
+        };
+
+        switch (element.constructor.name) {
+        case 'Function':
+            _.extend(element.prototype, fn);
+            break;
+        default:
+            _.extend(element, fn);
+        }
+    }
+
+    return function (element) {
+        eventScope(element);
+    };
+});
+/*global define*/
+define('layout_builder',['jquery', 'underscore', 'events'], function ($, _, eventScope) {
+    
+    var Column,
+        Layout,
+        LayoutBuilder;
+
+    Column = function (width, data) {
+        var self = this;
+        eventScope(self);
+
+        self.data = data || '';
+        self.$el = $('<div class="c' + width + '">').text('test content');
+        self.$el.click(function () {
+            self.trigger('select', self);
+        });
     };
 
-    Previewer.prototype.show = function (value) {
-        this.$el.html(value);
+    Layout = function (columns, data) {
+        var self = this;
+        eventScope(self);
+
+        self.data = data;
+        self.title = columns.toString();
+
+        self.$el = $('<div class="r"></div>');
+
+        _.each(columns, function (width) {
+            var column = new Column(width);
+
+            column.addEventListener('select', function (column) {
+                self.trigger('select', column);
+            });
+
+            self.$el.append(column.$el);
+        });
+
     };
 
-    return Previewer;
+    LayoutBuilder = function (configuration) {
+        if (configuration === undefined) {
+            throw new Error('No LayoutBuilderConfiguration set for LayoutBuilder');
+        }
+        var self = this;
+        eventScope(this);
+
+        self.$el = $('<div class="add-layout"></div>');
+        self.$add = $('<a href="#" class="plus">+</a>');
+        self.$layoutList = $('<div class="layout-list">');
+
+        self.layouts = [];
+
+        _.each(configuration.layouts, function (columns) {
+            var $add = $('<a href="#">' + createIconTag(columns) + '</a>');
+
+            $add.click(function (e) {
+                e.preventDefault();
+                var layout = new Layout(columns);
+
+                self.trigger('add', layout);
+
+                self.hideLayouts();
+                return;
+            });
+
+            self.$layoutList.append($add);
+        });
+
+        self.$el.append(self.$add);
+
+        self.$add.click(function (e) {
+            e.preventDefault();
+            self.showLayouts();
+            return;
+        });
+    };
+
+    LayoutBuilder.prototype.showLayouts = function () {
+        this.$el.append(this.$layoutList);
+    };
+
+    LayoutBuilder.prototype.hideLayouts = function () {
+        this.$layoutList.detach();
+    };
+
+    function createIconTag(columns) {
+        return columns.toString();
+        // var canvas = $('<canvas>')[0],
+        //     context,
+        //     length = columns.length,
+        //     width = (120 + columns.length * 5) / (columns.length);
+
+        // canvas.width = canvas.height = 120;
+
+        // context = canvas.getContext('2d');
+        // context.beginPath();
+        // context.fillStyle = '#EEEEEE';
+        // context.rect(0, 0, 120, 120);
+
+        // context.fill();
+
+        // while (length) {
+        //     context.beginPath();
+        //     context.fillStyle = '#333333';
+        //     context.rect(length * width + length * 5, 0, width, width);
+        //     context.fill();
+        //     length--;
+        // }
+
+        // return '<img src="' + canvas.toDataURL("image/png") + '" alt="' + columns.toString() + '"/>';
+    }
+
+    return LayoutBuilder;
+});
+/*global define*/
+define('formfield',['jquery', 'layout_builder', 'events'], function ($, LayoutBuilder, eventScope) {
+    
+    function invoke(instance, constructor) {
+        $.extend(instance, constructor.prototype);
+        constructor.apply(instance, Array.prototype.slice.call(arguments, 2));
+    }
+
+    var Field = function (field, type, label) {
+        this.field = field;
+        this.type = type;
+        this.label = label || '';
+
+        eventScope(this);
+
+        this.init();
+    };
+
+    Field.prototype.init = function () {
+        var self = this;
+        self.$el = $('<div>');
+        self.$inner = $('<div>');
+        self.$el.append(self.$inner);
+
+        self.$inner.click(function () {
+            self.trigger('select', self);
+        });
+
+        self.data = $(this.field).val();
+    };
+
+    Field.Textarea = function (field, label) {
+        // this = new Field(field, 'textarea', label);
+        invoke(this, Field, field, 'textarea', label);
+
+        this.$inner.unbind('click');
+        this.data = $(this.field).html();
+    };
+
+    Field.Textarea.prototype.addLayoutBuilder = function (layoutBuilderConfiguration) {
+        var self = this;
+        self.layoutBuilder = new LayoutBuilder(layoutBuilderConfiguration);
+
+        self.layoutBuilder.addEventListener('add', function (layout) {
+            self.$inner.append(layout.$el);
+            layout.addEventListener('select', function (column) {
+                self.trigger('select', self, column);
+            });
+        });
+
+        self.$el.append(self.layoutBuilder.$el);
+    };
+
+    // Field.Input = function (field, label) {
+    //     this = new Field(field, 'input', label);
+    // };
+    // Field.Checkbox = function (field, label) {
+    //     this = new Field(field, 'checkbox', label);
+    // };
+    // Field.Select = function (field, label) {
+    //     this = new Field(field, 'select', label);
+    // };
+
+    return Field;
+});
+/*global define*/
+define('preview',['formfield', 'events'], function (Field, eventScope) {
+    
+    var Preview,
+        slice = Array.prototype.slice;
+
+    Preview = function (options) {
+        this.$el = options.$el;
+        this.formFields = [];
+        eventScope(this);
+    };
+
+    Preview.prototype.setLayoutBuilderConfiguration = function (layoutBuilderConfiguration) {
+        this.layoutBuilderConfiguration = layoutBuilderConfiguration;
+    };
+
+    Preview.prototype.createFromForm = function ($form) {
+        var self = this;
+        if ($form.children().length) {
+            self.formFields = [];
+
+            $form.children().each(function () {
+                var field,
+                    type = self.getFieldType(this);
+
+                if (type) {
+                    field = new Field[type](this);
+                    if (type === 'Textarea') {
+                        if (!self.layoutBuilderConfiguration) {
+                            throw new Error('No Layout Builder set');
+                        }
+                        field.addLayoutBuilder(self.layoutBuilderConfiguration);
+                    }
+                    field.addEventListener('select', function () {
+                        self.trigger.apply(self, ['field-select'].concat(slice.call(arguments)));
+                    });
+
+                    self.formFields.push(field);
+                    self.$el.append(field.$el);
+                }
+            });
+        }
+    };
+
+    Preview.prototype.getFieldType = function (field) {
+        var self = this,
+            type;
+
+        switch (field.tagName) {
+        case 'TEXTAREA':
+            type = 'Textarea';
+            break;
+        case 'INPUT':
+            switch (field.type) {
+            case 'submit':
+                self.submit = field;
+                break;
+            default:
+                type = 'Input';
+                break;
+            }
+            break;
+        }
+
+        return type;
+    };
+
+    return Preview;
+});
+//
+// showdown.js -- A javascript port of Markdown.
+//
+// Copyright (c) 2007 John Fraser.
+//
+// Original Markdown Copyright (c) 2004-2005 John Gruber
+//   <http://daringfireball.net/projects/markdown/>
+//
+// Redistributable under a BSD-style open source license.
+// See license.txt for more information.
+//
+// The full source distribution is at:
+//
+//				A A L
+//				T C A
+//				T K B
+//
+//   <http://www.attacklab.net/>
+//
+
+//
+// Wherever possible, Showdown is a straight, line-by-line port
+// of the Perl version of Markdown.
+//
+// This is not a normal parser design; it's basically just a
+// series of string substitutions.  It's hard to read and
+// maintain this way,  but keeping Showdown close to the original
+// design makes it easier to port new features.
+//
+// More importantly, Showdown behaves like markdown.pl in most
+// edge cases.  So web applications can do client-side preview
+// in Javascript, and then build identical HTML on the server.
+//
+// This port needs the new RegExp functionality of ECMA 262,
+// 3rd Edition (i.e. Javascript 1.5).  Most modern web browsers
+// should do fine.  Even with the new regular expression features,
+// We do a lot of work to emulate Perl's regex functionality.
+// The tricky changes in this file mostly have the "attacklab:"
+// label.  Major or self-explanatory changes don't.
+//
+// Smart diff tools like Araxis Merge will be able to match up
+// this file with markdown.pl in a useful way.  A little tweaking
+// helps: in a copy of markdown.pl, replace "#" with "//" and
+// replace "$text" with "text".  Be sure to ignore whitespace
+// and line endings.
+//
+
+
+//
+// Showdown usage:
+//
+//   var text = "Markdown *rocks*.";
+//
+//   var converter = new Showdown.converter();
+//   var html = converter.makeHtml(text);
+//
+//   alert(html);
+//
+// Note: move the sample code to the bottom of this
+// file before uncommenting it.
+//
+
+
+//
+// Showdown namespace
+//
+var Showdown = { extensions: {} };
+
+//
+// forEach
+//
+var forEach = Showdown.forEach = function(obj, callback) {
+	if (typeof obj.forEach === 'function') {
+		obj.forEach(callback);
+	} else {
+		var i, len = obj.length;
+		for (i = 0; i < len; i++) {
+			callback(obj[i], i, obj);
+		}
+	}
+};
+
+//
+// Standard extension naming
+//
+var stdExtName = function(s) {
+	return s.replace(/[_-]||\s/g, '').toLowerCase();
+};
+
+//
+// converter
+//
+// Wraps all "globals" so that the only thing
+// exposed is makeHtml().
+//
+Showdown.converter = function(converter_options) {
+
+//
+// Globals:
+//
+
+// Global hashes, used by various utility routines
+var g_urls;
+var g_titles;
+var g_html_blocks;
+
+// Used to track when we're inside an ordered or unordered list
+// (see _ProcessListItems() for details):
+var g_list_level = 0;
+
+// Global extensions
+var g_lang_extensions = [];
+var g_output_modifiers = [];
+
+
+//
+// Automatic Extension Loading (node only):
+//
+
+if (typeof module !== 'undefind' && typeof exports !== 'undefined' && typeof require !== 'undefind') {
+	var fs = require('fs');
+
+	if (fs) {
+		// Search extensions folder
+		var extensions = fs.readdirSync((__dirname || '.')+'/extensions').filter(function(file){
+			return ~file.indexOf('.js');
+		}).map(function(file){
+			return file.replace(/\.js$/, '');
+		});
+		// Load extensions into Showdown namespace
+		Showdown.forEach(extensions, function(ext){
+			var name = stdExtName(ext);
+			Showdown.extensions[name] = require('./extensions/' + ext);
+		});
+	}
+}
+
+this.makeHtml = function(text) {
+//
+// Main function. The order in which other subs are called here is
+// essential. Link and image substitutions need to happen before
+// _EscapeSpecialCharsWithinTagAttributes(), so that any *'s or _'s in the <a>
+// and <img> tags get encoded.
+//
+
+	// Clear the global hashes. If we don't clear these, you get conflicts
+	// from other articles when generating a page which contains more than
+	// one article (e.g. an index page that shows the N most recent
+	// articles):
+	g_urls = {};
+	g_titles = {};
+	g_html_blocks = [];
+
+	// attacklab: Replace ~ with ~T
+	// This lets us use tilde as an escape char to avoid md5 hashes
+	// The choice of character is arbitray; anything that isn't
+	// magic in Markdown will work.
+	text = text.replace(/~/g,"~T");
+
+	// attacklab: Replace $ with ~D
+	// RegExp interprets $ as a special character
+	// when it's in a replacement string
+	text = text.replace(/\$/g,"~D");
+
+	// Standardize line endings
+	text = text.replace(/\r\n/g,"\n"); // DOS to Unix
+	text = text.replace(/\r/g,"\n"); // Mac to Unix
+
+	// Make sure text begins and ends with a couple of newlines:
+	text = "\n\n" + text + "\n\n";
+
+	// Convert all tabs to spaces.
+	text = _Detab(text);
+
+	// Strip any lines consisting only of spaces and tabs.
+	// This makes subsequent regexen easier to write, because we can
+	// match consecutive blank lines with /\n+/ instead of something
+	// contorted like /[ \t]*\n+/ .
+	text = text.replace(/^[ \t]+$/mg,"");
+
+	// Run language extensions
+	Showdown.forEach(g_lang_extensions, function(x){
+		text = _ExecuteExtension(x, text);
+	});
+
+	// Handle github codeblocks prior to running HashHTML so that
+	// HTML contained within the codeblock gets escaped propertly
+	text = _DoGithubCodeBlocks(text);
+
+	// Turn block-level HTML blocks into hash entries
+	text = _HashHTMLBlocks(text);
+
+	// Strip link definitions, store in hashes.
+	text = _StripLinkDefinitions(text);
+
+	text = _RunBlockGamut(text);
+
+	text = _UnescapeSpecialChars(text);
+
+	// attacklab: Restore dollar signs
+	text = text.replace(/~D/g,"$$");
+
+	// attacklab: Restore tildes
+	text = text.replace(/~T/g,"~");
+
+	// Run output modifiers
+	Showdown.forEach(g_output_modifiers, function(x){
+		text = _ExecuteExtension(x, text);
+	});
+
+	return text;
+};
+//
+// Options:
+//
+
+// Parse extensions options into separate arrays
+if (converter_options && converter_options.extensions) {
+
+  var self = this;
+
+	// Iterate over each plugin
+	Showdown.forEach(converter_options.extensions, function(plugin){
+
+		// Assume it's a bundled plugin if a string is given
+		if (typeof plugin === 'string') {
+			plugin = Showdown.extensions[stdExtName(plugin)];
+		}
+
+		if (typeof plugin === 'function') {
+			// Iterate over each extension within that plugin
+			Showdown.forEach(plugin(self), function(ext){
+				// Sort extensions by type
+				if (ext.type) {
+					if (ext.type === 'language' || ext.type === 'lang') {
+						g_lang_extensions.push(ext);
+					} else if (ext.type === 'output' || ext.type === 'html') {
+						g_output_modifiers.push(ext);
+					}
+				} else {
+					// Assume language extension
+					g_output_modifiers.push(ext);
+				}
+			});
+		} else {
+			throw "Extension '" + plugin + "' could not be loaded.  It was either not found or is not a valid extension.";
+		}
+	});
+}
+
+
+var _ExecuteExtension = function(ext, text) {
+	if (ext.regex) {
+		var re = new RegExp(ext.regex, 'g');
+		return text.replace(re, ext.replace);
+	} else if (ext.filter) {
+		return ext.filter(text);
+	}
+};
+
+var _StripLinkDefinitions = function(text) {
+//
+// Strips link definitions from text, stores the URLs and titles in
+// hash references.
+//
+
+	// Link defs are in the form: ^[id]: url "optional title"
+
+	/*
+		var text = text.replace(/
+				^[ ]{0,3}\[(.+)\]:  // id = $1  attacklab: g_tab_width - 1
+				  [ \t]*
+				  \n?				// maybe *one* newline
+				  [ \t]*
+				<?(\S+?)>?			// url = $2
+				  [ \t]*
+				  \n?				// maybe one newline
+				  [ \t]*
+				(?:
+				  (\n*)				// any lines skipped = $3 attacklab: lookbehind removed
+				  ["(]
+				  (.+?)				// title = $4
+				  [")]
+				  [ \t]*
+				)?					// title is optional
+				(?:\n+|$)
+			  /gm,
+			  function(){...});
+	*/
+
+	// attacklab: sentinel workarounds for lack of \A and \Z, safari\khtml bug
+	text += "~0";
+
+	text = text.replace(/^[ ]{0,3}\[(.+)\]:[ \t]*\n?[ \t]*<?(\S+?)>?[ \t]*\n?[ \t]*(?:(\n*)["(](.+?)[")][ \t]*)?(?:\n+|(?=~0))/gm,
+		function (wholeMatch,m1,m2,m3,m4) {
+			m1 = m1.toLowerCase();
+			g_urls[m1] = _EncodeAmpsAndAngles(m2);  // Link IDs are case-insensitive
+			if (m3) {
+				// Oops, found blank lines, so it's not a title.
+				// Put back the parenthetical statement we stole.
+				return m3+m4;
+			} else if (m4) {
+				g_titles[m1] = m4.replace(/"/g,"&quot;");
+			}
+
+			// Completely remove the definition from the text
+			return "";
+		}
+	);
+
+	// attacklab: strip sentinel
+	text = text.replace(/~0/,"");
+
+	return text;
+}
+
+
+var _HashHTMLBlocks = function(text) {
+	// attacklab: Double up blank lines to reduce lookaround
+	text = text.replace(/\n/g,"\n\n");
+
+	// Hashify HTML blocks:
+	// We only want to do this for block-level HTML tags, such as headers,
+	// lists, and tables. That's because we still want to wrap <p>s around
+	// "paragraphs" that are wrapped in non-block-level tags, such as anchors,
+	// phrase emphasis, and spans. The list of tags we're looking for is
+	// hard-coded:
+	var block_tags_a = "p|div|h[1-6]|blockquote|pre|table|dl|ol|ul|script|noscript|form|fieldset|iframe|math|ins|del|style|section|header|footer|nav|article|aside";
+	var block_tags_b = "p|div|h[1-6]|blockquote|pre|table|dl|ol|ul|script|noscript|form|fieldset|iframe|math|style|section|header|footer|nav|article|aside";
+
+	// First, look for nested blocks, e.g.:
+	//   <div>
+	//     <div>
+	//     tags for inner block must be indented.
+	//     </div>
+	//   </div>
+	//
+	// The outermost tags must start at the left margin for this to match, and
+	// the inner nested divs must be indented.
+	// We need to do this before the next, more liberal match, because the next
+	// match will start at the first `<div>` and stop at the first `</div>`.
+
+	// attacklab: This regex can be expensive when it fails.
+	/*
+		var text = text.replace(/
+		(						// save in $1
+			^					// start of line  (with /m)
+			<($block_tags_a)	// start tag = $2
+			\b					// word break
+								// attacklab: hack around khtml/pcre bug...
+			[^\r]*?\n			// any number of lines, minimally matching
+			</\2>				// the matching end tag
+			[ \t]*				// trailing spaces/tabs
+			(?=\n+)				// followed by a newline
+		)						// attacklab: there are sentinel newlines at end of document
+		/gm,function(){...}};
+	*/
+	text = text.replace(/^(<(p|div|h[1-6]|blockquote|pre|table|dl|ol|ul|script|noscript|form|fieldset|iframe|math|ins|del)\b[^\r]*?\n<\/\2>[ \t]*(?=\n+))/gm,hashElement);
+
+	//
+	// Now match more liberally, simply from `\n<tag>` to `</tag>\n`
+	//
+
+	/*
+		var text = text.replace(/
+		(						// save in $1
+			^					// start of line  (with /m)
+			<($block_tags_b)	// start tag = $2
+			\b					// word break
+								// attacklab: hack around khtml/pcre bug...
+			[^\r]*?				// any number of lines, minimally matching
+			</\2>				// the matching end tag
+			[ \t]*				// trailing spaces/tabs
+			(?=\n+)				// followed by a newline
+		)						// attacklab: there are sentinel newlines at end of document
+		/gm,function(){...}};
+	*/
+	text = text.replace(/^(<(p|div|h[1-6]|blockquote|pre|table|dl|ol|ul|script|noscript|form|fieldset|iframe|math|style|section|header|footer|nav|article|aside)\b[^\r]*?<\/\2>[ \t]*(?=\n+)\n)/gm,hashElement);
+
+	// Special case just for <hr />. It was easier to make a special case than
+	// to make the other regex more complicated.
+
+	/*
+		text = text.replace(/
+		(						// save in $1
+			\n\n				// Starting after a blank line
+			[ ]{0,3}
+			(<(hr)				// start tag = $2
+			\b					// word break
+			([^<>])*?			//
+			\/?>)				// the matching end tag
+			[ \t]*
+			(?=\n{2,})			// followed by a blank line
+		)
+		/g,hashElement);
+	*/
+	text = text.replace(/(\n[ ]{0,3}(<(hr)\b([^<>])*?\/?>)[ \t]*(?=\n{2,}))/g,hashElement);
+
+	// Special case for standalone HTML comments:
+
+	/*
+		text = text.replace(/
+		(						// save in $1
+			\n\n				// Starting after a blank line
+			[ ]{0,3}			// attacklab: g_tab_width - 1
+			<!
+			(--[^\r]*?--\s*)+
+			>
+			[ \t]*
+			(?=\n{2,})			// followed by a blank line
+		)
+		/g,hashElement);
+	*/
+	text = text.replace(/(\n\n[ ]{0,3}<!(--[^\r]*?--\s*)+>[ \t]*(?=\n{2,}))/g,hashElement);
+
+	// PHP and ASP-style processor instructions (<?...?> and <%...%>)
+
+	/*
+		text = text.replace(/
+		(?:
+			\n\n				// Starting after a blank line
+		)
+		(						// save in $1
+			[ ]{0,3}			// attacklab: g_tab_width - 1
+			(?:
+				<([?%])			// $2
+				[^\r]*?
+				\2>
+			)
+			[ \t]*
+			(?=\n{2,})			// followed by a blank line
+		)
+		/g,hashElement);
+	*/
+	text = text.replace(/(?:\n\n)([ ]{0,3}(?:<([?%])[^\r]*?\2>)[ \t]*(?=\n{2,}))/g,hashElement);
+
+	// attacklab: Undo double lines (see comment at top of this function)
+	text = text.replace(/\n\n/g,"\n");
+	return text;
+}
+
+var hashElement = function(wholeMatch,m1) {
+	var blockText = m1;
+
+	// Undo double lines
+	blockText = blockText.replace(/\n\n/g,"\n");
+	blockText = blockText.replace(/^\n/,"");
+
+	// strip trailing blank lines
+	blockText = blockText.replace(/\n+$/g,"");
+
+	// Replace the element text with a marker ("~KxK" where x is its key)
+	blockText = "\n\n~K" + (g_html_blocks.push(blockText)-1) + "K\n\n";
+
+	return blockText;
+};
+
+var _RunBlockGamut = function(text) {
+//
+// These are all the transformations that form block-level
+// tags like paragraphs, headers, and list items.
+//
+	text = _DoHeaders(text);
+
+	// Do Horizontal Rules:
+	var key = hashBlock("<hr />");
+	text = text.replace(/^[ ]{0,2}([ ]?\*[ ]?){3,}[ \t]*$/gm,key);
+	text = text.replace(/^[ ]{0,2}([ ]?\-[ ]?){3,}[ \t]*$/gm,key);
+	text = text.replace(/^[ ]{0,2}([ ]?\_[ ]?){3,}[ \t]*$/gm,key);
+
+	text = _DoLists(text);
+	text = _DoCodeBlocks(text);
+	text = _DoBlockQuotes(text);
+
+	// We already ran _HashHTMLBlocks() before, in Markdown(), but that
+	// was to escape raw HTML in the original Markdown source. This time,
+	// we're escaping the markup we've just created, so that we don't wrap
+	// <p> tags around block-level tags.
+	text = _HashHTMLBlocks(text);
+	text = _FormParagraphs(text);
+
+	return text;
+};
+
+
+var _RunSpanGamut = function(text) {
+//
+// These are all the transformations that occur *within* block-level
+// tags like paragraphs, headers, and list items.
+//
+
+	text = _DoCodeSpans(text);
+	text = _EscapeSpecialCharsWithinTagAttributes(text);
+	text = _EncodeBackslashEscapes(text);
+
+	// Process anchor and image tags. Images must come first,
+	// because ![foo][f] looks like an anchor.
+	text = _DoImages(text);
+	text = _DoAnchors(text);
+
+	// Make links out of things like `<http://example.com/>`
+	// Must come after _DoAnchors(), because you can use < and >
+	// delimiters in inline links like [this](<url>).
+	text = _DoAutoLinks(text);
+	text = _EncodeAmpsAndAngles(text);
+	text = _DoItalicsAndBold(text);
+
+	// Do hard breaks:
+	text = text.replace(/  +\n/g," <br />\n");
+
+	return text;
+}
+
+var _EscapeSpecialCharsWithinTagAttributes = function(text) {
+//
+// Within tags -- meaning between < and > -- encode [\ ` * _] so they
+// don't conflict with their use in Markdown for code, italics and strong.
+//
+
+	// Build a regex to find HTML tags and comments.  See Friedl's
+	// "Mastering Regular Expressions", 2nd Ed., pp. 200-201.
+	var regex = /(<[a-z\/!$]("[^"]*"|'[^']*'|[^'">])*>|<!(--.*?--\s*)+>)/gi;
+
+	text = text.replace(regex, function(wholeMatch) {
+		var tag = wholeMatch.replace(/(.)<\/?code>(?=.)/g,"$1`");
+		tag = escapeCharacters(tag,"\\`*_");
+		return tag;
+	});
+
+	return text;
+}
+
+var _DoAnchors = function(text) {
+//
+// Turn Markdown link shortcuts into XHTML <a> tags.
+//
+	//
+	// First, handle reference-style links: [link text] [id]
+	//
+
+	/*
+		text = text.replace(/
+		(							// wrap whole match in $1
+			\[
+			(
+				(?:
+					\[[^\]]*\]		// allow brackets nested one level
+					|
+					[^\[]			// or anything else
+				)*
+			)
+			\]
+
+			[ ]?					// one optional space
+			(?:\n[ ]*)?				// one optional newline followed by spaces
+
+			\[
+			(.*?)					// id = $3
+			\]
+		)()()()()					// pad remaining backreferences
+		/g,_DoAnchors_callback);
+	*/
+	text = text.replace(/(\[((?:\[[^\]]*\]|[^\[\]])*)\][ ]?(?:\n[ ]*)?\[(.*?)\])()()()()/g,writeAnchorTag);
+
+	//
+	// Next, inline-style links: [link text](url "optional title")
+	//
+
+	/*
+		text = text.replace(/
+			(						// wrap whole match in $1
+				\[
+				(
+					(?:
+						\[[^\]]*\]	// allow brackets nested one level
+					|
+					[^\[\]]			// or anything else
+				)
+			)
+			\]
+			\(						// literal paren
+			[ \t]*
+			()						// no id, so leave $3 empty
+			<?(.*?)>?				// href = $4
+			[ \t]*
+			(						// $5
+				(['"])				// quote char = $6
+				(.*?)				// Title = $7
+				\6					// matching quote
+				[ \t]*				// ignore any spaces/tabs between closing quote and )
+			)?						// title is optional
+			\)
+		)
+		/g,writeAnchorTag);
+	*/
+	text = text.replace(/(\[((?:\[[^\]]*\]|[^\[\]])*)\]\([ \t]*()<?(.*?(?:\(.*?\).*?)?)>?[ \t]*((['"])(.*?)\6[ \t]*)?\))/g,writeAnchorTag);
+
+	//
+	// Last, handle reference-style shortcuts: [link text]
+	// These must come last in case you've also got [link test][1]
+	// or [link test](/foo)
+	//
+
+	/*
+		text = text.replace(/
+		(		 					// wrap whole match in $1
+			\[
+			([^\[\]]+)				// link text = $2; can't contain '[' or ']'
+			\]
+		)()()()()()					// pad rest of backreferences
+		/g, writeAnchorTag);
+	*/
+	text = text.replace(/(\[([^\[\]]+)\])()()()()()/g, writeAnchorTag);
+
+	return text;
+}
+
+var writeAnchorTag = function(wholeMatch,m1,m2,m3,m4,m5,m6,m7) {
+	if (m7 == undefined) m7 = "";
+	var whole_match = m1;
+	var link_text   = m2;
+	var link_id	 = m3.toLowerCase();
+	var url		= m4;
+	var title	= m7;
+
+	if (url == "") {
+		if (link_id == "") {
+			// lower-case and turn embedded newlines into spaces
+			link_id = link_text.toLowerCase().replace(/ ?\n/g," ");
+		}
+		url = "#"+link_id;
+
+		if (g_urls[link_id] != undefined) {
+			url = g_urls[link_id];
+			if (g_titles[link_id] != undefined) {
+				title = g_titles[link_id];
+			}
+		}
+		else {
+			if (whole_match.search(/\(\s*\)$/m)>-1) {
+				// Special case for explicit empty url
+				url = "";
+			} else {
+				return whole_match;
+			}
+		}
+	}
+
+	url = escapeCharacters(url,"*_");
+	var result = "<a href=\"" + url + "\"";
+
+	if (title != "") {
+		title = title.replace(/"/g,"&quot;");
+		title = escapeCharacters(title,"*_");
+		result +=  " title=\"" + title + "\"";
+	}
+
+	result += ">" + link_text + "</a>";
+
+	return result;
+}
+
+
+var _DoImages = function(text) {
+//
+// Turn Markdown image shortcuts into <img> tags.
+//
+
+	//
+	// First, handle reference-style labeled images: ![alt text][id]
+	//
+
+	/*
+		text = text.replace(/
+		(						// wrap whole match in $1
+			!\[
+			(.*?)				// alt text = $2
+			\]
+
+			[ ]?				// one optional space
+			(?:\n[ ]*)?			// one optional newline followed by spaces
+
+			\[
+			(.*?)				// id = $3
+			\]
+		)()()()()				// pad rest of backreferences
+		/g,writeImageTag);
+	*/
+	text = text.replace(/(!\[(.*?)\][ ]?(?:\n[ ]*)?\[(.*?)\])()()()()/g,writeImageTag);
+
+	//
+	// Next, handle inline images:  ![alt text](url "optional title")
+	// Don't forget: encode * and _
+
+	/*
+		text = text.replace(/
+		(						// wrap whole match in $1
+			!\[
+			(.*?)				// alt text = $2
+			\]
+			\s?					// One optional whitespace character
+			\(					// literal paren
+			[ \t]*
+			()					// no id, so leave $3 empty
+			<?(\S+?)>?			// src url = $4
+			[ \t]*
+			(					// $5
+				(['"])			// quote char = $6
+				(.*?)			// title = $7
+				\6				// matching quote
+				[ \t]*
+			)?					// title is optional
+		\)
+		)
+		/g,writeImageTag);
+	*/
+	text = text.replace(/(!\[(.*?)\]\s?\([ \t]*()<?(\S+?)>?[ \t]*((['"])(.*?)\6[ \t]*)?\))/g,writeImageTag);
+
+	return text;
+}
+
+var writeImageTag = function(wholeMatch,m1,m2,m3,m4,m5,m6,m7) {
+	var whole_match = m1;
+	var alt_text   = m2;
+	var link_id	 = m3.toLowerCase();
+	var url		= m4;
+	var title	= m7;
+
+	if (!title) title = "";
+
+	if (url == "") {
+		if (link_id == "") {
+			// lower-case and turn embedded newlines into spaces
+			link_id = alt_text.toLowerCase().replace(/ ?\n/g," ");
+		}
+		url = "#"+link_id;
+
+		if (g_urls[link_id] != undefined) {
+			url = g_urls[link_id];
+			if (g_titles[link_id] != undefined) {
+				title = g_titles[link_id];
+			}
+		}
+		else {
+			return whole_match;
+		}
+	}
+
+	alt_text = alt_text.replace(/"/g,"&quot;");
+	url = escapeCharacters(url,"*_");
+	var result = "<img src=\"" + url + "\" alt=\"" + alt_text + "\"";
+
+	// attacklab: Markdown.pl adds empty title attributes to images.
+	// Replicate this bug.
+
+	//if (title != "") {
+		title = title.replace(/"/g,"&quot;");
+		title = escapeCharacters(title,"*_");
+		result +=  " title=\"" + title + "\"";
+	//}
+
+	result += " />";
+
+	return result;
+}
+
+
+var _DoHeaders = function(text) {
+
+	// Setext-style headers:
+	//	Header 1
+	//	========
+	//
+	//	Header 2
+	//	--------
+	//
+	text = text.replace(/^(.+)[ \t]*\n=+[ \t]*\n+/gm,
+		function(wholeMatch,m1){return hashBlock('<h1 id="' + headerId(m1) + '">' + _RunSpanGamut(m1) + "</h1>");});
+
+	text = text.replace(/^(.+)[ \t]*\n-+[ \t]*\n+/gm,
+		function(matchFound,m1){return hashBlock('<h2 id="' + headerId(m1) + '">' + _RunSpanGamut(m1) + "</h2>");});
+
+	// atx-style headers:
+	//  # Header 1
+	//  ## Header 2
+	//  ## Header 2 with closing hashes ##
+	//  ...
+	//  ###### Header 6
+	//
+
+	/*
+		text = text.replace(/
+			^(\#{1,6})				// $1 = string of #'s
+			[ \t]*
+			(.+?)					// $2 = Header text
+			[ \t]*
+			\#*						// optional closing #'s (not counted)
+			\n+
+		/gm, function() {...});
+	*/
+
+	text = text.replace(/^(\#{1,6})[ \t]*(.+?)[ \t]*\#*\n+/gm,
+		function(wholeMatch,m1,m2) {
+			var h_level = m1.length;
+			return hashBlock("<h" + h_level + ' id="' + headerId(m2) + '">' + _RunSpanGamut(m2) + "</h" + h_level + ">");
+		});
+
+	function headerId(m) {
+		return m.replace(/[^\w]/g, '').toLowerCase();
+	}
+	return text;
+}
+
+// This declaration keeps Dojo compressor from outputting garbage:
+var _ProcessListItems;
+
+var _DoLists = function(text) {
+//
+// Form HTML ordered (numbered) and unordered (bulleted) lists.
+//
+
+	// attacklab: add sentinel to hack around khtml/safari bug:
+	// http://bugs.webkit.org/show_bug.cgi?id=11231
+	text += "~0";
+
+	// Re-usable pattern to match any entirel ul or ol list:
+
+	/*
+		var whole_list = /
+		(									// $1 = whole list
+			(								// $2
+				[ ]{0,3}					// attacklab: g_tab_width - 1
+				([*+-]|\d+[.])				// $3 = first list item marker
+				[ \t]+
+			)
+			[^\r]+?
+			(								// $4
+				~0							// sentinel for workaround; should be $
+			|
+				\n{2,}
+				(?=\S)
+				(?!							// Negative lookahead for another list item marker
+					[ \t]*
+					(?:[*+-]|\d+[.])[ \t]+
+				)
+			)
+		)/g
+	*/
+	var whole_list = /^(([ ]{0,3}([*+-]|\d+[.])[ \t]+)[^\r]+?(~0|\n{2,}(?=\S)(?![ \t]*(?:[*+-]|\d+[.])[ \t]+)))/gm;
+
+	if (g_list_level) {
+		text = text.replace(whole_list,function(wholeMatch,m1,m2) {
+			var list = m1;
+			var list_type = (m2.search(/[*+-]/g)>-1) ? "ul" : "ol";
+
+			// Turn double returns into triple returns, so that we can make a
+			// paragraph for the last item in a list, if necessary:
+			list = list.replace(/\n{2,}/g,"\n\n\n");;
+			var result = _ProcessListItems(list);
+
+			// Trim any trailing whitespace, to put the closing `</$list_type>`
+			// up on the preceding line, to get it past the current stupid
+			// HTML block parser. This is a hack to work around the terrible
+			// hack that is the HTML block parser.
+			result = result.replace(/\s+$/,"");
+			result = "<"+list_type+">" + result + "</"+list_type+">\n";
+			return result;
+		});
+	} else {
+		whole_list = /(\n\n|^\n?)(([ ]{0,3}([*+-]|\d+[.])[ \t]+)[^\r]+?(~0|\n{2,}(?=\S)(?![ \t]*(?:[*+-]|\d+[.])[ \t]+)))/g;
+		text = text.replace(whole_list,function(wholeMatch,m1,m2,m3) {
+			var runup = m1;
+			var list = m2;
+
+			var list_type = (m3.search(/[*+-]/g)>-1) ? "ul" : "ol";
+			// Turn double returns into triple returns, so that we can make a
+			// paragraph for the last item in a list, if necessary:
+			var list = list.replace(/\n{2,}/g,"\n\n\n");;
+			var result = _ProcessListItems(list);
+			result = runup + "<"+list_type+">\n" + result + "</"+list_type+">\n";
+			return result;
+		});
+	}
+
+	// attacklab: strip sentinel
+	text = text.replace(/~0/,"");
+
+	return text;
+}
+
+_ProcessListItems = function(list_str) {
+//
+//  Process the contents of a single ordered or unordered list, splitting it
+//  into individual list items.
+//
+	// The $g_list_level global keeps track of when we're inside a list.
+	// Each time we enter a list, we increment it; when we leave a list,
+	// we decrement. If it's zero, we're not in a list anymore.
+	//
+	// We do this because when we're not inside a list, we want to treat
+	// something like this:
+	//
+	//    I recommend upgrading to version
+	//    8. Oops, now this line is treated
+	//    as a sub-list.
+	//
+	// As a single paragraph, despite the fact that the second line starts
+	// with a digit-period-space sequence.
+	//
+	// Whereas when we're inside a list (or sub-list), that line will be
+	// treated as the start of a sub-list. What a kludge, huh? This is
+	// an aspect of Markdown's syntax that's hard to parse perfectly
+	// without resorting to mind-reading. Perhaps the solution is to
+	// change the syntax rules such that sub-lists must start with a
+	// starting cardinal number; e.g. "1." or "a.".
+
+	g_list_level++;
+
+	// trim trailing blank lines:
+	list_str = list_str.replace(/\n{2,}$/,"\n");
+
+	// attacklab: add sentinel to emulate \z
+	list_str += "~0";
+
+	/*
+		list_str = list_str.replace(/
+			(\n)?							// leading line = $1
+			(^[ \t]*)						// leading whitespace = $2
+			([*+-]|\d+[.]) [ \t]+			// list marker = $3
+			([^\r]+?						// list item text   = $4
+			(\n{1,2}))
+			(?= \n* (~0 | \2 ([*+-]|\d+[.]) [ \t]+))
+		/gm, function(){...});
+	*/
+	list_str = list_str.replace(/(\n)?(^[ \t]*)([*+-]|\d+[.])[ \t]+([^\r]+?(\n{1,2}))(?=\n*(~0|\2([*+-]|\d+[.])[ \t]+))/gm,
+		function(wholeMatch,m1,m2,m3,m4){
+			var item = m4;
+			var leading_line = m1;
+			var leading_space = m2;
+
+			if (leading_line || (item.search(/\n{2,}/)>-1)) {
+				item = _RunBlockGamut(_Outdent(item));
+			}
+			else {
+				// Recursion for sub-lists:
+				item = _DoLists(_Outdent(item));
+				item = item.replace(/\n$/,""); // chomp(item)
+				item = _RunSpanGamut(item);
+			}
+
+			return  "<li>" + item + "</li>\n";
+		}
+	);
+
+	// attacklab: strip sentinel
+	list_str = list_str.replace(/~0/g,"");
+
+	g_list_level--;
+	return list_str;
+}
+
+
+var _DoCodeBlocks = function(text) {
+//
+//  Process Markdown `<pre><code>` blocks.
+//
+
+	/*
+		text = text.replace(text,
+			/(?:\n\n|^)
+			(								// $1 = the code block -- one or more lines, starting with a space/tab
+				(?:
+					(?:[ ]{4}|\t)			// Lines must start with a tab or a tab-width of spaces - attacklab: g_tab_width
+					.*\n+
+				)+
+			)
+			(\n*[ ]{0,3}[^ \t\n]|(?=~0))	// attacklab: g_tab_width
+		/g,function(){...});
+	*/
+
+	// attacklab: sentinel workarounds for lack of \A and \Z, safari\khtml bug
+	text += "~0";
+
+	text = text.replace(/(?:\n\n|^)((?:(?:[ ]{4}|\t).*\n+)+)(\n*[ ]{0,3}[^ \t\n]|(?=~0))/g,
+		function(wholeMatch,m1,m2) {
+			var codeblock = m1;
+			var nextChar = m2;
+
+			codeblock = _EncodeCode( _Outdent(codeblock));
+			codeblock = _Detab(codeblock);
+			codeblock = codeblock.replace(/^\n+/g,""); // trim leading newlines
+			codeblock = codeblock.replace(/\n+$/g,""); // trim trailing whitespace
+
+			codeblock = "<pre><code>" + codeblock + "\n</code></pre>";
+
+			return hashBlock(codeblock) + nextChar;
+		}
+	);
+
+	// attacklab: strip sentinel
+	text = text.replace(/~0/,"");
+
+	return text;
+};
+
+var _DoGithubCodeBlocks = function(text) {
+//
+//  Process Github-style code blocks
+//  Example:
+//  ```ruby
+//  def hello_world(x)
+//    puts "Hello, #{x}"
+//  end
+//  ```
+//
+
+
+	// attacklab: sentinel workarounds for lack of \A and \Z, safari\khtml bug
+	text += "~0";
+
+	text = text.replace(/(?:^|\n)```(.*)\n([\s\S]*?)\n```/g,
+		function(wholeMatch,m1,m2) {
+			var language = m1;
+			var codeblock = m2;
+
+			codeblock = _EncodeCode(codeblock);
+			codeblock = _Detab(codeblock);
+			codeblock = codeblock.replace(/^\n+/g,""); // trim leading newlines
+			codeblock = codeblock.replace(/\n+$/g,""); // trim trailing whitespace
+
+			codeblock = "<pre><code" + (language ? " class=\"" + language + '"' : "") + ">" + codeblock + "\n</code></pre>";
+
+			return hashBlock(codeblock);
+		}
+	);
+
+	// attacklab: strip sentinel
+	text = text.replace(/~0/,"");
+
+	return text;
+}
+
+var hashBlock = function(text) {
+	text = text.replace(/(^\n+|\n+$)/g,"");
+	return "\n\n~K" + (g_html_blocks.push(text)-1) + "K\n\n";
+}
+
+var _DoCodeSpans = function(text) {
+//
+//   *  Backtick quotes are used for <code></code> spans.
+//
+//   *  You can use multiple backticks as the delimiters if you want to
+//	 include literal backticks in the code span. So, this input:
+//
+//		 Just type ``foo `bar` baz`` at the prompt.
+//
+//	   Will translate to:
+//
+//		 <p>Just type <code>foo `bar` baz</code> at the prompt.</p>
+//
+//	There's no arbitrary limit to the number of backticks you
+//	can use as delimters. If you need three consecutive backticks
+//	in your code, use four for delimiters, etc.
+//
+//  *  You can use spaces to get literal backticks at the edges:
+//
+//		 ... type `` `bar` `` ...
+//
+//	   Turns to:
+//
+//		 ... type <code>`bar`</code> ...
+//
+
+	/*
+		text = text.replace(/
+			(^|[^\\])					// Character before opening ` can't be a backslash
+			(`+)						// $2 = Opening run of `
+			(							// $3 = The code block
+				[^\r]*?
+				[^`]					// attacklab: work around lack of lookbehind
+			)
+			\2							// Matching closer
+			(?!`)
+		/gm, function(){...});
+	*/
+
+	text = text.replace(/(^|[^\\])(`+)([^\r]*?[^`])\2(?!`)/gm,
+		function(wholeMatch,m1,m2,m3,m4) {
+			var c = m3;
+			c = c.replace(/^([ \t]*)/g,"");	// leading whitespace
+			c = c.replace(/[ \t]*$/g,"");	// trailing whitespace
+			c = _EncodeCode(c);
+			return m1+"<code>"+c+"</code>";
+		});
+
+	return text;
+}
+
+var _EncodeCode = function(text) {
+//
+// Encode/escape certain characters inside Markdown code runs.
+// The point is that in code, these characters are literals,
+// and lose their special Markdown meanings.
+//
+	// Encode all ampersands; HTML entities are not
+	// entities within a Markdown code span.
+	text = text.replace(/&/g,"&amp;");
+
+	// Do the angle bracket song and dance:
+	text = text.replace(/</g,"&lt;");
+	text = text.replace(/>/g,"&gt;");
+
+	// Now, escape characters that are magic in Markdown:
+	text = escapeCharacters(text,"\*_{}[]\\",false);
+
+// jj the line above breaks this:
+//---
+
+//* Item
+
+//   1. Subitem
+
+//            special char: *
+//---
+
+	return text;
+}
+
+
+var _DoItalicsAndBold = function(text) {
+
+	// <strong> must go first:
+	text = text.replace(/(\*\*|__)(?=\S)([^\r]*?\S[*_]*)\1/g,
+		"<strong>$2</strong>");
+
+	text = text.replace(/(\*|_)(?=\S)([^\r]*?\S)\1/g,
+		"<em>$2</em>");
+
+	return text;
+}
+
+
+var _DoBlockQuotes = function(text) {
+
+	/*
+		text = text.replace(/
+		(								// Wrap whole match in $1
+			(
+				^[ \t]*>[ \t]?			// '>' at the start of a line
+				.+\n					// rest of the first line
+				(.+\n)*					// subsequent consecutive lines
+				\n*						// blanks
+			)+
+		)
+		/gm, function(){...});
+	*/
+
+	text = text.replace(/((^[ \t]*>[ \t]?.+\n(.+\n)*\n*)+)/gm,
+		function(wholeMatch,m1) {
+			var bq = m1;
+
+			// attacklab: hack around Konqueror 3.5.4 bug:
+			// "----------bug".replace(/^-/g,"") == "bug"
+
+			bq = bq.replace(/^[ \t]*>[ \t]?/gm,"~0");	// trim one level of quoting
+
+			// attacklab: clean up hack
+			bq = bq.replace(/~0/g,"");
+
+			bq = bq.replace(/^[ \t]+$/gm,"");		// trim whitespace-only lines
+			bq = _RunBlockGamut(bq);				// recurse
+
+			bq = bq.replace(/(^|\n)/g,"$1  ");
+			// These leading spaces screw with <pre> content, so we need to fix that:
+			bq = bq.replace(
+					/(\s*<pre>[^\r]+?<\/pre>)/gm,
+				function(wholeMatch,m1) {
+					var pre = m1;
+					// attacklab: hack around Konqueror 3.5.4 bug:
+					pre = pre.replace(/^  /mg,"~0");
+					pre = pre.replace(/~0/g,"");
+					return pre;
+				});
+
+			return hashBlock("<blockquote>\n" + bq + "\n</blockquote>");
+		});
+	return text;
+}
+
+
+var _FormParagraphs = function(text) {
+//
+//  Params:
+//    $text - string to process with html <p> tags
+//
+
+	// Strip leading and trailing lines:
+	text = text.replace(/^\n+/g,"");
+	text = text.replace(/\n+$/g,"");
+
+	var grafs = text.split(/\n{2,}/g);
+	var grafsOut = [];
+
+	//
+	// Wrap <p> tags.
+	//
+	var end = grafs.length;
+	for (var i=0; i<end; i++) {
+		var str = grafs[i];
+
+		// if this is an HTML marker, copy it
+		if (str.search(/~K(\d+)K/g) >= 0) {
+			grafsOut.push(str);
+		}
+		else if (str.search(/\S/) >= 0) {
+			str = _RunSpanGamut(str);
+			str = str.replace(/^([ \t]*)/g,"<p>");
+			str += "</p>"
+			grafsOut.push(str);
+		}
+
+	}
+
+	//
+	// Unhashify HTML blocks
+	//
+	end = grafsOut.length;
+	for (var i=0; i<end; i++) {
+		// if this is a marker for an html block...
+		while (grafsOut[i].search(/~K(\d+)K/) >= 0) {
+			var blockText = g_html_blocks[RegExp.$1];
+			blockText = blockText.replace(/\$/g,"$$$$"); // Escape any dollar signs
+			grafsOut[i] = grafsOut[i].replace(/~K\d+K/,blockText);
+		}
+	}
+
+	return grafsOut.join("\n\n");
+}
+
+
+var _EncodeAmpsAndAngles = function(text) {
+// Smart processing for ampersands and angle brackets that need to be encoded.
+
+	// Ampersand-encoding based entirely on Nat Irons's Amputator MT plugin:
+	//   http://bumppo.net/projects/amputator/
+	text = text.replace(/&(?!#?[xX]?(?:[0-9a-fA-F]+|\w+);)/g,"&amp;");
+
+	// Encode naked <'s
+	text = text.replace(/<(?![a-z\/?\$!])/gi,"&lt;");
+
+	return text;
+}
+
+
+var _EncodeBackslashEscapes = function(text) {
+//
+//   Parameter:  String.
+//   Returns:	The string, with after processing the following backslash
+//			   escape sequences.
+//
+
+	// attacklab: The polite way to do this is with the new
+	// escapeCharacters() function:
+	//
+	// 	text = escapeCharacters(text,"\\",true);
+	// 	text = escapeCharacters(text,"`*_{}[]()>#+-.!",true);
+	//
+	// ...but we're sidestepping its use of the (slow) RegExp constructor
+	// as an optimization for Firefox.  This function gets called a LOT.
+
+	text = text.replace(/\\(\\)/g,escapeCharacters_callback);
+	text = text.replace(/\\([`*_{}\[\]()>#+-.!])/g,escapeCharacters_callback);
+	return text;
+}
+
+
+var _DoAutoLinks = function(text) {
+
+	text = text.replace(/<((https?|ftp|dict):[^'">\s]+)>/gi,"<a href=\"$1\">$1</a>");
+
+	// Email addresses: <address@domain.foo>
+
+	/*
+		text = text.replace(/
+			<
+			(?:mailto:)?
+			(
+				[-.\w]+
+				\@
+				[-a-z0-9]+(\.[-a-z0-9]+)*\.[a-z]+
+			)
+			>
+		/gi, _DoAutoLinks_callback());
+	*/
+	text = text.replace(/<(?:mailto:)?([-.\w]+\@[-a-z0-9]+(\.[-a-z0-9]+)*\.[a-z]+)>/gi,
+		function(wholeMatch,m1) {
+			return _EncodeEmailAddress( _UnescapeSpecialChars(m1) );
+		}
+	);
+
+	return text;
+}
+
+
+var _EncodeEmailAddress = function(addr) {
+//
+//  Input: an email address, e.g. "foo@example.com"
+//
+//  Output: the email address as a mailto link, with each character
+//	of the address encoded as either a decimal or hex entity, in
+//	the hopes of foiling most address harvesting spam bots. E.g.:
+//
+//	<a href="&#x6D;&#97;&#105;&#108;&#x74;&#111;:&#102;&#111;&#111;&#64;&#101;
+//	   x&#x61;&#109;&#x70;&#108;&#x65;&#x2E;&#99;&#111;&#109;">&#102;&#111;&#111;
+//	   &#64;&#101;x&#x61;&#109;&#x70;&#108;&#x65;&#x2E;&#99;&#111;&#109;</a>
+//
+//  Based on a filter by Matthew Wickline, posted to the BBEdit-Talk
+//  mailing list: <http://tinyurl.com/yu7ue>
+//
+
+	var encode = [
+		function(ch){return "&#"+ch.charCodeAt(0)+";";},
+		function(ch){return "&#x"+ch.charCodeAt(0).toString(16)+";";},
+		function(ch){return ch;}
+	];
+
+	addr = "mailto:" + addr;
+
+	addr = addr.replace(/./g, function(ch) {
+		if (ch == "@") {
+		   	// this *must* be encoded. I insist.
+			ch = encode[Math.floor(Math.random()*2)](ch);
+		} else if (ch !=":") {
+			// leave ':' alone (to spot mailto: later)
+			var r = Math.random();
+			// roughly 10% raw, 45% hex, 45% dec
+			ch =  (
+					r > .9  ?	encode[2](ch)   :
+					r > .45 ?	encode[1](ch)   :
+								encode[0](ch)
+				);
+		}
+		return ch;
+	});
+
+	addr = "<a href=\"" + addr + "\">" + addr + "</a>";
+	addr = addr.replace(/">.+:/g,"\">"); // strip the mailto: from the visible part
+
+	return addr;
+}
+
+
+var _UnescapeSpecialChars = function(text) {
+//
+// Swap back in all the special characters we've hidden.
+//
+	text = text.replace(/~E(\d+)E/g,
+		function(wholeMatch,m1) {
+			var charCodeToReplace = parseInt(m1);
+			return String.fromCharCode(charCodeToReplace);
+		}
+	);
+	return text;
+}
+
+
+var _Outdent = function(text) {
+//
+// Remove one level of line-leading tabs or spaces
+//
+
+	// attacklab: hack around Konqueror 3.5.4 bug:
+	// "----------bug".replace(/^-/g,"") == "bug"
+
+	text = text.replace(/^(\t|[ ]{1,4})/gm,"~0"); // attacklab: g_tab_width
+
+	// attacklab: clean up hack
+	text = text.replace(/~0/g,"")
+
+	return text;
+}
+
+var _Detab = function(text) {
+// attacklab: Detab's completely rewritten for speed.
+// In perl we could fix it by anchoring the regexp with \G.
+// In javascript we're less fortunate.
+
+	// expand first n-1 tabs
+	text = text.replace(/\t(?=\t)/g,"    "); // attacklab: g_tab_width
+
+	// replace the nth with two sentinels
+	text = text.replace(/\t/g,"~A~B");
+
+	// use the sentinel to anchor our regex so it doesn't explode
+	text = text.replace(/~B(.+?)~A/g,
+		function(wholeMatch,m1,m2) {
+			var leadingText = m1;
+			var numSpaces = 4 - leadingText.length % 4;  // attacklab: g_tab_width
+
+			// there *must* be a better way to do this:
+			for (var i=0; i<numSpaces; i++) leadingText+=" ";
+
+			return leadingText;
+		}
+	);
+
+	// clean up sentinels
+	text = text.replace(/~A/g,"    ");  // attacklab: g_tab_width
+	text = text.replace(/~B/g,"");
+
+	return text;
+}
+
+
+//
+//  attacklab: Utility functions
+//
+
+
+var escapeCharacters = function(text, charsToEscape, afterBackslash) {
+	// First we have to escape the escape characters so that
+	// we can build a character class out of them
+	var regexString = "([" + charsToEscape.replace(/([\[\]\\])/g,"\\$1") + "])";
+
+	if (afterBackslash) {
+		regexString = "\\\\" + regexString;
+	}
+
+	var regex = new RegExp(regexString,"g");
+	text = text.replace(regex,escapeCharacters_callback);
+
+	return text;
+}
+
+
+var escapeCharacters_callback = function(wholeMatch,m1) {
+	var charCodeToEscape = m1.charCodeAt(0);
+	return "~E"+charCodeToEscape+"E";
+}
+
+} // end of Showdown.converter
+
+
+// export
+if (typeof module !== 'undefined') module.exports = Showdown;
+
+// stolen from AMD branch of underscore
+// AMD define happens at the end for compatibility with AMD loaders
+// that don't enforce next-turn semantics on modules.
+if (typeof define === 'function' && define.amd) {
+    define('showdown', [],function() {
+        return Showdown;
+    });
+}
+;
+/*global define*/
+define('layout_builder_configuration',[], function () {
+    
+    var LayoutBuilderConfiguration = function () {
+        this.layouts = [];
+    };
+
+    LayoutBuilderConfiguration.prototype.addLayout = function (layout) {
+        this.layouts.push(layout);
+        return this;
+    };
+
+    return LayoutBuilderConfiguration;
 });
 /**
  * 
@@ -19751,87 +22804,96 @@ define("ATHENE2-EDITOR", ['jquery'],
         var $window = $(window),
             Editor;
 
-        Editor = function () {
+        Editor = function (settings) {
+            return this.updateSettings(settings);
+        };
+
+        Editor.prototype.updateSettings = function (settings) {
+            return $.extend(this, settings);
+        };
+
+        Editor.prototype.initialize = function () {
             var self = this;
-            self.plugins = [];
+
             $window.resize(function () {
                 self.resize();
-            });
-        };
+            }).resize();
 
-        Editor.prototype.addPlugin = function (plugin) {
-            this.plugins.push(plugin);
-        };
+            self.preview.setLayoutBuilderConfiguration(self.layoutBuilderConfiguration);
+            self.preview.createFromForm(self.$form);
 
-        Editor.prototype.setTextEditor = function (textEditor) {
-            this.editor = textEditor;
-            return this;
-        };
-
-        Editor.prototype.initTextEditor = function () {
-            var self = this;
-            self.resize();
-
-            self.editor.on('change', function () {
-                self.onEditorChange();
+            self.textEditor.on('change', function () {
+                if (self.editable) {
+                    self.editable.data = self.textEditor.getValue();
+                    self.editable.$el.html(self.parser.parse(self.editable.data));
+                }
             });
 
-            return this;
+            self.preview.addEventListener('field-select', function (field, column) {
+                if (self.editable) {
+                    self.editable.$el.removeClass('active');
+                }
+
+                if (field.type === 'textarea' && column) {
+                    self.editable = column;
+                    column.$el.addClass('active');
+                    self.textEditor.setValue(column.data);
+                    self.textEditor.options.readOnly = false;
+                    self.textEditor.focus();
+
+                }
+            });
         };
 
         Editor.prototype.resize = function () {
-            if (this.editor) {
-                this.editor.setSize($window.width() / 2, $window.height() - 32);
+            if (this.textEditor) {
+                this.textEditor.setSize($window.width() / 2, $window.height() - 32);
             }
             return this;
         };
 
-        Editor.prototype.setParser = function (textParser) {
-            this.parser = textParser;
-            return this;
-        };
-
-        Editor.prototype.setPreviewer = function (preview) {
-            this.preview = preview;
-            return this;
-        };
-
-        Editor.prototype.onEditorChange = function () {
-            var value = this.editor.getValue();
-
-            if (this.parser) {
-                value = this.parser.parse(value);
-            }
-
-            if (this.preview) {
-                this.preview.show(value);
-            }
-        };
-
-        return new Editor();
+        return Editor;
     });
 
-require(['jquery', 'ATHENE2-EDITOR', 'codemirror', 'markdownparser', 'editor_previewer'], function ($, Editor, CodeMirror, MarkdownParser, EditorPreviewer) {
-    
+require(['jquery', 'ATHENE2-EDITOR', 'codemirror', 'parser', 'preview', 'showdown', 'layout_builder_configuration'],
+    function ($, Editor, CodeMirror, Parser, Preview, Showdown, LayoutBuilderConfiguration) {
+        
 
-    $(function () {
+        $(function () {
 
-        function init($context) {
+            function init() {
+                var editor,
+                    layoutBuilderConfiguration = new LayoutBuilderConfiguration(),
+                    parser = new Parser(),
+                    converter = new Showdown.converter();
 
-            Editor
-                .setTextEditor(CodeMirror.fromTextArea($('#code', $context)[0], {
-                    lineNumbers: true,
-                    styleActiveLine: true,
-                    matchBrackets: true
-                }))
-                .initTextEditor()
-                .setParser(new MarkdownParser())
-                .setPreviewer(new EditorPreviewer({
-                    selector: '#preview .editor-main-inner'
-                }));
-            Editor.onEditorChange();
-        }
+                parser.setConverter(converter, 'makeHtml');
 
-        init($('body'));
+                layoutBuilderConfiguration
+                    .addLayout([24])
+                    .addLayout([12, 12])
+                    .addLayout([8, 8, 8])
+                    .addLayout([12, 6, 6]);
+
+                editor = editor || new Editor({
+                    $form: $('#editor-form').first(),
+                    parser: parser,
+                    layoutBuilderConfiguration: layoutBuilderConfiguration,
+                    textEditor: new CodeMirror($('#main .editor-main-inner')[0], {
+                        lineNumbers: true,
+                        styleActiveLine: true,
+                        matchBrackets: true,
+                        lineWrapping: true,
+                        readOnly: true
+                    }),
+                    preview: new Preview({
+                        $el: $('#preview .editor-main-inner')
+                    })
+                });
+
+                editor.initialize();
+            }
+
+            init($('body'));
+        });
     });
-});

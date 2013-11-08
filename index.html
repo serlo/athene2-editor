@@ -24,10 +24,40 @@
                 </nav>
             </div>
         </header>
+        <form id="editor-form" action="/test/action" method="post">
+                    <textarea id="code"><div class="r"><div class="c12">**THIS IS BOLD** *THIS IS ITALIC* `this is inline code` [this is a link](/with/url)
 
+    this is a code block
+# headline 1
+
+## headline 2
+
+### headline 3
+
+#### headline 4
+
+##### headline5
+
+###### headline 6
+</div><div class="c12">
+A normal text block a normal text block a normal text block a normal text block a normal text block a normal text block a normal text block a normal text block a normal text block a normal text block a normal text block a normal text block a normal text block a normal text block a normal text block a normal text block a normal text block a normal text block a normal text block a normal text block a normal text block a normal text block a normal text block a normal text block a normal text block a normal text block a normal text block a normal text block a normal text block a normal text block a normal text block a normal text block a normal text block a normal text block a normal text block a normal text block a normal text block a normal text block
+
+A normal text block a normal text block a normal text block a normal text block a normal text block a normal text block a normal text block a normal text block a normal text block a normal text block a normal text block a normal text block
+
+this should become mathjax $$x^2$$ 
+
+and this too
+
+$$
+x^2
+$$
+</div></div>
+</textarea>
+<input type="submit" value="Save">
+                    </form>
         <section id="editor-wrap">
-            <div id="preview" class="editor-main">
-                <div class="editor-main-inner">
+            <div id="preview" class="editor-main content-editor">
+                <div class="editor-main-inner content">
 
                 </div>
                 <div id="editor-actions">
@@ -39,18 +69,9 @@
             </div>
             <div id="main" class="editor-main">
                 <div class="editor-main-inner">
-                    <textarea id="code">Hey yo!
- 
- * list
- * list2
-    * list2 1
-    * list2 2
-    * list2 3
-        * list2 3 1
-</textarea>
+                    
                 </div>
             </div>
         </section>
-
     </body>
 </html>
