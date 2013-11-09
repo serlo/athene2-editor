@@ -23181,7 +23181,6 @@ define("ATHENE2-EDITOR", ['jquery'],
             });
 
             self.preview.addEventListener('column-add', function (column) {
-                console.log(column.$el, column);
                 column.$el.html(self.parser.parse(column.data));
             });
 
