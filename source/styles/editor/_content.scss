@@ -30,4 +30,8 @@
             @include contentColumnWidth($i, $grid, $gutter);
         }
     }
+
+    img {
+        max-width: 100%;
+    }
 }

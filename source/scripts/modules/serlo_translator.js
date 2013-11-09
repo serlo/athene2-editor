@@ -37,7 +37,7 @@ define(["underscore", "i18n", "common"], function (_, i18n, Common) {
      **/
     function replace(string, replacements) {
         _.each(replacements, function (partial) {
-            switch (typeof partial) {
+            switch (typeof partial) {
             case 'string':
                 string = string.replace(/%s/, partial);
                 break;

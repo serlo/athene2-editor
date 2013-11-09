@@ -1,5 +1,5 @@
 /*global define*/
-define(['jquery', 'underscore', 'events'], function ($, _, eventScope) {
+define(['jquery', 'underscore', 'events', 'translator'], function ($, _, eventScope, t) {
     "use strict";
     var Column,
         Layout,
@@ -9,8 +9,9 @@ define(['jquery', 'underscore', 'events'], function ($, _, eventScope) {
         var self = this;
         eventScope(self);
 
-        self.data = data || '';
-        self.$el = $('<div class="c' + width + '">').text('test content');
+        self.data = data || t('Click to edit');
+        self.$el = $('<div class="c' + width + '">');
+
         self.$el.click(function () {
             self.trigger('select', self);
         });
@@ -20,19 +21,21 @@ define(['jquery', 'underscore', 'events'], function ($, _, eventScope) {
         var self = this;
         eventScope(self);
 
-        self.data = data;
+        self.data = data || [];
         self.title = columns.toString();
+        self.columns = [];
 
         self.$el = $('<div class="r"></div>');
 
-        _.each(columns, function (width) {
-            var column = new Column(width);
+        _.each(columns, function (width, index) {
+            var column = new Column(width, self.data[index]);
 
             column.addEventListener('select', function (column) {
                 self.trigger('select', column);
             });
 
             self.$el.append(column.$el);
+            self.columns.push(column);
         });
 
     };
@@ -48,9 +51,9 @@ define(['jquery', 'underscore', 'events'], function ($, _, eventScope) {
         self.$add = $('<a href="#" class="plus">+</a>');
         self.$layoutList = $('<div class="layout-list">');
 
-        self.layouts = [];
+        self.layouts = configuration.layouts;
 
-        _.each(configuration.layouts, function (columns) {
+        _.each(self.layouts, function (columns) {
             var $add = $('<a href="#">' + createIconTag(columns) + '</a>');
 
             $add.click(function (e) {
@@ -83,31 +86,60 @@ define(['jquery', 'underscore', 'events'], function ($, _, eventScope) {
         this.$layoutList.detach();
     };
 
+    LayoutBuilder.prototype.addLayout = function (requestedLayout, data) {
+        var newLayout,
+            self = this;
+
+        _.each(self.layouts, function (layout) {
+            if (_.isEqual(layout, requestedLayout)) {
+                newLayout = new Layout(requestedLayout, data);
+                self.trigger('add', newLayout);
+                return;
+            }
+        });
+
+        if (!newLayout) {
+            throw new Error('Layout does not exist: ' + requestedLayout.toString());
+        }
+
+        return newLayout;
+    };
+
     function createIconTag(columns) {
-        return columns.toString();
-        // var canvas = $('<canvas>')[0],
-        //     context,
-        //     length = columns.length,
-        //     width = (120 + columns.length * 5) / (columns.length);
+        var canvas = $('<canvas>')[0],
+            context,
+            width = 90,
+            height = 60,
+            gutter = 5,
+            iterateX = 5;
 
-        // canvas.width = canvas.height = 120;
+        function drawColumn(column) {
+            var x = iterateX + gutter,
+                w = (width - 20 - 23 * gutter) / 24 * column + (column - 1) * gutter;
 
-        // context = canvas.getContext('2d');
-        // context.beginPath();
-        // context.fillStyle = '#EEEEEE';
-        // context.rect(0, 0, 120, 120);
+            iterateX += w + gutter;
 
-        // context.fill();
+            context.beginPath();
+            context.fillStyle = '#C5C5C5';
+            context.rect(x, 10, w, height - 20);
+            context.fill();
+        }
 
-        // while (length) {
-        //     context.beginPath();
-        //     context.fillStyle = '#333333';
-        //     context.rect(length * width + length * 5, 0, width, width);
-        //     context.fill();
-        //     length--;
-        // }
+        canvas.width = width;
+        canvas.height = height;
 
-        // return '<img src="' + canvas.toDataURL("image/png") + '" alt="' + columns.toString() + '"/>';
+        context = canvas.getContext('2d');
+        context.beginPath();
+        context.fillStyle = '#EEEEEE';
+        context.rect(0, 0, width, height);
+
+        context.fill();
+
+        _.each(columns, function (column, index) {
+            drawColumn(column, index);
+        });
+
+        return '<img src="' + canvas.toDataURL("image/png") + '" alt="' + columns.toString() + '"/>';
     }
 
     return LayoutBuilder;

@@ -30,9 +30,6 @@ define("ATHENE2-EDITOR", ['jquery'],
                 self.resize();
             }).resize();
 
-            self.preview.setLayoutBuilderConfiguration(self.layoutBuilderConfiguration);
-            self.preview.createFromForm(self.$form);
-
             self.textEditor.on('change', function () {
                 if (self.editable) {
                     self.editable.data = self.textEditor.getValue();
@@ -54,6 +51,14 @@ define("ATHENE2-EDITOR", ['jquery'],
 
                 }
             });
+
+            self.preview.addEventListener('column-add', function (column) {
+                console.log(column.$el, column);
+                column.$el.html(self.parser.parse(column.data));
+            });
+
+            self.preview.setLayoutBuilderConfiguration(self.layoutBuilderConfiguration);
+            self.preview.createFromForm(self.$form);
         };
 
         Editor.prototype.resize = function () {
@@ -84,6 +89,9 @@ require(['jquery', 'ATHENE2-EDITOR', 'codemirror', 'parser', 'preview', 'showdow
                     .addLayout([24])
                     .addLayout([12, 12])
                     .addLayout([8, 8, 8])
+                    .addLayout([8, 16])
+                    .addLayout([16, 8])
+                    .addLayout([6, 6, 12])
                     .addLayout([12, 6, 6]);
 
                 editor = editor || new Editor({

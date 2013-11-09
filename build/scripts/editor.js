@@ -21070,8 +21070,285 @@ define('events',['underscore'], function (_) {
         eventScope(element);
     };
 });
+/**
+ * Dont edit this file!
+ * This module generates itself from lang.js files!
+ * Instead edit the language files in /lang/
+ **/
+
 /*global define*/
-define('layout_builder',['jquery', 'underscore', 'events'], function ($, _, eventScope) {
+define('i18n',[],function () {
+
+var i18n = {};
+
+i18n.de = {
+    "Visit %s overview" : "Zur %s Übersicht",
+    "An error occured, please reload." : "",
+    "Order successfully saved" : "",
+    "Your browser doesnt support the following technologies: %s <br>Please update your browser!" : "",
+    "Close" : "Schließen",
+    "When asynchronously trying to load a ressource, I came across an error: %s" : "",
+    "You are using an outdated web browser. Please consider an update!" : ""
+};
+
+i18n.en = {
+    "An error occured, please reload." : "",
+    "Close" : "",
+    "Visit %s overview" : "",
+    "Order successfully saved" : "",
+    "Your browser doesnt support the following technologies: %s <br>Please update your browser!" : "",
+    "When asynchronously trying to load a ressource, I came across an error: %s" : "",
+    "You are using an outdated web browser. Please consider an update!" : ""
+};
+
+return i18n;
+});
+/**
+ * 
+ * Athene2 - Advanced Learning Resources Manager
+ *
+ * @author  Julian Kempff (julian.kempff@serlo.org)
+ * @license LGPL-3.0
+ * @license http://opensource.org/licenses/LGPL-3.0 The GNU Lesser General Public License, version 3.0
+ * @link        https://github.com/serlo-org/athene2 for the canonical source repository
+ * @copyright Copyright (c) 2013 Gesellschaft für freie Bildung e.V. (http://www.open-education.eu/)
+ */
+
+/*global define, window, console, requestAnimationFrame*/
+define('common',['underscore', 'events'], function (_, eventScope) {
+    
+    var Common = {},
+        intervals,
+        slice = Array.prototype.slice;
+
+    Common.log = (function () {
+        var history = [];
+        return function () {
+            history.push(arguments);
+            if (window.console) {
+                console.log(Array.prototype.slice.call(arguments));
+            }
+        };
+    }());
+
+    Common.KeyCode = {
+        left: 37,
+        up : 38,
+        right: 39,
+        down: 40,
+        enter: 13,
+        backspace: 8,
+        entf: 46,
+        esc: 27,
+        shift: 16,
+        cmd: 91
+    };
+
+    Common.CarbonCopy = function (element) {
+        if (!(element instanceof Array) && !(element instanceof Object)) {
+            return element;
+        }
+
+        var copy = (function () {
+            if (element instanceof Array) {
+                return slice.call(element, 0);
+            }
+
+            if (element instanceof Object) {
+                return _.extend({}, element);
+            }
+
+            throw new Error('Cant copy element');
+        }());
+
+        _.each(copy, function (item, i) {
+            copy[i] = Common.CarbonCopy(item);
+        });
+
+        return copy;
+    };
+
+    Common.sortArrayByObjectKey = function (key, array, ascending) {
+        ascending = ascending || false;
+        return array.sort(function (a, b) {
+            return ((a[key] < b[key]) ? -1 : ((a[key] > b[key]) ? 1 : 0)) * (ascending ? 1 : -1);
+        });
+    };
+
+    Common.findObjectByKey = function (key, value, object) {
+        var item;
+        _.each(object, function (val) {
+            if (val[key] === value) {
+                item = val;
+                return;
+            }
+        });
+        return item;
+    };
+
+    Common.genericError = function () {
+        if (console && "trace" in console) {
+            console.trace();
+        }
+        Common.log(arguments);
+        Common.trigger('generic error');
+    };
+
+    /*
+    * memoize.js
+    * by @philogb and @addyosmani
+    * with further optimizations by @mathias
+    * and @DmitryBaranovsk
+    * perf tests: http://bit.ly/q3zpG3
+    * Released under an MIT license.
+    */
+    Common.memoize = function (fn) {
+        return function () {
+            var args = Array.prototype.slice.call(arguments),
+                hash = "",
+                i = args.length,
+                currentArg = null;
+            while (i--) {
+                currentArg = args[i];
+                hash += (currentArg === Object(currentArg)) ? JSON.stringify(currentArg) : currentArg;
+                if (!fn.memoize) {
+                    fn.memoize = {};
+                }
+            }
+            return (hash in fn.memoize) ? fn.memoize[hash] : (fn.memoize[hash] = fn.apply(this, args));
+        };
+    };
+
+    Common.expr = function (statement) {
+        return statement;
+    };
+
+    Common.trim = function (str) {
+        return str.replace(/^[\s\uFEFF]+|[\s\uFEFF]+$/g, '');
+    };
+
+    intervals = {};
+
+    Common.setInterval = function (fn, timeout) {
+        var interval = +new Date();
+
+        intervals[interval] = true;
+
+        function loop() {
+            if (intervals[interval]) {
+                setTimeout(function () {
+                    requestAnimationFrame(loop);
+                }, timeout);
+
+                fn();
+            }
+        }
+
+        loop();
+
+        return interval;
+    };
+
+    Common.clearInterval = function (interval) {
+        if (intervals[interval]) {
+            delete intervals[interval];
+        }
+    };
+
+    eventScope(Common);
+    window.Common = Common;
+    return Common;
+});
+/*global define, window*/
+define('translator',["underscore", "i18n", "common"], function (_, i18n, Common) {
+    
+    var t,
+        config,
+        untranslated = [],
+        defaultLanguage = 'de';
+
+    config = {
+        language: defaultLanguage,
+        // with debugging active,
+        // the translator will log
+        //  untranslated strings
+        debug: false
+    };
+
+    /**
+     * @function mayTranslate
+     * @param {String} string The string to translate
+     * @return {String} The translated string OR the untouched string
+     **/
+    function mayTranslate(string) {
+        if (i18n[config.language] && i18n[config.language][string] && i18n[config.language][string] !== "") {
+            return i18n[config.language][string];
+        }
+
+        Common.expr(config.debug && untranslated.push(string));
+
+        return string;
+    }
+
+    /**
+     * @function replace
+     * @param {String} string The string to translate
+     * @param {Array} replacements An array of strings, to replace placeholders in @param string
+     * @return {String} The string, with placeholders replaced by replacement partials
+     **/
+    function replace(string, replacements) {
+        _.each(replacements, function (partial) {
+            switch (typeof partial) {
+            case 'string':
+                string = string.replace(/%s/, partial);
+                break;
+            case 'number':
+                string = string.replace(/%d/, partial);
+                break;
+            case 'boolean':
+                string = string.replace(/%b/, partial ? 'true' : 'false');
+                break;
+            }
+        });
+        return string;
+    }
+
+    /**
+     * @function t
+     * @param {String} The string to translate
+     * ... 
+     * @param {String} String replacements
+     * @return {String} The translated string or the original
+     **/
+    t = Common.memoize(function () {
+        var args = Array.prototype.slice.call(arguments),
+            string = args.shift();
+
+        return replace(mayTranslate(string), args);
+    });
+
+    /**
+     * @method config
+     * @param {Object} configuration
+     * 
+     * sets configurations
+     **/
+    t.config = function (configuration) {
+        _.extend(config, configuration);
+    };
+
+    t.getLanguage = function () {
+        return config.language;
+    };
+
+    if (config.debug) {
+        window.t = t;
+    }
+
+    return t;
+});
+/*global define*/
+define('layout_builder',['jquery', 'underscore', 'events', 'translator'], function ($, _, eventScope, t) {
     
     var Column,
         Layout,
@@ -21081,8 +21358,9 @@ define('layout_builder',['jquery', 'underscore', 'events'], function ($, _, even
         var self = this;
         eventScope(self);
 
-        self.data = data || '';
-        self.$el = $('<div class="c' + width + '">').text('test content');
+        self.data = data || t('Click to edit');
+        self.$el = $('<div class="c' + width + '">');
+
         self.$el.click(function () {
             self.trigger('select', self);
         });
@@ -21092,19 +21370,21 @@ define('layout_builder',['jquery', 'underscore', 'events'], function ($, _, even
         var self = this;
         eventScope(self);
 
-        self.data = data;
+        self.data = data || [];
         self.title = columns.toString();
+        self.columns = [];
 
         self.$el = $('<div class="r"></div>');
 
-        _.each(columns, function (width) {
-            var column = new Column(width);
+        _.each(columns, function (width, index) {
+            var column = new Column(width, self.data[index]);
 
             column.addEventListener('select', function (column) {
                 self.trigger('select', column);
             });
 
             self.$el.append(column.$el);
+            self.columns.push(column);
         });
 
     };
@@ -21120,9 +21400,9 @@ define('layout_builder',['jquery', 'underscore', 'events'], function ($, _, even
         self.$add = $('<a href="#" class="plus">+</a>');
         self.$layoutList = $('<div class="layout-list">');
 
-        self.layouts = [];
+        self.layouts = configuration.layouts;
 
-        _.each(configuration.layouts, function (columns) {
+        _.each(self.layouts, function (columns) {
             var $add = $('<a href="#">' + createIconTag(columns) + '</a>');
 
             $add.click(function (e) {
@@ -21155,37 +21435,66 @@ define('layout_builder',['jquery', 'underscore', 'events'], function ($, _, even
         this.$layoutList.detach();
     };
 
+    LayoutBuilder.prototype.addLayout = function (requestedLayout, data) {
+        var newLayout,
+            self = this;
+
+        _.each(self.layouts, function (layout) {
+            if (_.isEqual(layout, requestedLayout)) {
+                newLayout = new Layout(requestedLayout, data);
+                self.trigger('add', newLayout);
+                return;
+            }
+        });
+
+        if (!newLayout) {
+            throw new Error('Layout does not exist: ' + requestedLayout.toString());
+        }
+
+        return newLayout;
+    };
+
     function createIconTag(columns) {
-        return columns.toString();
-        // var canvas = $('<canvas>')[0],
-        //     context,
-        //     length = columns.length,
-        //     width = (120 + columns.length * 5) / (columns.length);
+        var canvas = $('<canvas>')[0],
+            context,
+            width = 90,
+            height = 60,
+            gutter = 5,
+            iterateX = 5;
 
-        // canvas.width = canvas.height = 120;
+        function drawColumn(column) {
+            var x = iterateX + gutter,
+                w = (width - 20 - 23 * gutter) / 24 * column + (column - 1) * gutter;
 
-        // context = canvas.getContext('2d');
-        // context.beginPath();
-        // context.fillStyle = '#EEEEEE';
-        // context.rect(0, 0, 120, 120);
+            iterateX += w + gutter;
 
-        // context.fill();
+            context.beginPath();
+            context.fillStyle = '#C5C5C5';
+            context.rect(x, 10, w, height - 20);
+            context.fill();
+        }
 
-        // while (length) {
-        //     context.beginPath();
-        //     context.fillStyle = '#333333';
-        //     context.rect(length * width + length * 5, 0, width, width);
-        //     context.fill();
-        //     length--;
-        // }
+        canvas.width = width;
+        canvas.height = height;
 
-        // return '<img src="' + canvas.toDataURL("image/png") + '" alt="' + columns.toString() + '"/>';
+        context = canvas.getContext('2d');
+        context.beginPath();
+        context.fillStyle = '#EEEEEE';
+        context.rect(0, 0, width, height);
+
+        context.fill();
+
+        _.each(columns, function (column, index) {
+            drawColumn(column, index);
+        });
+
+        return '<img src="' + canvas.toDataURL("image/png") + '" alt="' + columns.toString() + '"/>';
     }
 
     return LayoutBuilder;
 });
 /*global define*/
-define('formfield',['jquery', 'layout_builder', 'events'], function ($, LayoutBuilder, eventScope) {
+define('formfield',['jquery', 'underscore', 'layout_builder', 'events'], function ($, _, LayoutBuilder, eventScope) {
     
     function invoke(instance, constructor) {
         $.extend(instance, constructor.prototype);
@@ -21232,11 +21541,35 @@ define('formfield',['jquery', 'layout_builder', 'events'], function ($, LayoutBu
             layout.addEventListener('select', function (column) {
                 self.trigger('select', self, column);
             });
+
+            _.each(layout.columns, function (column) {
+                self.trigger('column-add', column);
+            });
         });
 
         self.$el.append(self.layoutBuilder.$el);
+
+        this.parseFieldData();
     };
 
+    Field.Textarea.prototype.parseFieldData = function () {
+        var self = this,
+            $html = $($(self.field).val());
+        $html.each(function () {
+            // row
+            var row = [],
+                data = [],
+                layout;
+            $(this).children().each(function () {
+                // column
+                var outerHtml = $(this).html();
+                row.push(parseInt(this.className.substring(1), 10));
+                data.push(outerHtml);
+            });
+
+            layout = self.layoutBuilder.addLayout(row, data);
+        });
+    };
     // Field.Input = function (field, label) {
     //     this = new Field(field, 'input', label);
     // };
@@ -21276,15 +21609,21 @@ define('preview',['formfield', 'events'], function (Field, eventScope) {
 
                 if (type) {
                     field = new Field[type](this);
+                    
+                    field.addEventListener('column-add', function () {
+                        self.trigger.apply(self, ['column-add'].concat(slice.call(arguments)));
+                    });
+
+                    field.addEventListener('select', function () {
+                        self.trigger.apply(self, ['field-select'].concat(slice.call(arguments)));
+                    });
+                    
                     if (type === 'Textarea') {
                         if (!self.layoutBuilderConfiguration) {
                             throw new Error('No Layout Builder set');
                         }
                         field.addLayoutBuilder(self.layoutBuilderConfiguration);
                     }
-                    field.addEventListener('select', function () {
-                        self.trigger.apply(self, ['field-select'].concat(slice.call(arguments)));
-                    });
 
                     self.formFields.push(field);
                     self.$el.append(field.$el);
@@ -22819,9 +23158,6 @@ define("ATHENE2-EDITOR", ['jquery'],
                 self.resize();
             }).resize();
 
-            self.preview.setLayoutBuilderConfiguration(self.layoutBuilderConfiguration);
-            self.preview.createFromForm(self.$form);
-
             self.textEditor.on('change', function () {
                 if (self.editable) {
                     self.editable.data = self.textEditor.getValue();
@@ -22843,6 +23179,14 @@ define("ATHENE2-EDITOR", ['jquery'],
 
                 }
             });
+
+            self.preview.addEventListener('column-add', function (column) {
+                console.log(column.$el, column);
+                column.$el.html(self.parser.parse(column.data));
+            });
+
+            self.preview.setLayoutBuilderConfiguration(self.layoutBuilderConfiguration);
+            self.preview.createFromForm(self.$form);
         };
 
         Editor.prototype.resize = function () {
@@ -22873,6 +23217,9 @@ require(['jquery', 'ATHENE2-EDITOR', 'codemirror', 'parser', 'preview', 'showdow
                     .addLayout([24])
                     .addLayout([12, 12])
                     .addLayout([8, 8, 8])
+                    .addLayout([8, 16])
+                    .addLayout([16, 8])
+                    .addLayout([6, 6, 12])
                     .addLayout([12, 6, 6]);
 
                 editor = editor || new Editor({

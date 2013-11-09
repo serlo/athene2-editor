@@ -1,5 +1,5 @@
 /*global define*/
-define(['jquery', 'layout_builder', 'events'], function ($, LayoutBuilder, eventScope) {
+define(['jquery', 'underscore', 'layout_builder', 'events'], function ($, _, LayoutBuilder, eventScope) {
     "use strict";
     function invoke(instance, constructor) {
         $.extend(instance, constructor.prototype);
@@ -46,11 +46,35 @@ define(['jquery', 'layout_builder', 'events'], function ($, LayoutBuilder, event
             layout.addEventListener('select', function (column) {
                 self.trigger('select', self, column);
             });
+
+            _.each(layout.columns, function (column) {
+                self.trigger('column-add', column);
+            });
         });
 
         self.$el.append(self.layoutBuilder.$el);
+
+        this.parseFieldData();
     };
 
+    Field.Textarea.prototype.parseFieldData = function () {
+        var self = this,
+            $html = $($(self.field).val());
+        $html.each(function () {
+            // row
+            var row = [],
+                data = [],
+                layout;
+            $(this).children().each(function () {
+                // column
+                var outerHtml = $(this).html();
+                row.push(parseInt(this.className.substring(1), 10));
+                data.push(outerHtml);
+            });
+
+            layout = self.layoutBuilder.addLayout(row, data);
+        });
+    };
     // Field.Input = function (field, label) {
     //     this = new Field(field, 'input', label);
     // };

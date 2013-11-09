@@ -93,4 +93,15 @@ body {
             text-decoration: none;
         }
     }
+
+    .layout-list {
+        > a {
+            display: inline-block;
+            margin: 0 5px;
+
+            &:hover {
+                outline: 1px solid $gray;
+            }
+        }
+    }
 }
