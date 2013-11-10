@@ -25,7 +25,7 @@ define(['formfield', 'events'], function (Field, eventScope) {
 
                 if (type) {
                     field = new Field[type](this);
-                    
+
                     field.addEventListener('column-add', function () {
                         self.trigger.apply(self, ['column-add'].concat(slice.call(arguments)));
                     });
@@ -33,10 +33,10 @@ define(['formfield', 'events'], function (Field, eventScope) {
                     field.addEventListener('select', function () {
                         self.trigger.apply(self, ['field-select'].concat(slice.call(arguments)));
                     });
-                    
+
                     if (type === 'Textarea') {
                         if (!self.layoutBuilderConfiguration) {
-                            throw new Error('No Layout Builder set');
+                            throw new Error('No Layout Builder Configuration set');
                         }
                         field.addLayoutBuilder(self.layoutBuilderConfiguration);
                     }

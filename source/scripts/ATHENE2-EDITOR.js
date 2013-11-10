@@ -32,8 +32,8 @@ define("ATHENE2-EDITOR", ['jquery'],
 
             self.textEditor.on('change', function () {
                 if (self.editable) {
-                    self.editable.data = self.textEditor.getValue();
-                    self.editable.$el.html(self.parser.parse(self.editable.data));
+                    var value = self.textEditor.getValue();
+                    self.editable.update(value, self.parser.parse(value));
                 }
             });
 

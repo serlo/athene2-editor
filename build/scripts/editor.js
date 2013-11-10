@@ -21351,7 +21351,7 @@ define('translator',["underscore", "i18n", "common"], function (_, i18n, Common)
 define('layout_builder',['jquery', 'underscore', 'events', 'translator'], function ($, _, eventScope, t) {
     
     var Column,
-        Layout,
+        Row,
         LayoutBuilder;
 
     Column = function (width, data) {
@@ -21360,21 +21360,47 @@ define('layout_builder',['jquery', 'underscore', 'events', 'translator'], functi
 
         self.data = data || t('Click to edit');
         self.$el = $('<div class="c' + width + '">');
+        self.type = width;
 
         self.$el.click(function () {
             self.trigger('select', self);
         });
     };
 
-    Layout = function (columns, data) {
+    Column.prototype.update = function (data, html) {
+        this.data = data;
+        this.$el.html(html);
+
+        this.trigger('update', this);
+    };
+
+    Row = function (columns, index, data) {
         var self = this;
         eventScope(self);
 
         self.data = data || [];
         self.title = columns.toString();
+        self.index = index;
+
         self.columns = [];
 
         self.$el = $('<div class="r"></div>');
+        self.$el.mouseenter(function (e) {
+            self.onMouseEnter(e);
+        });
+        self.$el.mouseleave(function (e) {
+            self.onMouseLeave(e);
+        });
+
+        self.$actions = $('<div class="row-actions btn-group"></div>');
+        self.$remove = $('<a href="#" class="btn btn-xs btn-danger">').text(t('Remove Row'));
+        self.$remove.click(function (e) {
+            e.preventDefault();
+            self.trigger('remove', self);
+            return;
+        });
+
+        self.$actions.append(self.$remove);
 
         _.each(columns, function (width, index) {
             var column = new Column(width, self.data[index]);
@@ -21383,10 +21409,21 @@ define('layout_builder',['jquery', 'underscore', 'events', 'translator'], functi
                 self.trigger('select', column);
             });
 
+            column.addEventListener('update', function (column) {
+                self.trigger('update', column);
+            });
+
             self.$el.append(column.$el);
             self.columns.push(column);
         });
+    };
 
+    Row.prototype.onMouseEnter = function () {
+        this.$el.append(this.$actions);
+    };
+
+    Row.prototype.onMouseLeave = function () {
+        this.$actions.detach();
     };
 
     LayoutBuilder = function (configuration) {
@@ -21401,16 +21438,14 @@ define('layout_builder',['jquery', 'underscore', 'events', 'translator'], functi
         self.$layoutList = $('<div class="layout-list">');
 
         self.layouts = configuration.layouts;
+        self.rows = [];
 
         _.each(self.layouts, function (columns) {
             var $add = $('<a href="#">' + createIconTag(columns) + '</a>');
 
             $add.click(function (e) {
                 e.preventDefault();
-                var layout = new Layout(columns);
-
-                self.trigger('add', layout);
-
+                self.addRow(columns);
                 self.hideLayouts();
                 return;
             });
@@ -21435,23 +21470,36 @@ define('layout_builder',['jquery', 'underscore', 'events', 'translator'], functi
         this.$layoutList.detach();
     };
 
-    LayoutBuilder.prototype.addLayout = function (requestedLayout, data) {
-        var newLayout,
+    LayoutBuilder.prototype.addRow = function (requestedLayout, data) {
+        var newRow,
             self = this;
 
         _.each(self.layouts, function (layout) {
             if (_.isEqual(layout, requestedLayout)) {
-                newLayout = new Layout(requestedLayout, data);
-                self.trigger('add', newLayout);
+                newRow = new Row(requestedLayout, self.rows.length, data);
+
+                newRow.addEventListener('remove', function (row) {
+                    self.removeRow(row);
+                });
+
+                self.rows.push(newRow);
+                self.trigger('add', newRow);
                 return;
             }
         });
 
-        if (!newLayout) {
+        if (!newRow) {
             throw new Error('Layout does not exist: ' + requestedLayout.toString());
         }
 
-        return newLayout;
+        return newRow;
+    };
+
+    LayoutBuilder.prototype.removeRow = function (row) {
+        row.$el.remove();
+        this.rows.splice(row.index, 1);
+        row.trigger('update');
+        row = null;
     };
 
     function createIconTag(columns) {
@@ -21503,6 +21551,7 @@ define('formfield',['jquery', 'underscore', 'layout_builder', 'events'], functio
 
     var Field = function (field, type, label) {
         this.field = field;
+        this.$field = $(field);
         this.type = type;
         this.label = label || '';
 
@@ -21521,15 +21570,29 @@ define('formfield',['jquery', 'underscore', 'layout_builder', 'events'], functio
             self.trigger('select', self);
         });
 
-        self.data = $(this.field).val();
+        self.data = this.$field.val();
     };
 
     Field.Textarea = function (field, label) {
-        // this = new Field(field, 'textarea', label);
-        invoke(this, Field, field, 'textarea', label);
+        var self = this;
+        invoke(self, Field, field, 'textarea', label);
 
-        this.$inner.unbind('click');
-        this.data = $(this.field).html();
+        self.$inner.unbind('click');
+        self.data = this.$field.html();
+
+        self.updateField = _.throttle(function () {
+            var updatedValue = '';
+            _.each(self.layoutBuilder.rows, function (row) {
+                updatedValue += '<div class="r">';
+                _.each(row.columns, function (column) {
+                    updatedValue += '<div class="c' + column.type + '">';
+                    updatedValue += column.data;
+                    updatedValue += '</div>';
+                });
+                updatedValue += '</div>';
+            });
+            self.$field.html(updatedValue);
+        }, 2000);
     };
 
     Field.Textarea.prototype.addLayoutBuilder = function (layoutBuilderConfiguration) {
@@ -21538,8 +21601,13 @@ define('formfield',['jquery', 'underscore', 'layout_builder', 'events'], functio
 
         self.layoutBuilder.addEventListener('add', function (layout) {
             self.$inner.append(layout.$el);
+
             layout.addEventListener('select', function (column) {
                 self.trigger('select', self, column);
+            });
+
+            layout.addEventListener('update', function () {
+                self.updateField();
             });
 
             _.each(layout.columns, function (column) {
@@ -21567,7 +21635,7 @@ define('formfield',['jquery', 'underscore', 'layout_builder', 'events'], functio
                 data.push(outerHtml);
             });
 
-            layout = self.layoutBuilder.addLayout(row, data);
+            layout = self.layoutBuilder.addRow(row, data);
         });
     };
     // Field.Input = function (field, label) {
@@ -21609,7 +21677,7 @@ define('preview',['formfield', 'events'], function (Field, eventScope) {
 
                 if (type) {
                     field = new Field[type](this);
-                    
+
                     field.addEventListener('column-add', function () {
                         self.trigger.apply(self, ['column-add'].concat(slice.call(arguments)));
                     });
@@ -21617,10 +21685,10 @@ define('preview',['formfield', 'events'], function (Field, eventScope) {
                     field.addEventListener('select', function () {
                         self.trigger.apply(self, ['field-select'].concat(slice.call(arguments)));
                     });
-                    
+
                     if (type === 'Textarea') {
                         if (!self.layoutBuilderConfiguration) {
-                            throw new Error('No Layout Builder set');
+                            throw new Error('No Layout Builder Configuration set');
                         }
                         field.addLayoutBuilder(self.layoutBuilderConfiguration);
                     }
@@ -23160,8 +23228,8 @@ define("ATHENE2-EDITOR", ['jquery'],
 
             self.textEditor.on('change', function () {
                 if (self.editable) {
-                    self.editable.data = self.textEditor.getValue();
-                    self.editable.$el.html(self.parser.parse(self.editable.data));
+                    var value = self.textEditor.getValue();
+                    self.editable.update(value, self.parser.parse(value));
                 }
             });
 

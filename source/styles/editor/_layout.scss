@@ -18,7 +18,7 @@ body {
     background: white;
 
     .editor-main-inner {
-        padding: 1px 10px $action-height 10px;
+        padding: 1px 20px $action-height 20px;
     }
 }
 
@@ -93,15 +93,18 @@ body {
             text-decoration: none;
         }
     }
+}
 
-    .layout-list {
-        > a {
-            display: inline-block;
-            margin: 0 5px;
+.layout-list {
+    position: relative;
+    top: -30px;
+    
+    > a {
+        display: inline-block;
+        margin: 0 5px 10px;
 
-            &:hover {
-                outline: 1px solid $gray;
-            }
+        &:hover {
+            outline: 2px solid $gray;
         }
     }
 }

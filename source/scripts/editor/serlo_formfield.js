@@ -8,6 +8,7 @@ define(['jquery', 'underscore', 'layout_builder', 'events'], function ($, _, Lay
 
     var Field = function (field, type, label) {
         this.field = field;
+        this.$field = $(field);
         this.type = type;
         this.label = label || '';
 
@@ -26,15 +27,29 @@ define(['jquery', 'underscore', 'layout_builder', 'events'], function ($, _, Lay
             self.trigger('select', self);
         });
 
-        self.data = $(this.field).val();
+        self.data = this.$field.val();
     };
 
     Field.Textarea = function (field, label) {
-        // this = new Field(field, 'textarea', label);
-        invoke(this, Field, field, 'textarea', label);
+        var self = this;
+        invoke(self, Field, field, 'textarea', label);
 
-        this.$inner.unbind('click');
-        this.data = $(this.field).html();
+        self.$inner.unbind('click');
+        self.data = this.$field.html();
+
+        self.updateField = _.throttle(function () {
+            var updatedValue = '';
+            _.each(self.layoutBuilder.rows, function (row) {
+                updatedValue += '<div class="r">';
+                _.each(row.columns, function (column) {
+                    updatedValue += '<div class="c' + column.type + '">';
+                    updatedValue += column.data;
+                    updatedValue += '</div>';
+                });
+                updatedValue += '</div>';
+            });
+            self.$field.html(updatedValue);
+        }, 2000);
     };
 
     Field.Textarea.prototype.addLayoutBuilder = function (layoutBuilderConfiguration) {
@@ -43,8 +58,13 @@ define(['jquery', 'underscore', 'layout_builder', 'events'], function ($, _, Lay
 
         self.layoutBuilder.addEventListener('add', function (layout) {
             self.$inner.append(layout.$el);
+
             layout.addEventListener('select', function (column) {
                 self.trigger('select', self, column);
+            });
+
+            layout.addEventListener('update', function () {
+                self.updateField();
             });
 
             _.each(layout.columns, function (column) {
@@ -72,7 +92,7 @@ define(['jquery', 'underscore', 'layout_builder', 'events'], function ($, _, Lay
                 data.push(outerHtml);
             });
 
-            layout = self.layoutBuilder.addLayout(row, data);
+            layout = self.layoutBuilder.addRow(row, data);
         });
     };
     // Field.Input = function (field, label) {
