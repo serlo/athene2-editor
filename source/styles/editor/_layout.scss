@@ -36,6 +36,32 @@ body {
     background: #F8F8F8;
 }
 
+#editor-helpers {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    padding-left: 20px;
+
+    .helper {
+        display: inline-block;
+        padding: 3px 12px 0 12px;
+        line-height: 28px;
+        border-left: 1px solid #C5C5C5;
+        border-right: 1px solid #C5C5C5;
+        text-align: center;
+        background: rgba(255, 255, 255, 0.5);
+        color: #333;
+
+        &:hover {
+            background: rgba(255, 255, 255, 0.75);
+        }
+
+        + .helper {
+            border-left: none;
+        }
+    }
+}
+
 #main {
     overflow-x: hidden;
 }

@@ -34,7 +34,8 @@ require.config({
         "preview" : "editor/serlo_editor_previewer",
         "layout_builder" : "editor/serlo_layout_builder",
         "layout_builder_configuration" : "editor/serlo_layout_builder_configuration",
-        "formfield" : "editor/serlo_formfield"
+        "formfield" : "editor/serlo_formfield",
+        "texteditor_helper" : "editor/serlo_texteditor_helper"
     },
     shim: {
         underscore: {

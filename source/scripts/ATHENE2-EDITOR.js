@@ -16,6 +16,7 @@ define("ATHENE2-EDITOR", ['jquery'],
             Editor;
 
         Editor = function (settings) {
+            this.helpers = [];
             return this.updateSettings(settings);
         };
 
@@ -60,6 +61,11 @@ define("ATHENE2-EDITOR", ['jquery'],
             self.preview.createFromForm(self.$form);
         };
 
+        Editor.prototype.addHelper = function (helper) {
+            this.$helpers.append(helper.$el);
+            this.helpers.push(helper);
+        };
+
         Editor.prototype.resize = function () {
             if (this.textEditor) {
                 this.textEditor.setSize($window.width() / 2, $window.height() - 32);
@@ -70,14 +76,15 @@ define("ATHENE2-EDITOR", ['jquery'],
         return Editor;
     });
 
-require(['jquery', 'ATHENE2-EDITOR', 'codemirror', 'parser', 'preview', 'showdown', 'layout_builder_configuration'],
-    function ($, Editor, CodeMirror, Parser, Preview, Showdown, LayoutBuilderConfiguration) {
+require(['jquery', 'ATHENE2-EDITOR', 'codemirror', 'parser', 'preview', 'showdown', 'layout_builder_configuration', 'texteditor_helper'],
+    function ($, Editor, CodeMirror, Parser, Preview, Showdown, LayoutBuilderConfiguration, TextEditorHelper) {
         "use strict";
 
         $(function () {
 
             function init() {
                 var editor,
+                    textEditor,
                     layoutBuilderConfiguration = new LayoutBuilderConfiguration(),
                     parser = new Parser(),
                     converter = new Showdown.converter();
@@ -93,21 +100,28 @@ require(['jquery', 'ATHENE2-EDITOR', 'codemirror', 'parser', 'preview', 'showdow
                     .addLayout([6, 6, 12])
                     .addLayout([12, 6, 6]);
 
+                textEditor = new CodeMirror($('#main .editor-main-inner')[0], {
+                    lineNumbers: true,
+                    styleActiveLine: true,
+                    matchBrackets: true,
+                    lineWrapping: true,
+                    readOnly: true
+                });
+
                 editor = editor || new Editor({
                     $form: $('#editor-form').first(),
+                    $helpers : $('#editor-helpers'),
                     parser: parser,
                     layoutBuilderConfiguration: layoutBuilderConfiguration,
-                    textEditor: new CodeMirror($('#main .editor-main-inner')[0], {
-                        lineNumbers: true,
-                        styleActiveLine: true,
-                        matchBrackets: true,
-                        lineWrapping: true,
-                        readOnly: true
-                    }),
+                    textEditor: textEditor,
                     preview: new Preview({
                         $el: $('#preview .editor-main-inner')
                     })
                 });
+
+                editor.addHelper(new TextEditorHelper.Bold(textEditor));
+                editor.addHelper(new TextEditorHelper.Italic(textEditor));
+                editor.addHelper(new TextEditorHelper.Link(textEditor));
 
                 editor.initialize();
             }
