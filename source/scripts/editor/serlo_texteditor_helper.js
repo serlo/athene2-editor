@@ -2,9 +2,13 @@
 define(['jquery'], function ($) {
     var TextEditorHelper;
 
-    TextEditorHelper = function (settings) {
+    TextEditorHelper = function (textEditor, settings) {
         var self = this;
-        self.settings = settings;
+        self.settings = $.extend({
+            cursorDelta: 0
+        }, settings);
+
+        self.textEditor = textEditor;
 
         self.$el = $('<a class="helper" href="#">').text(settings.title);
         self.$el.click(function (e) {
@@ -15,72 +19,56 @@ define(['jquery'], function ($) {
     };
 
     TextEditorHelper.prototype.action = function () {
-        this.settings.action.apply(this, arguments);
+        if (this.textEditor.options.readOnly === false) {
+            if (this.settings.action) {
+                return this.settings.action.apply(this, arguments);
+            }
+
+            var cursor = this.textEditor.getCursor(),
+                selection = this.textEditor.getSelection();
+
+            if (selection) {
+                this.textEditor.replaceSelection(this.settings.replaceBefore + selection + this.settings.replaceAfter);
+                this.textEditor.setCursor({
+                    line: cursor.line,
+                    ch: cursor.ch + this.settings.cursorDelta - selection.length
+                });
+            } else {
+                this.textEditor.replaceRange(this.settings.replaceBefore + this.settings.replaceAfter, cursor);
+                this.textEditor.setCursor({
+                    line: cursor.line,
+                    ch: cursor.ch + this.settings.cursorDelta
+                });
+            }
+
+            this.textEditor.focus();
+        }
     };
 
     TextEditorHelper.Bold = function (textEditor) {
-        return new TextEditorHelper({
+        return new TextEditorHelper(textEditor, {
             title: 'B',
-            action: function () {
-                var cursor,
-                    selection = textEditor.getSelection();
-                if (selection) {
-                    textEditor.replaceSelection('**' + selection + '**');
-                } else {
-                    cursor = textEditor.getCursor();
-                    textEditor.replaceRange('****', cursor);
-                    textEditor.setCursor({
-                        line: cursor.line,
-                        ch: cursor.ch - selection.length + 2
-                    });
-                }
-                textEditor.focus();
-            }
+            replaceBefore: '**',
+            replaceAfter: '**',
+            cursorDelta: 2
         });
     };
 
     TextEditorHelper.Italic = function (textEditor) {
-        return new TextEditorHelper({
+        return new TextEditorHelper(textEditor, {
             title: 'I',
-            action: function () {
-                var cursor,
-                    selection = textEditor.getSelection();
-                if (selection) {
-                    textEditor.replaceSelection('*' + selection + '*');
-                    textEditor.setCursor({
-                        line: cursor.line,
-                        ch: cursor.ch - selection.length + 1
-                    });
-                } else {
-                    cursor = textEditor.getCursor();
-                    textEditor.replaceRange('**', cursor);
-                    textEditor.setCursor({
-                        line: cursor.line,
-                        ch: cursor.ch + 1
-                    });
-                }
-                textEditor.focus();
-            }
+            replaceBefore: '*',
+            replaceAfter: '*',
+            cursorDelta: 1
         });
     };
 
     TextEditorHelper.Link = function (textEditor) {
-        return new TextEditorHelper({
+        return new TextEditorHelper(textEditor, {
             title: 'Link',
-            action: function () {
-                var cursor = textEditor.getCursor(),
-                    selection = textEditor.getSelection();
-                if (selection) {
-                    textEditor.replaceSelection('[Link Title](' + selection + ')');
-                } else {
-                    textEditor.replaceRange('[Link Title](Link Url)', cursor);
-                }
-                textEditor.setCursor({
-                    line: cursor.line,
-                    ch: cursor.ch - selection.length + 1
-                });
-                textEditor.focus();
-            }
+            replaceBefore: '[Link Title](',
+            replaceAfter: ')',
+            cursorDelta: 1
         });
     };
 
