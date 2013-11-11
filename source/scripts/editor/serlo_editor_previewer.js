@@ -71,5 +71,13 @@ define(['formfield', 'events'], function (Field, eventScope) {
         return type;
     };
 
+    Preview.prototype.scrollTo = function (elem) {
+        if (typeof elem === 'number') {
+            this.$el.scrollTop(elem);
+        } else {
+            this.$el.scrollTop(elem.position().top);
+        }
+    };
+
     return Preview;
 });

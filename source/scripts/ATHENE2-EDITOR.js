@@ -80,7 +80,7 @@ define("ATHENE2-EDITOR", ['jquery'],
 
         Editor.prototype.resize = function () {
             if (this.textEditor) {
-                this.textEditor.setSize($window.width() / 2, $window.height() - 32);
+                this.textEditor.setSize($window.width() / 2, $window.height() - 80);
             }
             return this;
         };

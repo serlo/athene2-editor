@@ -56,20 +56,22 @@ define(['jquery', 'underscore', 'layout_builder', 'events'], function ($, _, Lay
         var self = this;
         self.layoutBuilder = new LayoutBuilder(layoutBuilderConfiguration);
 
-        self.layoutBuilder.addEventListener('add', function (layout) {
-            self.$inner.append(layout.$el);
+        self.layoutBuilder.addEventListener('add', function (row) {
+            self.$inner.append(row.$el);
 
-            layout.addEventListener('select', function (column) {
+            row.addEventListener('select', function (column) {
                 self.trigger('select', self, column);
             });
 
-            layout.addEventListener('update', function () {
+            row.addEventListener('update', function () {
                 self.updateField();
             });
 
-            _.each(layout.columns, function (column) {
+            _.each(row.columns, function (column) {
                 self.trigger('column-add', column);
             });
+
+            row.columns[0].trigger('select', row.columns[0]);
         });
 
         self.$el.append(self.layoutBuilder.$el);
@@ -85,6 +87,7 @@ define(['jquery', 'underscore', 'layout_builder', 'events'], function ($, _, Lay
             var row = [],
                 data = [],
                 layout;
+
             $(this).children().each(function () {
                 // column
                 var outerHtml = $(this).html();
