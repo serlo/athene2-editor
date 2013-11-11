@@ -324,8 +324,8 @@ module.exports = function (grunt) {
         'cssmin',
         'imagemin',
         'requirejs:production',
-        'modernizr'
-        // 'uglify'
+        'modernizr',
+        'uglify'
     ]);
 
     grunt.registerTask('default', [
