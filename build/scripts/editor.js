@@ -23198,9 +23198,13 @@ define('layout_builder_configuration',[], function () {
 define('texteditor_helper',['jquery'], function ($) {
     var TextEditorHelper;
 
-    TextEditorHelper = function (settings) {
+    TextEditorHelper = function (textEditor, settings) {
         var self = this;
-        self.settings = settings;
+        self.settings = $.extend({
+            cursorDelta: 0
+        }, settings);
+
+        self.textEditor = textEditor;
 
         self.$el = $('<a class="helper" href="#">').text(settings.title);
         self.$el.click(function (e) {
@@ -23211,72 +23215,68 @@ define('texteditor_helper',['jquery'], function ($) {
     };
 
     TextEditorHelper.prototype.action = function () {
-        this.settings.action.apply(this, arguments);
+        if (this.textEditor.options.readOnly === false) {
+            if (this.settings.action) {
+                return this.settings.action.apply(this, arguments);
+            }
+
+            var cursor = this.textEditor.getCursor(false),
+                selection = this.textEditor.getSelection(),
+                anchor = {line: cursor.line, ch: cursor.ch},
+                head = null;
+
+            if (selection) {
+                this.textEditor.replaceSelection(this.settings.replaceBefore + selection + this.settings.replaceAfter);
+                anchor.ch = cursor.ch + this.settings.cursorDelta - selection.length;
+            } else {
+                this.textEditor.replaceRange(this.settings.replaceBefore + this.settings.replaceAfter, cursor);
+                anchor.ch = cursor.ch + this.settings.cursorDelta;
+            }
+
+            if (this.settings.selectionDelta) {
+                head = {
+                    line: cursor.line
+                };
+
+                if (this.settings.selectionDelta === 'selection') {
+                    head.ch = anchor.ch + (selection ? selection.length : 0);
+                } else {
+                    head.ch = anchor.ch + this.settings.selectionDelta;
+                }
+            }
+
+            this.textEditor.setSelection(anchor, head);
+            this.textEditor.focus();
+        }
     };
 
     TextEditorHelper.Bold = function (textEditor) {
-        return new TextEditorHelper({
+        return new TextEditorHelper(textEditor, {
             title: 'B',
-            action: function () {
-                var cursor,
-                    selection = textEditor.getSelection();
-                if (selection) {
-                    textEditor.replaceSelection('**' + selection + '**');
-                } else {
-                    cursor = textEditor.getCursor();
-                    textEditor.replaceRange('****', cursor);
-                    textEditor.setCursor({
-                        line: cursor.line,
-                        ch: cursor.ch - selection.length + 2
-                    });
-                }
-                textEditor.focus();
-            }
+            replaceBefore: '**',
+            replaceAfter: '**',
+            cursorDelta: 2,
+            selectionDelta: 'selection'
         });
     };
 
     TextEditorHelper.Italic = function (textEditor) {
-        return new TextEditorHelper({
+        return new TextEditorHelper(textEditor, {
             title: 'I',
-            action: function () {
-                var cursor,
-                    selection = textEditor.getSelection();
-                if (selection) {
-                    textEditor.replaceSelection('*' + selection + '*');
-                    textEditor.setCursor({
-                        line: cursor.line,
-                        ch: cursor.ch - selection.length + 1
-                    });
-                } else {
-                    cursor = textEditor.getCursor();
-                    textEditor.replaceRange('**', cursor);
-                    textEditor.setCursor({
-                        line: cursor.line,
-                        ch: cursor.ch + 1
-                    });
-                }
-                textEditor.focus();
-            }
+            replaceBefore: '*',
+            replaceAfter: '*',
+            cursorDelta: 1,
+            selectionDelta: 'selection'
         });
     };
 
     TextEditorHelper.Link = function (textEditor) {
-        return new TextEditorHelper({
+        return new TextEditorHelper(textEditor, {
             title: 'Link',
-            action: function () {
-                var cursor = textEditor.getCursor(),
-                    selection = textEditor.getSelection();
-                if (selection) {
-                    textEditor.replaceSelection('[Link Title](' + selection + ')');
-                } else {
-                    textEditor.replaceRange('[Link Title](Link Url)', cursor);
-                }
-                textEditor.setCursor({
-                    line: cursor.line,
-                    ch: cursor.ch - selection.length + 1
-                });
-                textEditor.focus();
-            }
+            replaceBefore: '[Link Title](',
+            replaceAfter: ')',
+            cursorDelta: 1,
+            selectionDelta: 10
         });
     };
 
@@ -23324,13 +23324,25 @@ define("ATHENE2-EDITOR", ['jquery'],
 
             self.preview.addEventListener('field-select', function (field, column) {
                 if (self.editable) {
+                    if (self.editable === column) {
+                        return;
+                    }
+
                     self.editable.$el.removeClass('active');
+                    self.editable.history = self.textEditor.getHistory();
                 }
 
                 if (field.type === 'textarea' && column) {
                     self.editable = column;
                     column.$el.addClass('active');
+
                     self.textEditor.setValue(column.data);
+                    self.textEditor.clearHistory();
+
+                    if (self.editable.history) {
+                        self.textEditor.setHistory(self.editable.history);
+                    }
+
                     self.textEditor.options.readOnly = false;
                     self.textEditor.focus();
 
@@ -23389,7 +23401,7 @@ require(['jquery', 'ATHENE2-EDITOR', 'codemirror', 'parser', 'preview', 'showdow
                     styleActiveLine: true,
                     matchBrackets: true,
                     lineWrapping: true,
-                    readOnly: true
+                    readOnly: 'nocursor'
                 });
 
                 editor = editor || new Editor({
@@ -23408,6 +23420,7 @@ require(['jquery', 'ATHENE2-EDITOR', 'codemirror', 'parser', 'preview', 'showdow
                 editor.addHelper(new TextEditorHelper.Link(textEditor));
 
                 editor.initialize();
+                window.textEditor = textEditor;
             }
 
             init($('body'));

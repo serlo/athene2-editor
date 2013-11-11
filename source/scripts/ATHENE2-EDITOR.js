@@ -40,6 +40,10 @@ define("ATHENE2-EDITOR", ['jquery'],
 
             self.preview.addEventListener('field-select', function (field, column) {
                 if (self.editable) {
+                    if (self.editable === column) {
+                        return;
+                    }
+
                     self.editable.$el.removeClass('active');
                     self.editable.history = self.textEditor.getHistory();
                 }
@@ -47,7 +51,7 @@ define("ATHENE2-EDITOR", ['jquery'],
                 if (field.type === 'textarea' && column) {
                     self.editable = column;
                     column.$el.addClass('active');
-                    console.log('clear?');
+
                     self.textEditor.setValue(column.data);
                     self.textEditor.clearHistory();
 
@@ -106,8 +110,7 @@ require(['jquery', 'ATHENE2-EDITOR', 'codemirror', 'parser', 'preview', 'showdow
                     .addLayout([8, 16])
                     .addLayout([16, 8])
                     .addLayout([6, 6, 12])
-                    .addLayout([12, 6, 6])
-                    .addLayout([12, 8, 4]);
+                    .addLayout([12, 6, 6]);
 
                 textEditor = new CodeMirror($('#main .editor-main-inner')[0], {
                     lineNumbers: true,

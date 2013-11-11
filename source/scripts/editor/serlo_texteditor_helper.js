@@ -24,23 +24,32 @@ define(['jquery'], function ($) {
                 return this.settings.action.apply(this, arguments);
             }
 
-            var cursor = this.textEditor.getCursor(),
-                selection = this.textEditor.getSelection();
+            var cursor = this.textEditor.getCursor(false),
+                selection = this.textEditor.getSelection(),
+                anchor = {line: cursor.line, ch: cursor.ch},
+                head = null;
 
             if (selection) {
                 this.textEditor.replaceSelection(this.settings.replaceBefore + selection + this.settings.replaceAfter);
-                this.textEditor.setCursor({
-                    line: cursor.line,
-                    ch: cursor.ch + this.settings.cursorDelta - selection.length
-                });
+                anchor.ch = cursor.ch + this.settings.cursorDelta - selection.length;
             } else {
                 this.textEditor.replaceRange(this.settings.replaceBefore + this.settings.replaceAfter, cursor);
-                this.textEditor.setCursor({
-                    line: cursor.line,
-                    ch: cursor.ch + this.settings.cursorDelta
-                });
+                anchor.ch = cursor.ch + this.settings.cursorDelta;
             }
 
+            if (this.settings.selectionDelta) {
+                head = {
+                    line: cursor.line
+                };
+
+                if (this.settings.selectionDelta === 'selection') {
+                    head.ch = anchor.ch + (selection ? selection.length : 0);
+                } else {
+                    head.ch = anchor.ch + this.settings.selectionDelta;
+                }
+            }
+
+            this.textEditor.setSelection(anchor, head);
             this.textEditor.focus();
         }
     };
@@ -50,7 +59,8 @@ define(['jquery'], function ($) {
             title: 'B',
             replaceBefore: '**',
             replaceAfter: '**',
-            cursorDelta: 2
+            cursorDelta: 2,
+            selectionDelta: 'selection'
         });
     };
 
@@ -59,7 +69,8 @@ define(['jquery'], function ($) {
             title: 'I',
             replaceBefore: '*',
             replaceAfter: '*',
-            cursorDelta: 1
+            cursorDelta: 1,
+            selectionDelta: 'selection'
         });
     };
 
@@ -68,7 +79,8 @@ define(['jquery'], function ($) {
             title: 'Link',
             replaceBefore: '[Link Title](',
             replaceAfter: ')',
-            cursorDelta: 1
+            cursorDelta: 1,
+            selectionDelta: 10
         });
     };
 
