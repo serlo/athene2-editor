@@ -1,15 +1,22 @@
 $action-height: 48px;
+$header-height: 32px;
 $gray: #C5C5C5;
 
 body {
     overflow-y: hidden;
 }
 
+header {
+    position: relative;
+    box-shadow: 0 0 3px #333;
+    z-index: 1
+}
+
 #editor-wrap {
     position: absolute;
-    top: 0;
+    top: $header-height;
     left: 0;
-    bottom: 0;
+    bottom: $action-height;
     right: 0;
 }
 
@@ -29,11 +36,12 @@ body {
 #editor-actions {
     height: $action-height;
     position: absolute;
-    bottom: 0;
+    bottom: -1 * $action-height;
     left: 0;
-    width: 50%;
+    width: 100%;
     padding: 8px 12px;
     background: #F8F8F8;
+    outline: 1px solid $gray;
 }
 
 #editor-helpers {
@@ -71,10 +79,6 @@ body {
     height: 100%;
     float: left;
     overflow-y: auto;
-}
-
-.editor-main-inner {
-    margin-top: 32px;
 }
 
 .add-layout {
@@ -124,6 +128,8 @@ body {
 .layout-list {
     position: relative;
     top: -30px;
+
+    padding-bottom: 30px;
     
     > a {
         display: inline-block;
