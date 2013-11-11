@@ -41,12 +41,20 @@ define("ATHENE2-EDITOR", ['jquery'],
             self.preview.addEventListener('field-select', function (field, column) {
                 if (self.editable) {
                     self.editable.$el.removeClass('active');
+                    self.editable.history = self.textEditor.getHistory();
                 }
 
                 if (field.type === 'textarea' && column) {
                     self.editable = column;
                     column.$el.addClass('active');
+                    console.log('clear?');
                     self.textEditor.setValue(column.data);
+                    self.textEditor.clearHistory();
+
+                    if (self.editable.history) {
+                        self.textEditor.setHistory(self.editable.history);
+                    }
+
                     self.textEditor.options.readOnly = false;
                     self.textEditor.focus();
 
@@ -98,14 +106,15 @@ require(['jquery', 'ATHENE2-EDITOR', 'codemirror', 'parser', 'preview', 'showdow
                     .addLayout([8, 16])
                     .addLayout([16, 8])
                     .addLayout([6, 6, 12])
-                    .addLayout([12, 6, 6]);
+                    .addLayout([12, 6, 6])
+                    .addLayout([12, 8, 4]);
 
                 textEditor = new CodeMirror($('#main .editor-main-inner')[0], {
                     lineNumbers: true,
                     styleActiveLine: true,
                     matchBrackets: true,
                     lineWrapping: true,
-                    readOnly: true
+                    readOnly: 'nocursor'
                 });
 
                 editor = editor || new Editor({
@@ -124,6 +133,7 @@ require(['jquery', 'ATHENE2-EDITOR', 'codemirror', 'parser', 'preview', 'showdow
                 editor.addHelper(new TextEditorHelper.Link(textEditor));
 
                 editor.initialize();
+                window.textEditor = textEditor;
             }
 
             init($('body'));
