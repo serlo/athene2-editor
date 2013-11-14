@@ -34,7 +34,7 @@ module.exports = function (grunt) {
                 tasks: ['i18n']
             },
             scripts: {
-                files: ['<%= serlo.app %>/scripts/{,*/}*.js'],
+                files: ['<%= serlo.app %>/scripts/{,*/,**/}*.js'],
                 tasks: ['jshint', 'copy:requirejs', 'requirejs:production']
             },
             images: {
@@ -44,14 +44,6 @@ module.exports = function (grunt) {
             fonts: {
                 files: ['<%= serlo.app %>/styles/fonts/*'],
                 tasks: ['copy:dist']
-            },
-            editorScripts: {
-                files: ['<%= serlo.app %>/editor/scripts/{,*/}*.js'],
-                tasks: ['jshint', 'copy:requirejs', 'requirejs:editor']
-            },
-            editorCompass: {
-                files: ['<%= serlo.app %>/editor/styles/{,*/}*.{scss,sass}'],
-                tasks: ['jshint', 'compass:editor', 'autoprefixer']
             }
         },
         clean: {

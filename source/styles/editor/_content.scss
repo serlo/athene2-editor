@@ -29,7 +29,9 @@
 
         .content-editor & {
             position: relative;
-            
+            // brower paint optimization hack            
+            transform: translateZ(0);
+
             .row-actions {
                 position: absolute;
                 top: 0;

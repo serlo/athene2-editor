@@ -1,5 +1,5 @@
 /**
- * 
+ *
  * Athene2 - Advanced Learning Resources Manager
  *
  * @author  Julian Kempff (julian.kempff@serlo.org)
@@ -29,13 +29,17 @@ require.config({
         "modals" : "modules/serlo_modals",
         "codemirror" : "codemirror/codemirror",
         "markdownmode" : "codemirror/mode/markdown/markdown",
+        "searchcursor" : "codemirror/addon/search/searchcursor",
         "showdown": "../bower_components/showdown/src/showdown",
         "parser" : "editor/serlo_parser",
         "preview" : "editor/serlo_editor_previewer",
         "layout_builder" : "editor/serlo_layout_builder",
         "layout_builder_configuration" : "editor/serlo_layout_builder_configuration",
         "formfield" : "editor/serlo_formfield",
-        "texteditor_helper" : "editor/serlo_texteditor_helper"
+        "texteditor_helper" : "editor/serlo_texteditor_helper",
+        "texteditor_plugin_manager" : "editor/plugins/serlo_texteditor_plugin_manager",
+        "texteditor_plugin" : "editor/plugins/serlo_texteditor_plugin",
+        "texteditor_plugin_image" : "editor/plugins/image_plugin"
     },
     shim: {
         underscore: {
@@ -50,11 +54,14 @@ require.config({
         markdownmode: {
             deps: ['codemirror']
         },
+        searchcursor: {
+            deps: ['codemirror']
+        },
         codemirror: {
             exports: "CodeMirror"
         },
         "ATHENE2-EDITOR": {
-            deps: ['bootstrap', 'polyfills', 'datepicker', 'markdownmode']
+            deps: ['bootstrap', 'polyfills', 'datepicker', 'markdownmode', 'searchcursor', 'texteditor_plugin_image']
         }
     },
     waitSeconds: 12

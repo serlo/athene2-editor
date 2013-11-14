@@ -74,6 +74,16 @@ define(['jquery'], function ($) {
         });
     };
 
+    TextEditorHelper.List = function (textEditor) {
+        return new TextEditorHelper(textEditor, {
+            title: 'List',
+            replaceBefore: '* ',
+            replaceAfter: '\n* ',
+            cursorDelta: 2,
+            selectionDelta: 'selection'
+        });
+    };
+
     TextEditorHelper.Link = function (textEditor) {
         return new TextEditorHelper(textEditor, {
             title: 'Link',
@@ -81,6 +91,26 @@ define(['jquery'], function ($) {
             replaceAfter: ')',
             cursorDelta: 1,
             selectionDelta: 10
+        });
+    };
+
+    TextEditorHelper.Image = function (textEditor) {
+        return new TextEditorHelper(textEditor, {
+            title: 'Image',
+            replaceBefore: '![Image Title](',
+            replaceAfter: ')',
+            cursorDelta: 2,
+            selectionDelta: 11
+        });
+    };
+
+    TextEditorHelper.Formula = function (textEditor) {
+        return new TextEditorHelper(textEditor, {
+            title: 'Formula',
+            replaceBefore: '$$',
+            replaceAfter: '$$',
+            cursorDelta: 2,
+            selectionDelta: 'selection'
         });
     };
 
