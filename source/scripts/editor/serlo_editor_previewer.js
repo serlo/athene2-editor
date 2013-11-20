@@ -34,6 +34,10 @@ define(['formfield', 'events'], function (Field, eventScope) {
                         self.trigger.apply(self, ['field-select'].concat(slice.call(arguments)));
                     });
 
+                    field.addEventListener('update', function () {
+                        self.trigger.apply(self, ['update'].concat(slice.call(arguments)));
+                    });
+
                     if (type === 'Textarea') {
                         if (!self.layoutBuilderConfiguration) {
                             throw new Error('No Layout Builder Configuration set');

@@ -63,8 +63,9 @@ define(['jquery', 'underscore', 'layout_builder', 'events'], function ($, _, Lay
                 self.trigger('select', self, column);
             });
 
-            row.addEventListener('update', function () {
+            row.addEventListener('update', function (column) {
                 self.updateField();
+                self.trigger('update', column);
             });
 
             _.each(row.columns, function (column) {

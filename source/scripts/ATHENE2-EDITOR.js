@@ -8,7 +8,7 @@
  * @link        https://github.com/serlo-org/athene2 for the canonical source repository
  * @copyright Copyright (c) 2013 Gesellschaft für freie Bildung e.V. (http://www.open-education.eu/)
  */
-/*global define, require*/
+/*global define, require, MathJax*/
 define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events'],
     function ($, _, eventScope) {
         "use strict";
@@ -121,6 +121,15 @@ define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events'],
                 column.$el.html(self.parser.parse(column.data));
             });
 
+            self.preview.addEventListener('update', function (column) {
+                console.log(column);
+                $('.math, .mathInline', column.$el).each(function () {
+                    MathJax.Hub.Typeset(this, function () {
+                        // setRenderDelay((new Date()).getTime() - startTime);
+                    });
+                });
+            });
+
             self.preview.setLayoutBuilderConfiguration(self.layoutBuilderConfiguration);
             self.preview.createFromForm(self.$form);
         };
@@ -155,6 +164,8 @@ require(['jquery', 'underscore', 'ATHENE2-EDITOR', 'codemirror', 'parser', 'prev
                     parser = new Parser(),
                     converter = new Showdown.converter(),
                     pluginManager = new PluginManager();
+
+                converter.config.math = true;
 
                 parser.setConverter(converter, 'makeHtml');
 
