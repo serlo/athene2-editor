@@ -122,7 +122,6 @@ define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events'],
             });
 
             self.preview.addEventListener('update', function (column) {
-                console.log(column);
                 $('.math, .mathInline', column.$el).each(function () {
                     MathJax.Hub.Typeset(this, function () {
                         // setRenderDelay((new Date()).getTime() - startTime);
@@ -156,6 +155,11 @@ define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events'],
 require(['jquery', 'underscore', 'ATHENE2-EDITOR', 'codemirror', 'parser', 'preview', 'showdown', 'layout_builder_configuration', 'texteditor_helper', 'texteditor_plugin_manager', 'texteditor_plugin', 'texteditor_plugin_image'],
     function ($, _, Editor, CodeMirror, Parser, Preview, Showdown, LayoutBuilderConfiguration, TextEditorHelper, PluginManager, EditorPlugin) {
         "use strict";
+
+        MathJax.Hub.Config({
+            displayAlign: 'left'
+        });
+
         $(function () {
             function init() {
                 var editor,

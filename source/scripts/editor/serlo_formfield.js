@@ -38,17 +38,21 @@ define(['jquery', 'underscore', 'layout_builder', 'events'], function ($, _, Lay
         self.data = this.$field.html();
 
         self.updateField = _.throttle(function () {
-            var updatedValue = '';
+            var updatedValue = [];
             _.each(self.layoutBuilder.rows, function (row) {
-                updatedValue += '<div class="r">';
+                var _row = [];
+
                 _.each(row.columns, function (column) {
-                    updatedValue += '<div class="c' + column.type + '">';
-                    updatedValue += column.data;
-                    updatedValue += '</div>';
+                    _row.push({
+                        col: column.type,
+                        content: column.data
+                    });
                 });
-                updatedValue += '</div>';
+
+                updatedValue.push(_row);
             });
-            self.$field.html(updatedValue);
+
+            self.$field.html(JSON.stringify(updatedValue));
         }, 2000);
     };
 
@@ -82,18 +86,22 @@ define(['jquery', 'underscore', 'layout_builder', 'events'], function ($, _, Lay
 
     Field.Textarea.prototype.parseFieldData = function () {
         var self = this,
-            $html = $($(self.field).val());
-        $html.each(function () {
-            // row
+            data = $(self.field).val();
+
+        try {
+            data = JSON.parse(data);
+        } catch (e) {
+            throw new Error(e.message);
+        }
+
+        _.each(data, function (columns) {
             var row = [],
                 data = [],
                 layout;
 
-            $(this).children().each(function () {
-                // column
-                var outerHtml = $(this).html();
-                row.push(parseInt(this.className.substring(1), 10));
-                data.push(outerHtml);
+            _.each(columns, function (column) {
+                row.push(column.col);
+                data.push(column.content);
             });
 
             layout = self.layoutBuilder.addRow(row, data);

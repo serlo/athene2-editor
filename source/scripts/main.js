@@ -30,7 +30,7 @@ require.config({
         "codemirror" : "codemirror/codemirror",
         "markdownmode" : "codemirror/mode/markdown/markdown",
         "searchcursor" : "codemirror/addon/search/searchcursor",
-        "showdown": "../bower_components/showdown/src/showdown",
+        "showdown": "libs/showdown",
         "parser" : "editor/serlo_parser",
         "preview" : "editor/serlo_editor_previewer",
         "layout_builder" : "editor/serlo_layout_builder",
