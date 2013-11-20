@@ -60,26 +60,30 @@ define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events'],
 
                 this.pluginManager.deactivate();
 
+                window.activeToken = token;
+
                 if (state) {
                     state = _.first(token.type.split(' '));
                     plugin = this.pluginManager.matchState(state);
                     if (plugin) {
                         this.pluginManager.activate(plugin, token);
                         this.activePlugin = plugin;
-                        window.activePlugin = plugin;
-                        $body.append(plugin.render());
+                        $body.append(plugin.$el);
                     }
                 }
             });
 
             self.pluginManager.addEventListener('save', function (plugin) {
-                self.textEditor.replaceRange(plugin.data, {
-                    line: self.currentToken.line,
-                    ch: self.currentToken.from
-                }, {
-                    line: self.currentToken.line,
-                    ch: self.currentToken.to
-                });
+                console.log(plugin.data.content);
+                // plugin.data.content is the updated value
+                //
+                // self.textEditor.replaceRange(plugin.data, {
+                //     line: self.currentToken.line,
+                //     ch: self.currentToken.from
+                // }, {
+                //     line: self.currentToken.line,
+                //     ch: self.currentToken.to
+                // });
             });
 
             self.preview.addEventListener('field-select', function (field, column) {
@@ -140,12 +144,10 @@ define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events'],
         return Editor;
     });
 
-require(['jquery', 'ATHENE2-EDITOR', 'codemirror', 'parser', 'preview', 'showdown', 'layout_builder_configuration', 'texteditor_helper', 'texteditor_plugin_manager', 'texteditor_plugin', 'texteditor_plugin_image'],
-    function ($, Editor, CodeMirror, Parser, Preview, Showdown, LayoutBuilderConfiguration, TextEditorHelper, PluginManager, EditorPlugin) {
+require(['jquery', 'underscore', 'ATHENE2-EDITOR', 'codemirror', 'parser', 'preview', 'showdown', 'layout_builder_configuration', 'texteditor_helper', 'texteditor_plugin_manager', 'texteditor_plugin', 'texteditor_plugin_image'],
+    function ($, _, Editor, CodeMirror, Parser, Preview, Showdown, LayoutBuilderConfiguration, TextEditorHelper, PluginManager, EditorPlugin) {
         "use strict";
-
         $(function () {
-
             function init() {
                 var editor,
                     textEditor,

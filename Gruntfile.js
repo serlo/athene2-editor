@@ -34,7 +34,7 @@ module.exports = function (grunt) {
                 tasks: ['i18n']
             },
             scripts: {
-                files: ['<%= serlo.app %>/scripts/{,*/,**/}*.js'],
+                files: ['<%= serlo.app %>/scripts/{,*/,**/}*.{js,html}'],
                 tasks: ['jshint', 'copy:requirejs', 'requirejs:production']
             },
             images: {
@@ -255,7 +255,13 @@ module.exports = function (grunt) {
                     mainConfigFile: "source/scripts/main.js",
                     out: "<%= serlo.dist %>/scripts/editor.js",
                     preserveLicenseComments: false,
-                    optimize: 'none'
+                    optimize: 'none',
+                    wrap: true,
+                    inlineText: true,
+                    stubModules: ['test'],
+                    paths: {
+                        'text': '../bower_components/text/text'
+                    }
                 }
             },
             testing: {

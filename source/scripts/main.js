@@ -43,7 +43,14 @@ require.config({
     },
     shim: {
         underscore: {
-            exports: '_'
+            exports: '_',
+            init: function () {
+                // mustache templates to the rescue
+                this._.templateSettings = {
+                    interpolate: /\{\{(.+?)\}\}/g
+                };
+                return this._;
+            }
         },
         bootstrap: {
             deps: ['jquery']

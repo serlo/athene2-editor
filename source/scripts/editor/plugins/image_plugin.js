@@ -1,7 +1,12 @@
 /*global define*/
-define(['jquery', 'underscore', 'texteditor_plugin', 'translator'], function ($, _, EditorPlugin, t) {
+define(['jquery', 'underscore', 'text!./editor/templates/plugins/image_plugin.html', 'texteditor_plugin', 'translator'], function ($, _, plugin_template, EditorPlugin, t) {
     "use strict";
-    var ImagePlugin;
+    var ImagePlugin,
+        titleRegexp,
+        hrefRegexp;
+
+    titleRegexp = new RegExp(/\[[^\]]*\]\(/);
+    hrefRegexp =  new RegExp(/\([^\)]*\)/);
 
     ImagePlugin = function () {
         this.state = 'tag';
@@ -14,34 +19,43 @@ define(['jquery', 'underscore', 'texteditor_plugin', 'translator'], function ($,
     ImagePlugin.prototype.init = function () {
         var self = this;
 
-        self.$title = $('<input type="text" value="" />');
-        self.$file = $('<input class="upload" type="file" value="">');
+        self.template = _.template(plugin_template);
 
-        self.titleRegexp = new RegExp(/\[[^\]]*\]\(/);
+        self.data.name = 'Image';
+    };
 
-        self.$el.append(self.$title).append(self.$file);
-
-        self.$title.change(function () {
-            self.data = self.data.replace(self.titleRegexp, '[' + this.value + ']');
-        });
+    ImagePlugin.prototype.updateContentString = function () {
+        this.data.content = '![' + this.data.title + '](' + this.data.href + ')';
     };
 
     ImagePlugin.prototype.activate = function (token) {
-        var title;
+        var self = this,
+            title,
+            href;
 
-        this.data = token.string;
+        self.data.content = token.string;
+        title = _.first(self.data.content.match(titleRegexp));
+        self.data.title = title.substr(1, title.length - 3);
 
-        title = _.first(this.data.match(this.titleRegexp));
+        href = _.first(self.data.content.match(hrefRegexp));
+        self.data.href = href.substr(1, href.length - 2);
 
-        this.$title.val(title.substr(1, title.length - 3));
-    };
+        self.$el = $(self.template(self.data));
 
-    ImagePlugin.prototype.render = function () {
-        return this.$el;
+        self.$el.on('change', '.title', function () {
+            self.setData('title', this.value);
+        });
+
+        self.$el.on('change', '.href', function () {
+            self.setData('href', this.value);
+        });
+
+        self.$el.on('click', '.btn-success', function (e) {
+            e.preventDefault();
+            self.trigger('save', self);
+            return;
+        });
     };
 
     EditorPlugin.Image = ImagePlugin;
 });
-
-
-// ![This is what you get](http://www.mermaidsrock.net/uni61.jpg)

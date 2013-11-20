@@ -8,6 +8,7 @@
     "sass-bootstrap": "~3.0.0",
     "underscore" : "~1.5.2",
     "requirejs": "~2.1.8",
+    "text" : "~2.0.10",
     "momentjs" : "~2.3.1",
     "showdown" : "~0.3.1",
     "markdown" : "~0.6.0-beta1",

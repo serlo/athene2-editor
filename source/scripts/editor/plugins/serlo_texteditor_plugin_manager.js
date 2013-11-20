@@ -11,11 +11,16 @@ define(['underscore', 'events'], function (_, eventScope) {
     };
 
     PluginManager.prototype.addPlugin = function (plugin) {
-        this.plugins.push(plugin);
+        var self = this;
+        self.plugins.push(plugin);
 
-        // plugin.addEventListener('save', function () {
-        //     self.trigger('save', plugin);
-        // });
+        plugin.addEventListener('save', function (plugin) {
+            self.trigger('save', plugin);
+        });
+
+        plugin.addEventListener('update', function (plugin) {
+            self.trigger('update', plugin);
+        });
 
         this.updateChain();
     };
