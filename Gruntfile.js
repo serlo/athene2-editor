@@ -67,7 +67,8 @@ module.exports = function (grunt) {
                     '<%= serlo.app %>/scripts/libs/polyfills.js',
                     '<%= serlo.app %>/scripts/libs/markdown.js',
                     '<%= serlo.app %>/scripts/codemirror/codemirror.js',
-                    '<%= serlo.app %>/scripts/libs/showdown.js'
+                    '<%= serlo.app %>/scripts/libs/showdown.js',
+                    '<%= serlo.app %>/scripts/libs/quickdiff.js'
                 ]
             },
             all: [

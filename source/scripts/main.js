@@ -14,6 +14,7 @@ require.config({
     baseUrl: "/build/scripts",
     paths: {
         "jquery": "../bower_components/jquery/jquery",
+        "quickdiff": "libs/quickdiff",
         "bootstrap": "../bower_components/sass-bootstrap/dist/js/bootstrap",
         "underscore": "../bower_components/underscore/underscore",
         "moment" : "../bower_components/momentjs/min/moment.min",
@@ -52,6 +53,9 @@ require.config({
                 return this._;
             }
         },
+        quickdiff: {
+            deps: ['jquery']
+        },
         bootstrap: {
             deps: ['jquery']
         },
@@ -68,7 +72,7 @@ require.config({
             exports: "CodeMirror"
         },
         "ATHENE2-EDITOR": {
-            deps: ['bootstrap', 'polyfills', 'datepicker', 'markdownmode', 'searchcursor', 'texteditor_plugin_image']
+            deps: ['bootstrap', 'polyfills', 'datepicker', 'quickdiff', 'markdownmode', 'searchcursor', 'texteditor_plugin_image']
         }
     },
     waitSeconds: 12

@@ -10,6 +10,7 @@ define(['jquery', 'underscore', 'events', 'translator'], function ($, _, eventSc
         eventScope(self);
 
         self.data = data || t('Click to edit');
+
         self.$el = $('<div class="c' + width + '">');
         self.type = width;
 
@@ -20,9 +21,12 @@ define(['jquery', 'underscore', 'events', 'translator'], function ($, _, eventSc
 
     Column.prototype.update = function (data, html) {
         this.data = data;
-        this.$el.html(html);
+        // this.$el.html(html);
+        html = html || '<span>&nbsp;</span>';
+        var patch = this.$el.quickdiff('patch', $("<div></div>").html(html), ["mathSpan", "mathSpanInline"]);
 
         this.trigger('update', this);
+        return patch;
     };
 
     Row = function (columns, index, data) {

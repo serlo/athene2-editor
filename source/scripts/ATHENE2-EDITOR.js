@@ -36,8 +36,18 @@ define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events'],
 
             self.textEditor.on('change', function () {
                 if (self.editable) {
-                    var value = self.textEditor.getValue();
-                    self.editable.update(value, self.parser.parse(value));
+                    var value = self.textEditor.getValue(),
+                        patch = self.editable.update(value, self.parser.parse(value));
+
+                    if (patch.type !== "identical" && patch.replace.length > 0) {
+                        _.each(patch.replace, function (el) {
+                            if (el.innerHTML) {
+                                MathJax.Hub.Typeset(el, function () {
+                                    // setRenderDelay((new Date()).getTime() - startTime);
+                                });
+                            }
+                        });
+                    }
                 }
             });
 
@@ -121,13 +131,9 @@ define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events'],
                 column.$el.html(self.parser.parse(column.data));
             });
 
-            self.preview.addEventListener('update', function (column) {
-                $('.math, .mathInline', column.$el).each(function () {
-                    MathJax.Hub.Typeset(this, function () {
-                        // setRenderDelay((new Date()).getTime() - startTime);
-                    });
-                });
-            });
+            // self.preview.addEventListener('update', function (column) {
+                
+            // });
 
             self.preview.setLayoutBuilderConfiguration(self.layoutBuilderConfiguration);
             self.preview.createFromForm(self.$form);
@@ -157,7 +163,42 @@ require(['jquery', 'underscore', 'ATHENE2-EDITOR', 'codemirror', 'parser', 'prev
         "use strict";
 
         MathJax.Hub.Config({
-            displayAlign: 'left'
+            displayAlign: 'left',
+            extensions: ["tex2jax.js"],
+            jax: ["input/TeX", "output/HTML-CSS"],
+            tex2jax: {
+                inlineMath: [["%%", "%%"]]
+            },
+            "HTML-CSS": {
+                scale: 100
+            }
+        });
+
+        // Setup a filter for comparing mathInline spans.
+        $.fn.quickdiff("filter", "mathSpanInline",
+            function (node) {
+                return (node.nodeName === "SPAN" && $(node).hasClass("mathInline"));
+            },
+            function (a, b) {
+                var aHTML = $.trim($("script", a).html()), bHTML = $.trim($(b).html());
+                return ("%%" + aHTML + "%%") !== bHTML;
+            });
+
+        // Setup a filter for comparing math spans.
+        $.fn.quickdiff("filter", "mathSpan",
+            function (node) {
+                return (node.nodeName === "SPAN" && $(node).hasClass("math"));
+            },
+            function (a, b) {
+                var aHTML = $.trim($("script", a).html()), bHTML = $.trim($(b).html());
+                return ("$$" + aHTML + "$$") !== bHTML;
+            });
+
+        $.fn.quickdiff("attributes", {
+            "td" : ["align"],
+            "th" : ["align"],
+            "img" : ["src", "alt", "title"],
+            "a" : ["href", "title"]
         });
 
         $(function () {
