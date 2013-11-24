@@ -27,8 +27,7 @@ define(['jquery', 'underscore', 'text!./editor/templates/plugins/wiris/wiris_plu
     FormulaPlugin.prototype.constructor = FormulaPlugin;
 
     FormulaPlugin.prototype.init = function () {
-        var self = this,
-            formular;
+        var self = this;
 
         self.template = _.template(plugin_template);
 
@@ -41,7 +40,8 @@ define(['jquery', 'underscore', 'text!./editor/templates/plugins/wiris/wiris_plu
     };
 
     FormulaPlugin.prototype.activate = function (token) {
-        var self = this;
+        var self = this,
+            formular;
 
         formular = token.string;
         self.data.content = formular.substr(2, formular.length - 4);
