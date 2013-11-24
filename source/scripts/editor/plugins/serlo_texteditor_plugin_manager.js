@@ -23,6 +23,7 @@ define(['underscore', 'events'], function (_, eventScope) {
         });
 
         this.updateChain();
+        return this;
     };
 
     PluginManager.prototype.updateChain = function () {

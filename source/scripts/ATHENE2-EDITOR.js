@@ -146,6 +146,7 @@ define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events'],
 
         Editor.prototype.addPlugin = function (plugin) {
             this.plugins.push(plugin);
+            return this;
         };
 
         Editor.prototype.resize = function () {
@@ -158,7 +159,7 @@ define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events'],
         return Editor;
     });
 
-require(['jquery', 'underscore', 'ATHENE2-EDITOR', 'codemirror', 'parser', 'preview', 'showdown', 'layout_builder_configuration', 'texteditor_helper', 'texteditor_plugin_manager', 'texteditor_plugin', 'texteditor_plugin_image'],
+require(['jquery', 'underscore', 'ATHENE2-EDITOR', 'codemirror', 'parser', 'preview', 'showdown', 'layout_builder_configuration', 'texteditor_helper', 'texteditor_plugin_manager', 'texteditor_plugin', 'texteditor_plugin_image', 'texteditor_plugin_wiris'],
     function ($, _, Editor, CodeMirror, Parser, Preview, Showdown, LayoutBuilderConfiguration, TextEditorHelper, PluginManager, EditorPlugin) {
         "use strict";
 
@@ -224,8 +225,10 @@ require(['jquery', 'underscore', 'ATHENE2-EDITOR', 'codemirror', 'parser', 'prev
                     .addLayout([12, 6, 6]);
 
                 // new EditorPlugin();
+                console.log(EditorPlugin.Wiris);
                 pluginManager
-                    .addPlugin(new EditorPlugin.Image());
+                    .addPlugin(new EditorPlugin.Image())
+                    .addPlugin(new EditorPlugin.Wiris());
 
                 textEditor = new CodeMirror($('#main .editor-main-inner')[0], {
                     lineNumbers: true,

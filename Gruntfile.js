@@ -68,7 +68,8 @@ module.exports = function (grunt) {
                     '<%= serlo.app %>/scripts/libs/markdown.js',
                     '<%= serlo.app %>/scripts/codemirror/codemirror.js',
                     '<%= serlo.app %>/scripts/libs/showdown.js',
-                    '<%= serlo.app %>/scripts/libs/quickdiff.js'
+                    '<%= serlo.app %>/scripts/libs/quickdiff.js',
+                    '<%= serlo.app %>/scripts/editor/plugins/wiris/wiris.js'
                 ]
             },
             all: [
@@ -294,6 +295,14 @@ module.exports = function (grunt) {
                 ],
                 dest: '<%= serlo.dist %>/styles/main.css'
             }
+        },
+        connect: {
+            server: {
+                options: {
+                    port: 9001,
+                    base: '.'
+                }
+            }
         }
     });
 
@@ -311,6 +320,7 @@ module.exports = function (grunt) {
             'requirejs:production',
             'copy:dist',
             'copy:modernizr',
+            'connect',
             'watch'
         ]);
     });

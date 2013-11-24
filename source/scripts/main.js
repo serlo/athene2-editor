@@ -40,7 +40,8 @@ require.config({
         "texteditor_helper" : "editor/serlo_texteditor_helper",
         "texteditor_plugin_manager" : "editor/plugins/serlo_texteditor_plugin_manager",
         "texteditor_plugin" : "editor/plugins/serlo_texteditor_plugin",
-        "texteditor_plugin_image" : "editor/plugins/image_plugin"
+        "texteditor_plugin_image" : "editor/plugins/image_plugin",
+        "texteditor_plugin_wiris" : "editor/plugins/wiris/wiris_plugin"
     },
     shim: {
         underscore: {
@@ -72,7 +73,7 @@ require.config({
             exports: "CodeMirror"
         },
         "ATHENE2-EDITOR": {
-            deps: ['bootstrap', 'polyfills', 'datepicker', 'quickdiff', 'markdownmode', 'searchcursor', 'texteditor_plugin_image']
+            deps: ['bootstrap', 'polyfills', 'datepicker', 'quickdiff', 'markdownmode', 'searchcursor', 'texteditor_plugin_image', 'texteditor_plugin_wiris']
         }
     },
     waitSeconds: 12
