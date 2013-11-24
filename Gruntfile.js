@@ -300,7 +300,8 @@ module.exports = function (grunt) {
             server: {
                 options: {
                     port: 9001,
-                    base: '.'
+                    base: '.',
+                    open: true
                 }
             }
         }
