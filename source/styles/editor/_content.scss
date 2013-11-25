@@ -6,12 +6,14 @@
 
     .content-editor & {
         min-height: 20px;
+        cursor: pointer;
 
         &:hover {
             outline: 1px dotted #C5C5C5;
         }
+
         &.active {
-            background: #F8F8F8;
+            outline: 2px solid lightskyblue;
         }
 
     }

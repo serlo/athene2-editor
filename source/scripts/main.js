@@ -28,6 +28,7 @@ require.config({
         "i18n" : "modules/serlo_i18n",
         "support" : "modules/serlo_supporter",
         "modals" : "modules/serlo_modals",
+        "system_notification" : "modules/serlo_system_notification",
         "codemirror" : "codemirror/codemirror",
         "markdownmode" : "codemirror/mode/markdown/markdown",
         "searchcursor" : "codemirror/addon/search/searchcursor",
@@ -40,7 +41,7 @@ require.config({
         "texteditor_helper" : "editor/serlo_texteditor_helper",
         "texteditor_plugin_manager" : "editor/plugins/serlo_texteditor_plugin_manager",
         "texteditor_plugin" : "editor/plugins/serlo_texteditor_plugin",
-        "texteditor_plugin_image" : "editor/plugins/image_plugin",
+        "texteditor_plugin_image" : "editor/plugins/image/image_plugin",
         "texteditor_plugin_wiris" : "editor/plugins/wiris/wiris_plugin"
     },
     shim: {

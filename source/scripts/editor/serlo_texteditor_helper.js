@@ -114,5 +114,23 @@ define(['jquery'], function ($) {
         });
     };
 
+    TextEditorHelper.HidePlugins = function (textEditor) {
+        var self = this;
+        self.title = 'Hide Plugins';
+        self.editor = textEditor;
+        self.hide = self.editor.hidePlugins = false;
+        self.$el = $('<a class="helper" href="#">').text(self.title);
+        self.$el.click(function (e) {
+            e.preventDefault();
+            self.action();
+            return;
+        });
+    };
+
+    TextEditorHelper.HidePlugins.prototype.action = function () {
+        this.active = this.editor.hidePlugins = !this.active;
+        this.$el.toggleClass('active', this.active);
+    };
+
     return TextEditorHelper;
 });

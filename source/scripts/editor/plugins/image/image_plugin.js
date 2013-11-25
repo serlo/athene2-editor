@@ -1,5 +1,5 @@
 /*global define*/
-define(['jquery', 'underscore', 'text!./editor/templates/plugins/image_plugin.html', 'texteditor_plugin', 'translator'], function ($, _, plugin_template, EditorPlugin, t) {
+define(['jquery', 'underscore', 'text!./editor/templates/plugins/image/image_plugin.html', 'texteditor_plugin', 'translator'], function ($, _, plugin_template, EditorPlugin, t) {
     "use strict";
     var ImagePlugin,
         titleRegexp,

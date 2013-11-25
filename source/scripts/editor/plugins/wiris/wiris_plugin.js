@@ -1,5 +1,5 @@
 /*global define, require, MathJax*/
-define(['jquery', 'underscore', 'text!./editor/templates/plugins/wiris/wiris_plugin.html', 'texteditor_plugin', 'translator'], function ($, _, plugin_template, EditorPlugin, t) {
+define(['jquery', 'underscore', 'text!./editor/templates/plugins/wiris/wiris_plugin.html', 'texteditor_plugin', 'translator', 'common'], function ($, _, plugin_template, EditorPlugin, t, Common) {
     "use strict";
     var FormulaPlugin,
         wiris,
@@ -52,9 +52,7 @@ define(['jquery', 'underscore', 'text!./editor/templates/plugins/wiris/wiris_plu
             .success(function (mml) {
                 wiris.setMathML(mml);
             })
-            .fail(function () {
-                console.log(arguments);
-            });
+            .fail(Common.genericError);
 
 
         self.$el.on('click', '.btn-success', function () {
@@ -70,9 +68,7 @@ define(['jquery', 'underscore', 'text!./editor/templates/plugins/wiris/wiris_plu
             .success(function (latex) {
                 self.data.content = latex;
                 self.trigger('save', self);
-            }).fail(function () {
-                console.log(arguments);
-            });
+            }).fail(Common.genericError);
     };
 
     EditorPlugin.Wiris = FormulaPlugin;

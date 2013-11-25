@@ -75,12 +75,42 @@ define(['formfield', 'events'], function (Field, eventScope) {
         return type;
     };
 
-    Preview.prototype.scrollTo = function (elem) {
-        if (typeof elem === 'number') {
-            this.$el.scrollTop(elem);
-        } else {
-            this.$el.scrollTop(elem.position().top);
+    Preview.prototype.scrollSync = function ($elem, percentage) {
+        var $parent = this.$el.parent(),
+            target,
+            maxScroll,
+            diff = $elem.height() - $parent.height() + 90;
+
+        if (diff > 0) {
+            target = $elem.offset().top + $parent.scrollTop() - 90 + (diff * percentage);
+            maxScroll = $parent[0].scrollHeight - $parent[0].clientHeight;
+            if (target > maxScroll) {
+                target = maxScroll;
+            } else if (target < 0) {
+                target = 0;
+            }
+
+            $parent.animate({
+                scrollTop: target
+            });
         }
+    };
+
+    Preview.prototype.scrollTo = function ($elem, offset) {
+        offset = offset || 0;
+
+        var $parent = this.$el.parent(),
+            top = $elem.offset().top + $parent.scrollTop(),
+            target =  (function () {
+                var maxScroll = $parent[0].scrollHeight - $parent[0].clientHeight,
+                    elemTarget = (top + offset);
+
+                return elemTarget < 0 ? 0 : (elemTarget > maxScroll ? maxScroll : elemTarget);
+            }());
+
+        $parent.animate({
+            scrollTop: target
+        });
     };
 
     return Preview;

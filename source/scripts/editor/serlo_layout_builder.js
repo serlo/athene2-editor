@@ -1,9 +1,11 @@
 /*global define*/
-define(['jquery', 'underscore', 'events', 'translator'], function ($, _, eventScope, t) {
+define(['jquery', 'underscore', 'events', 'translator', 'text!./editor/templates/layout/row.html', 'text!./editor/templates/layout/column.html'], function ($, _, eventScope, t, row_template, column_template) {
     "use strict";
     var Column,
         Row,
-        LayoutBuilder;
+        LayoutBuilder,
+        columnTemplate = _.template(column_template),
+        rowTemplate = _.template(row_template);
 
     Column = function (width, data) {
         var self = this;
@@ -11,7 +13,10 @@ define(['jquery', 'underscore', 'events', 'translator'], function ($, _, eventSc
 
         self.data = data || t('Click to edit');
 
-        self.$el = $('<div class="c' + width + '">');
+        self.$el = $(columnTemplate({
+            width: width
+        }));
+
         self.type = width;
 
         self.$el.click(function () {
@@ -39,7 +44,7 @@ define(['jquery', 'underscore', 'events', 'translator'], function ($, _, eventSc
 
         self.columns = [];
 
-        self.$el = $('<div class="r"></div>');
+        self.$el = $(rowTemplate());
         self.$el.mouseenter(function (e) {
             self.onMouseEnter(e);
         });

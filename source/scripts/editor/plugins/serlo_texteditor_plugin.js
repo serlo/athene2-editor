@@ -1,5 +1,5 @@
 /*global define*/
-define(['jquery', 'events', 'text!./editor/templates/plugins/default.html'], function ($, eventScope, plugin_template) {
+define(['jquery', 'events', 'translator', 'text!./editor/templates/plugins/default.html'], function ($, eventScope, t, plugin_template) {
     var EditorPlugin,
         defaults = {};
 
@@ -39,6 +39,10 @@ define(['jquery', 'events', 'text!./editor/templates/plugins/default.html'], fun
 
     EditorPlugin.prototype.deactivate = function () {
         this.$el.detach();
+    };
+
+    EditorPlugin.prototype.getActivateLink = function () {
+        return this.widget || (this.widget = $('<a class="editor-widget" href="#">').text(t('Edit %s', this.data.name)));
     };
 
     return EditorPlugin;

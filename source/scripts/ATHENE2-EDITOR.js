@@ -42,9 +42,7 @@ define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events'],
                     if (patch.type !== "identical" && patch.replace.length > 0) {
                         _.each(patch.replace, function (el) {
                             if (el.innerHTML) {
-                                MathJax.Hub.Typeset(el, function () {
-                                    // setRenderDelay((new Date()).getTime() - startTime);
-                                });
+                                MathJax.Hub.Typeset(el);
                             }
                         });
                     }
@@ -52,33 +50,51 @@ define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events'],
             });
 
             self.textEditor.on('cursorActivity', _.throttle(function () {
+                var cursor = self.textEditor.getCursor();
+
                 self.textEditor.operation(function () {
-                    var cursor = self.textEditor.getCursor(),
-                        token = self.textEditor.getTokenAt(cursor);
+                    var token = self.textEditor.getTokenAt(cursor);
 
                     if (!self.currentToken || !_.isEqual(self.currentToken, token)) {
                         token.line = cursor.line;
                         self.currentToken = token;
                         self.trigger('tokenChange', token);
                     }
+
+                    if (self.editable) {
+                        self.preview.scrollSync(self.editable.$el, cursor.line / self.textEditor.lastLine());
+                    }
                 });
+                // _.throttle(function () {
+                    
+                // }, 1000);
             }, 300));
 
             self.addEventListener('tokenChange', function (token) {
                 var state = token.type,
                     plugin;
 
-                this.pluginManager.deactivate();
+                self.pluginManager.deactivate();
+                if (self.$widget) {
+                    self.$widget.remove();
+                }
 
-                window.activeToken = token;
-
-                if (state) {
+                if (!self.textEditor.hidePlugins && state) {
                     state = _.first(token.type.split(' '));
-                    plugin = this.pluginManager.matchState(state);
+                    plugin = self.pluginManager.matchState(state);
                     if (plugin) {
-                        this.pluginManager.activate(plugin, token);
-                        this.activePlugin = plugin;
-                        $body.append(plugin.$el);
+                        self.$widget = plugin.getActivateLink();
+                        self.$widget.click(function () {
+                            self.$widget.remove();
+                            self.$widget = null;
+
+                            self.pluginManager.activate(plugin, token);
+                            self.activePlugin = plugin;
+
+                            $body.append(plugin.$el);
+                        });
+
+                        self.textEditor.addWidget(self.textEditor.getCursor(), self.$widget[0]);
                     }
                 }
             });
@@ -109,6 +125,8 @@ define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events'],
                 if (field.type === 'textarea' && column) {
                     self.editable = column;
                     column.$el.addClass('active');
+
+                    self.preview.scrollTo(self.editable.$el, - 90);
 
                     self.textEditor.operation(function () {
                         self.textEditor.setValue(column.data);
@@ -159,8 +177,34 @@ define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events'],
         return Editor;
     });
 
-require(['jquery', 'underscore', 'ATHENE2-EDITOR', 'codemirror', 'parser', 'preview', 'showdown', 'layout_builder_configuration', 'texteditor_helper', 'texteditor_plugin_manager', 'texteditor_plugin', 'texteditor_plugin_image', 'texteditor_plugin_wiris'],
-    function ($, _, Editor, CodeMirror, Parser, Preview, Showdown, LayoutBuilderConfiguration, TextEditorHelper, PluginManager, EditorPlugin) {
+require(['jquery',
+    'underscore',
+    'common',
+    'ATHENE2-EDITOR',
+    'codemirror',
+    'parser',
+    'preview',
+    'showdown',
+    'layout_builder_configuration',
+    'texteditor_helper',
+    'texteditor_plugin_manager',
+    'texteditor_plugin',
+    'system_notification',
+    'texteditor_plugin_image',
+    'texteditor_plugin_wiris'],
+    function ($,
+        _,
+        Common,
+        Editor,
+        CodeMirror,
+        Parser,
+        Preview,
+        Showdown,
+        LayoutBuilderConfiguration,
+        TextEditorHelper,
+        PluginManager,
+        EditorPlugin,
+        SystemNotification) {
         "use strict";
 
         MathJax.Hub.Config({
@@ -225,7 +269,6 @@ require(['jquery', 'underscore', 'ATHENE2-EDITOR', 'codemirror', 'parser', 'prev
                     .addLayout([12, 6, 6]);
 
                 // new EditorPlugin();
-                console.log(EditorPlugin.Wiris);
                 pluginManager
                     .addPlugin(new EditorPlugin.Image())
                     .addPlugin(new EditorPlugin.Wiris());
@@ -256,9 +299,14 @@ require(['jquery', 'underscore', 'ATHENE2-EDITOR', 'codemirror', 'parser', 'prev
                 editor.addHelper(new TextEditorHelper.Link(textEditor));
                 editor.addHelper(new TextEditorHelper.Image(textEditor));
                 editor.addHelper(new TextEditorHelper.Formula(textEditor));
+                editor.addHelper(new TextEditorHelper.HidePlugins(textEditor));
 
                 editor.initialize();
-                window.textEditor = textEditor;
+
+                window.editor = editor;
+                Common.addEventListener('generic error', function () {
+                    SystemNotification.error();
+                });
             }
 
             init($('body'));

@@ -280,7 +280,7 @@ module.exports = function (grunt) {
         },
         "language-update": {
             src: [
-                '<%= serlo.app %>/scripts/{,*/}*.js'
+                '<%= serlo.app %>/scripts/{,*/,**/}*.js'
             ],
             langSrc: [
                 '<%= serlo.app %>/lang/*.json'
