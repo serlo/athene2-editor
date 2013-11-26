@@ -111,17 +111,37 @@ define(['jquery', 'underscore', 'layout_builder', 'events'], function ($, _, Lay
         });
     };
 
+    Field.PlainText = function (field, label) {
+        var self = this;
+        invoke(self, Field, field, 'plaintext', label);
+
+        self.data = {};
+        self.data.value = self.$field.text();
+
+        self.$input = $('<textarea>').text(self.data.value);
+        self.$inner.append(self.$input);
+        self.$input.on('keyup', function () {
+            self.data.value = this.value;
+            self.$field.text(self.data.value);
+        });
+    };
+
     Field.Input = function (field, label) {
         var self = this;
         invoke(self, Field, field, 'input', label);
 
-        self.data = self.$field.val();
+        self.data = {};
+        self.data.value = self.field.value;
+        self.data.placeholder = self.$field.attr('placeholder') || '';
 
-        self.$field = $('<input type="text">').val(self.data);
-        self.$inner.append(self.$field);
+        self.$input = $('<input type="text">').attr({
+            placeholder: self.data.placeholder
+        }).val(self.data.value);
 
-        self.$field.on('keyup', function () {
-            self.data = self.field.value = this.value;
+        self.$inner.append(self.$input);
+
+        self.$input.on('keyup', function () {
+            self.data.value = self.field.value = this.value;
         });
     };
 

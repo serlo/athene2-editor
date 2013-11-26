@@ -4,6 +4,7 @@ define(['jquery'], function ($) {
 
     TextEditorHelper = function (textEditor, settings) {
         var self = this;
+
         self.settings = $.extend({
             cursorDelta: 0
         }, settings);
@@ -111,6 +112,28 @@ define(['jquery'], function ($) {
             replaceAfter: '$$',
             cursorDelta: 2,
             selectionDelta: 'selection'
+        });
+    };
+
+    TextEditorHelper.Undo = function (textEditor) {
+        var self = this;
+        self.title = 'Undo';
+        self.$el = $('<a class="helper" href="#">').text(self.title);
+        self.$el.click(function (e) {
+            e.preventDefault();
+            textEditor.undo();
+            return;
+        });
+    };
+
+    TextEditorHelper.Redo = function (textEditor) {
+        var self = this;
+        self.title = 'Redo';
+        self.$el = $('<a class="helper" href="#">').text(self.title);
+        self.$el.click(function (e) {
+            e.preventDefault();
+            textEditor.redo();
+            return;
         });
     };
 

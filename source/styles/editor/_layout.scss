@@ -47,6 +47,11 @@ header {
             width: auto;
         }
     }
+
+    textarea {
+        width: 100%;
+        max-width: 100%;
+    }
 }
 
 #editor-form {

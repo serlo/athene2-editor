@@ -97,6 +97,7 @@ define(['jquery', 'underscore', 'events', 'translator', 'text!./editor/templates
         self.$add = $('<a href="#" class="plus">+</a>');
         self.$layoutList = $('<div class="layout-list">');
 
+        this.layoutListVisible = true;
         self.layouts = configuration.layouts;
         self.rows = [];
 
@@ -117,13 +118,18 @@ define(['jquery', 'underscore', 'events', 'translator', 'text!./editor/templates
 
         self.$add.click(function (e) {
             e.preventDefault();
-            self.showLayouts();
+            self.showOrHideLayouts();
             return;
         });
     };
 
-    LayoutBuilder.prototype.showLayouts = function () {
-        this.$el.append(this.$layoutList);
+    LayoutBuilder.prototype.showOrHideLayouts = function () {
+        this.layoutListVisible = !this.layoutListVisible;
+        if (this.layoutListVisible) {
+            this.$layoutList.detach();
+        } else {
+            this.$el.append(this.$layoutList);
+        }
     };
 
     LayoutBuilder.prototype.hideLayouts = function () {

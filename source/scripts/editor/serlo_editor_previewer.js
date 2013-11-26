@@ -70,7 +70,11 @@ define(['formfield', 'events'], function (Field, eventScope) {
 
         switch (field.tagName) {
         case 'TEXTAREA':
-            type = 'Textarea';
+            if (field.classList.contains('plain')) {
+                type = 'PlainText';
+            } else {
+                type = 'Textarea';
+            }
             break;
         case 'INPUT':
             switch (field.type) {

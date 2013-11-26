@@ -312,6 +312,8 @@ require(['jquery',
                 editor.addHelper(new TextEditorHelper.Link(textEditor));
                 editor.addHelper(new TextEditorHelper.Image(textEditor));
                 editor.addHelper(new TextEditorHelper.Formula(textEditor));
+                editor.addHelper(new TextEditorHelper.Undo(textEditor));
+                editor.addHelper(new TextEditorHelper.Redo(textEditor));
                 editor.addHelper(new TextEditorHelper.HidePlugins(textEditor));
 
                 editor.initialize();
