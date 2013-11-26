@@ -158,8 +158,16 @@ define(['jquery', 'underscore', 'events', 'translator', 'text!./editor/templates
     LayoutBuilder.prototype.removeRow = function (row) {
         row.$el.remove();
         this.rows.splice(row.index, 1);
+        this.updateRowIndexes();
+
         row.trigger('update');
         row = null;
+    };
+
+    LayoutBuilder.prototype.updateRowIndexes = function () {
+        _.each(this.rows, function (row, i) {
+            row.index = i;
+        });
     };
 
     function createIconTag(columns) {

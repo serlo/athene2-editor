@@ -15,7 +15,9 @@ define(['formfield', 'events'], function (Field, eventScope) {
     };
 
     Preview.prototype.createFromForm = function ($form) {
-        var self = this;
+        var self = this,
+            label;
+
         if ($form.children().length) {
             self.formFields = [];
 
@@ -24,7 +26,17 @@ define(['formfield', 'events'], function (Field, eventScope) {
                     type = self.getFieldType(this);
 
                 if (type) {
+                    if (type === 'Label') {
+                        label = this.innerText;
+                        return true;
+                    }
+
                     field = new Field[type](this);
+
+                    if (label) {
+                        field.setLabel(label);
+                        label = null;
+                    }
 
                     field.addEventListener('column-add', function () {
                         self.trigger.apply(self, ['column-add'].concat(slice.call(arguments)));
@@ -65,10 +77,16 @@ define(['formfield', 'events'], function (Field, eventScope) {
             case 'submit':
                 self.submit = field;
                 break;
+            case 'checkbox':
+                type = 'Checkbox';
+                break;
             default:
                 type = 'Input';
                 break;
             }
+            break;
+        case 'LABEL':
+            type = 'Label';
             break;
         }
 

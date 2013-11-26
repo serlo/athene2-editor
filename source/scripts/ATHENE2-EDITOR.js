@@ -120,6 +120,7 @@ define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events'],
 
                     self.editable.$el.removeClass('active');
                     self.editable.history = self.textEditor.getHistory();
+                    self.editable = null;
                 }
 
                 if (field.type === 'textarea' && column) {
@@ -141,7 +142,11 @@ define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events'],
 
                         return;
                     });
-
+                } else {
+                    self.textEditor.operation(function () {
+                        self.textEditor.setValue('');
+                        self.textEditor.options.readOnly = true;
+                    });
                 }
             });
 
@@ -155,6 +160,13 @@ define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events'],
 
             self.preview.setLayoutBuilderConfiguration(self.layoutBuilderConfiguration);
             self.preview.createFromForm(self.$form);
+
+            self.$submit.click(function () {
+                console.log(self.preview.submit);
+                if (self.preview.submit) {
+                    $(self.preview.submit).click();
+                }
+            });
         };
 
         Editor.prototype.addHelper = function (helper) {
@@ -284,6 +296,7 @@ require(['jquery',
                 editor = editor || new Editor({
                     $form: $('#editor-form').first(),
                     $helpers : $('#editor-helpers'),
+                    $submit : $('#editor-actions .btn-success'),
                     parser: parser,
                     layoutBuilderConfiguration: layoutBuilderConfiguration,
                     textEditor: textEditor,

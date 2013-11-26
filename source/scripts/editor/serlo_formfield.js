@@ -20,7 +20,7 @@ define(['jquery', 'underscore', 'layout_builder', 'events'], function ($, _, Lay
     Field.prototype.init = function () {
         var self = this;
         self.$el = $('<div>');
-        self.$inner = $('<div>');
+        self.$inner = $('<div>').addClass('preview-content');
         self.$el.append(self.$inner);
 
         self.$inner.click(function () {
@@ -28,6 +28,11 @@ define(['jquery', 'underscore', 'layout_builder', 'events'], function ($, _, Lay
         });
 
         self.data = this.$field.val();
+    };
+
+    Field.prototype.setLabel = function (label) {
+        this.label = label;
+        this.$el.prepend('<label>' + label + '</label>');
     };
 
     Field.Textarea = function (field, label) {
@@ -75,8 +80,6 @@ define(['jquery', 'underscore', 'layout_builder', 'events'], function ($, _, Lay
             _.each(row.columns, function (column) {
                 self.trigger('column-add', column);
             });
-
-            row.columns[0].trigger('select', row.columns[0]);
         });
 
         self.$el.append(self.layoutBuilder.$el);
@@ -86,7 +89,7 @@ define(['jquery', 'underscore', 'layout_builder', 'events'], function ($, _, Lay
 
     Field.Textarea.prototype.parseFieldData = function () {
         var self = this,
-            data = $(self.field).val();
+            data = $(self.field).val() || '[]';
 
         try {
             data = JSON.parse(data);
@@ -107,12 +110,32 @@ define(['jquery', 'underscore', 'layout_builder', 'events'], function ($, _, Lay
             layout = self.layoutBuilder.addRow(row, data);
         });
     };
-    // Field.Input = function (field, label) {
-    //     this = new Field(field, 'input', label);
-    // };
-    // Field.Checkbox = function (field, label) {
-    //     this = new Field(field, 'checkbox', label);
-    // };
+
+    Field.Input = function (field, label) {
+        var self = this;
+        invoke(self, Field, field, 'input', label);
+
+        self.data = self.$field.val();
+
+        self.$field = $('<input type="text">').val(self.data);
+        self.$inner.append(self.$field);
+
+        self.$field.on('keyup', function () {
+            self.data = self.field.value = this.value;
+        });
+    };
+
+    Field.Checkbox = function (field, label) {
+        var self = this;
+        invoke(self, Field, field, 'input', label);
+
+        self.data = self.$field.attr('checked');
+
+        self.$field = $('<input type="checkbox">').attr('checked', self.data);
+
+        self.$inner.append(self.$field).append(' whatever');
+    };
+
     // Field.Select = function (field, label) {
     //     this = new Field(field, 'select', label);
     // };

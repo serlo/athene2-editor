@@ -25,8 +25,27 @@ header {
     outline: 1px solid $gray;
     background: white;
 
-    .editor-main-inner {
-        padding: 5px 20px $action-height 20px;
+    label {
+        display: block;
+        padding: 5px 20px 5px 20px;
+
+        background: #eee;
+        border-top: 1px solid $gray;
+    }
+
+}
+
+.preview-content {
+    padding: 5px 20px 5px 20px;
+
+    input {
+        width: 100%;
+        border: none;
+        padding: 5px 0;
+
+        &[type="checkbox"] {
+            width: auto;
+        }
     }
 }
 
@@ -87,18 +106,30 @@ header {
 }
 
 .add-layout {
+    position: relative;
     margin: 0 40px;
     padding-top: 20px;
-    height: 0;
-    border-bottom: 4px solid $gray;
 
     text-align: center;
 
     &:hover {
-        border-color: darken($gray, 30%);
+        &:before {
+            border-color: darken($gray, 30%);
+        }
+
         .plus {
             color: darken($gray, 30%);
         }
+    }
+    
+    &:before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: inherit;
+        border-top: 4px solid $gray;
+        display: block;
+        width: 100%;
     }
 
     .plus {
@@ -134,8 +165,6 @@ header {
     position: relative;
     top: -30px;
 
-    padding-bottom: 30px;
-    
     > a {
         display: inline-block;
         margin: 0 5px 10px;
