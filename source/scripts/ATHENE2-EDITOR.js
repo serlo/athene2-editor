@@ -60,15 +60,15 @@ define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events'],
                         self.currentToken = token;
                         self.trigger('tokenChange', token);
                     }
-
-                    if (self.editable) {
-                        self.preview.scrollSync(self.editable.$el, cursor.line / self.textEditor.lastLine());
-                    }
                 });
-                // _.throttle(function () {
-                    
-                // }, 1000);
-            }, 300));
+
+            }, 400));
+
+            self.textEditor.on('cursorActivity', _.throttle(function () {
+                if (self.editable) {
+                    self.preview.scrollSync(self.editable.$el, self.textEditor.getCursor().line / self.textEditor.lastLine());
+                }
+            }, 1500));
 
             self.addEventListener('tokenChange', function (token) {
                 var state = token.type,
@@ -126,7 +126,7 @@ define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events'],
                     self.editable = column;
                     column.$el.addClass('active');
 
-                    self.preview.scrollTo(self.editable.$el, - 90);
+                    self.preview.scrollSync(self.editable.$el, 1);
 
                     self.textEditor.operation(function () {
                         self.textEditor.setValue(column.data);

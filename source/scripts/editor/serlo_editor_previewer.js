@@ -79,10 +79,18 @@ define(['formfield', 'events'], function (Field, eventScope) {
         var $parent = this.$el.parent(),
             target,
             maxScroll,
+            pos = $elem.offset().top + $parent.scrollTop() - 90,
             diff = $elem.height() - $parent.height() + 90;
 
         if (diff > 0) {
-            target = $elem.offset().top + $parent.scrollTop() - 90 + (diff * percentage);
+            target = pos + (diff * percentage);
+        } else if (pos + $elem.height() > $parent.height() + $parent.scrollTop() - 90) {
+            target = pos;
+        } else if (pos < $parent.scrollTop()) {
+            target = pos;
+        }
+
+        if (target) {
             maxScroll = $parent[0].scrollHeight - $parent[0].clientHeight;
             if (target > maxScroll) {
                 target = maxScroll;
@@ -92,6 +100,8 @@ define(['formfield', 'events'], function (Field, eventScope) {
 
             $parent.animate({
                 scrollTop: target
+            }, {
+                queue: false
             });
         }
     };
