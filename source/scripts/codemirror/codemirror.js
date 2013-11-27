@@ -2929,8 +2929,19 @@ window.CodeMirror = (function() {
       pos = clipPos(doc, pos);
       var state = getStateBefore(this, pos.line, precise), mode = this.doc.mode;
       var line = getLine(doc, pos.line);
-      var stream = new StringStream(line.text, this.options.tabSize);
-      while (stream.pos < pos.ch && !stream.eol()) {
+      /*
+       * FNC HACK:
+       */
+      // var stream = new StringStream(line.text, this.options.tabSize);
+      var stream = new StringStream(line.text, this.options.tabSize, pos.line);
+      if(pos.ch === 0 && line.text === '') {
+        mode.blankLine(state);
+      }
+      //while (stream.pos < pos.ch && !stream.eol()) {
+      while (stream.pos <= pos.ch && !stream.eol()) {
+      /*
+       * FNC HACK END
+       */
         stream.start = stream.pos;
         var style = mode.token(stream, state);
       }
@@ -3693,12 +3704,25 @@ window.CodeMirror = (function() {
   // parsers more succinct.
 
   // The character stream used by a mode's parser.
-  function StringStream(string, tabSize) {
+  /*
+   * FNC HACK:
+   */
+  // function StringStream(string, tabSize) {
+  //   this.pos = this.start = 0;
+  //   this.string = string;
+  //   this.tabSize = tabSize || 8;
+  //   this.lastColumnPos = this.lastColumnValue = 0;
+  // }
+  function StringStream(string, tabSize, lineNo) {
     this.pos = this.start = 0;
     this.string = string;
     this.tabSize = tabSize || 8;
     this.lastColumnPos = this.lastColumnValue = 0;
+    this.lineNo = lineNo || undefined;
   }
+  /*
+   * FNC HACK END
+   */
 
   StringStream.prototype = {
     eol: function() {return this.pos >= this.string.length;},

@@ -60,6 +60,12 @@ define(['jquery', 'underscore', 'text!./editor/templates/plugins/wiris/wiris_plu
         });
     };
 
+    FormulaPlugin.prototype.deactivate = function () {
+        this.$el.detach();
+        wiris.setMathML('');
+        window.wiris = wiris;
+    };
+
     FormulaPlugin.prototype.save = function () {
         var self = this,
             data = wiris.getMathML();

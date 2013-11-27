@@ -9,7 +9,7 @@ define(['jquery', 'underscore', 'text!./editor/templates/plugins/image/image_plu
     hrefRegexp =  new RegExp(/\([^\)]*\)/);
 
     ImagePlugin = function () {
-        this.state = 'tag';
+        this.state = 'image';
         this.init();
     };
 

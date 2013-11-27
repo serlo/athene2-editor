@@ -16,6 +16,48 @@ define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events'],
             $window = $(window),
             Editor;
 
+        function getCompleteToken(editor, pos, maxLines, currentToken, firstRun) {
+            var prevStartPos = {};
+
+            function loop(pos, maxLines, currentToken) {
+                // Get the token at current position
+                var token = editor.getTokenAt(pos),
+                    endPos;
+
+                // Check if it's the other one than before
+                if ((_.isEqual(token.state.startPos, prevStartPos && !firstRun)) || (!_.isEqual(token.state.startPos, prevStartPos && firstRun))) {
+
+                    if (token.state.endPos) {
+                        // YIPPIE, COMPLETE NEW TOKEN
+                        return token;
+                    }
+                    // D'oh, endPos is missing, let's have a look
+
+                    // We're in the last line, let's stop here
+                    if (maxLines <= pos.line) {
+                        endPos = {
+                            ch: token.end,
+                            line: pos.line
+                        };
+                        // Dunno what'll happen, let's try
+                        return token;
+                    }
+
+                    // Let's save the current Token startPos as a reference
+                    prevStartPos = token.state.startPos;
+
+                    // Now call this function again 
+                    pos.line++;
+                    pos.ch = 1;
+                    return loop(pos, maxLines, token);
+                }
+
+                return currentToken;
+            }
+
+            return loop(pos, maxLines, currentToken);
+        }
+
         Editor = function (settings) {
             this.helpers = [];
             eventScope(this);
@@ -75,6 +117,7 @@ define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events'],
                     plugin;
 
                 self.pluginManager.deactivate();
+
                 if (self.$widget) {
                     self.$widget.remove();
                 }
@@ -85,10 +128,17 @@ define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events'],
                     if (plugin) {
                         self.$widget = plugin.getActivateLink();
                         self.$widget.click(function () {
+                            var maxLines = self.textEditor.doc.size,
+                                detailedToken;
+
                             self.$widget.remove();
                             self.$widget = null;
 
-                            self.pluginManager.activate(plugin, token);
+                            detailedToken = getCompleteToken(self.textEditor, self.textEditor.getCursor(), maxLines, {}, true);
+
+                            // detailedToken.state.string = self.textEditor.doc.getRange(detailedToken.state.startPos, detailedToken.state.endPos);
+
+                            self.pluginManager.activate(plugin, detailedToken);
                             self.activePlugin = plugin;
 
                             $body.append(plugin.$el);
@@ -162,7 +212,6 @@ define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events'],
             self.preview.createFromForm(self.$form);
 
             self.$submit.click(function () {
-                console.log(self.preview.submit);
                 if (self.preview.submit) {
                     $(self.preview.submit).click();
                 }

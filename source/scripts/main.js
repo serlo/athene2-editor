@@ -30,7 +30,7 @@ require.config({
         "modals" : "modules/serlo_modals",
         "system_notification" : "modules/serlo_system_notification",
         "codemirror" : "codemirror/codemirror",
-        "markdownmode" : "codemirror/mode/markdown/markdown",
+        "markdownmode" : "codemirror/mode/sfm/sfm",
         "searchcursor" : "codemirror/addon/search/searchcursor",
         "showdown": "libs/showdown",
         "parser" : "editor/serlo_parser",
