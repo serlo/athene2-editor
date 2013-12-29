@@ -9789,16 +9789,19 @@ if ( typeof module === "object" && module && typeof module.exports === "object" 
 
 })( window );
 
-/**
-* bootstrap.js v3.0.0 by @fat and @mdo
-* Copyright 2013 Twitter Inc.
-* http://www.apache.org/licenses/LICENSE-2.0
-*/
-if (!jQuery) { throw new Error("Bootstrap requires jQuery") }
+/*!
+ * Bootstrap v3.0.2 by @fat and @mdo
+ * Copyright 2013 Twitter, Inc.
+ * Licensed under http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Designed and built with all the love in the world by @mdo and @fat.
+ */
+
+if (typeof jQuery === "undefined") { throw new Error("Bootstrap requires jQuery") }
 
 /* ========================================================================
- * Bootstrap: transition.js v3.0.0
- * http://twbs.github.com/bootstrap/javascript.html#transitions
+ * Bootstrap: transition.js v3.0.2
+ * http://getbootstrap.com/javascript/#transitions
  * ========================================================================
  * Copyright 2013 Twitter, Inc.
  *
@@ -9851,11 +9854,11 @@ if (!jQuery) { throw new Error("Bootstrap requires jQuery") }
     $.support.transition = transitionEnd()
   })
 
-}(window.jQuery);
+}(jQuery);
 
 /* ========================================================================
- * Bootstrap: alert.js v3.0.0
- * http://twbs.github.com/bootstrap/javascript.html#alerts
+ * Bootstrap: alert.js v3.0.2
+ * http://getbootstrap.com/javascript/#alerts
  * ========================================================================
  * Copyright 2013 Twitter, Inc.
  *
@@ -9950,11 +9953,11 @@ if (!jQuery) { throw new Error("Bootstrap requires jQuery") }
 
   $(document).on('click.bs.alert.data-api', dismiss, Alert.prototype.close)
 
-}(window.jQuery);
+}(jQuery);
 
 /* ========================================================================
- * Bootstrap: button.js v3.0.0
- * http://twbs.github.com/bootstrap/javascript.html#buttons
+ * Bootstrap: button.js v3.0.2
+ * http://getbootstrap.com/javascript/#buttons
  * ========================================================================
  * Copyright 2013 Twitter, Inc.
  *
@@ -10060,13 +10063,13 @@ if (!jQuery) { throw new Error("Bootstrap requires jQuery") }
     e.preventDefault()
   })
 
-}(window.jQuery);
+}(jQuery);
 
 /* ========================================================================
- * Bootstrap: carousel.js v3.0.0
- * http://twbs.github.com/bootstrap/javascript.html#carousel
+ * Bootstrap: carousel.js v3.0.2
+ * http://getbootstrap.com/javascript/#carousel
  * ========================================================================
- * Copyright 2012 Twitter, Inc.
+ * Copyright 2013 Twitter, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -10278,13 +10281,13 @@ if (!jQuery) { throw new Error("Bootstrap requires jQuery") }
     })
   })
 
-}(window.jQuery);
+}(jQuery);
 
 /* ========================================================================
- * Bootstrap: collapse.js v3.0.0
- * http://twbs.github.com/bootstrap/javascript.html#collapse
+ * Bootstrap: collapse.js v3.0.2
+ * http://getbootstrap.com/javascript/#collapse
  * ========================================================================
- * Copyright 2012 Twitter, Inc.
+ * Copyright 2013 Twitter, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -10458,13 +10461,13 @@ if (!jQuery) { throw new Error("Bootstrap requires jQuery") }
     $target.collapse(option)
   })
 
-}(window.jQuery);
+}(jQuery);
 
 /* ========================================================================
- * Bootstrap: dropdown.js v3.0.0
- * http://twbs.github.com/bootstrap/javascript.html#dropdowns
+ * Bootstrap: dropdown.js v3.0.2
+ * http://getbootstrap.com/javascript/#dropdowns
  * ========================================================================
- * Copyright 2012 Twitter, Inc.
+ * Copyright 2013 Twitter, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -10613,13 +10616,13 @@ if (!jQuery) { throw new Error("Bootstrap requires jQuery") }
     .on('click.bs.dropdown.data-api'  , toggle, Dropdown.prototype.toggle)
     .on('keydown.bs.dropdown.data-api', toggle + ', [role=menu]' , Dropdown.prototype.keydown)
 
-}(window.jQuery);
+}(jQuery);
 
 /* ========================================================================
- * Bootstrap: modal.js v3.0.0
- * http://twbs.github.com/bootstrap/javascript.html#modals
+ * Bootstrap: modal.js v3.0.2
+ * http://getbootstrap.com/javascript/#modals
  * ========================================================================
- * Copyright 2012 Twitter, Inc.
+ * Copyright 2013 Twitter, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -10860,14 +10863,14 @@ if (!jQuery) { throw new Error("Bootstrap requires jQuery") }
     .on('show.bs.modal',  '.modal', function () { $(document.body).addClass('modal-open') })
     .on('hidden.bs.modal', '.modal', function () { $(document.body).removeClass('modal-open') })
 
-}(window.jQuery);
+}(jQuery);
 
 /* ========================================================================
- * Bootstrap: tooltip.js v3.0.0
- * http://twbs.github.com/bootstrap/javascript.html#tooltip
+ * Bootstrap: tooltip.js v3.0.2
+ * http://getbootstrap.com/javascript/#tooltip
  * Inspired by the original jQuery.tipsy by Jason Frame
  * ========================================================================
- * Copyright 2012 Twitter, Inc.
+ * Copyright 2013 Twitter, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -11247,13 +11250,13 @@ if (!jQuery) { throw new Error("Bootstrap requires jQuery") }
     return this
   }
 
-}(window.jQuery);
+}(jQuery);
 
 /* ========================================================================
- * Bootstrap: popover.js v3.0.0
- * http://twbs.github.com/bootstrap/javascript.html#popovers
+ * Bootstrap: popover.js v3.0.2
+ * http://getbootstrap.com/javascript/#popovers
  * ========================================================================
- * Copyright 2012 Twitter, Inc.
+ * Copyright 2013 Twitter, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -11365,13 +11368,13 @@ if (!jQuery) { throw new Error("Bootstrap requires jQuery") }
     return this
   }
 
-}(window.jQuery);
+}(jQuery);
 
 /* ========================================================================
- * Bootstrap: scrollspy.js v3.0.0
- * http://twbs.github.com/bootstrap/javascript.html#scrollspy
+ * Bootstrap: scrollspy.js v3.0.2
+ * http://getbootstrap.com/javascript/#scrollspy
  * ========================================================================
- * Copyright 2012 Twitter, Inc.
+ * Copyright 2013 Twitter, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -11524,13 +11527,13 @@ if (!jQuery) { throw new Error("Bootstrap requires jQuery") }
     })
   })
 
-}(window.jQuery);
+}(jQuery);
 
 /* ========================================================================
- * Bootstrap: tab.js v3.0.0
- * http://twbs.github.com/bootstrap/javascript.html#tabs
+ * Bootstrap: tab.js v3.0.2
+ * http://getbootstrap.com/javascript/#tabs
  * ========================================================================
- * Copyright 2012 Twitter, Inc.
+ * Copyright 2013 Twitter, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -11558,7 +11561,7 @@ if (!jQuery) { throw new Error("Bootstrap requires jQuery") }
   Tab.prototype.show = function () {
     var $this    = this.element
     var $ul      = $this.closest('ul:not(.dropdown-menu)')
-    var selector = $this.attr('data-target')
+    var selector = $this.data('target')
 
     if (!selector) {
       selector = $this.attr('href')
@@ -11660,13 +11663,13 @@ if (!jQuery) { throw new Error("Bootstrap requires jQuery") }
     $(this).tab('show')
   })
 
-}(window.jQuery);
+}(jQuery);
 
 /* ========================================================================
- * Bootstrap: affix.js v3.0.0
- * http://twbs.github.com/bootstrap/javascript.html#affix
+ * Bootstrap: affix.js v3.0.2
+ * http://getbootstrap.com/javascript/#affix
  * ========================================================================
- * Copyright 2012 Twitter, Inc.
+ * Copyright 2013 Twitter, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -11787,7 +11790,7 @@ if (!jQuery) { throw new Error("Bootstrap requires jQuery") }
     })
   })
 
-}(window.jQuery);
+}(jQuery);
 
 define("bootstrap", ["jquery"], function(){});
 
@@ -17656,11 +17659,12 @@ window.CodeMirror = (function() {
   // Run the given mode's parser over a line, update the styles
   // array, which contains alternating fragments of text and CSS
   // classes.
-  function runMode(cm, text, mode, state, f) {
+  // FNC HACK added lineNo Parameter
+  function runMode(cm, lineNo, text, mode, state, f) {
     var flattenSpans = mode.flattenSpans;
     if (flattenSpans == null) flattenSpans = cm.options.flattenSpans;
     var curStart = 0, curStyle = null;
-    var stream = new StringStream(text, cm.options.tabSize), style;
+    var stream = new StringStream(text, cm.options.tabSize, lineNo), style;
     if (text == "" && mode.blankLine) mode.blankLine(state);
     while (!stream.eol()) {
       if (stream.pos > cm.options.maxHighlightLength) {
@@ -17689,12 +17693,14 @@ window.CodeMirror = (function() {
     // mode/overlays that it is based on (for easy invalidation).
     var st = [cm.state.modeGen];
     // Compute the base array of styles
-    runMode(cm, line.text, cm.doc.mode, state, function(end, style) {st.push(end, style);});
+    // FNC HACK added lineNo Parameter
+    runMode(cm, lineNo(line), line.text, cm.doc.mode, state, function(end, style) {st.push(end, style);});
 
     // Run overlays, adjust style array.
     for (var o = 0; o < cm.state.overlays.length; ++o) {
       var overlay = cm.state.overlays[o], i = 1, at = 0;
-      runMode(cm, line.text, overlay.mode, true, function(end, style) {
+      // FNC HACK added lineNo Parameter
+      runMode(cm, lineNo(line), line.text, overlay.mode, true, function(end, style) {
         var start = i;
         // Ensure there's a token end at the current position, and that i points at it
         while (at < end) {
@@ -24427,7 +24433,8 @@ define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events'],
         function getCompleteToken(editor, pos, maxLines, currentToken, firstRun) {
             var prevStartPos = {};
 
-            function loop(pos, maxLines, currentToken) {
+
+            function loop(pos, maxLines, currentToken, firstRun) {
                 // Get the token at current position
                 var token = editor.getTokenAt(pos),
                     endPos;
@@ -24458,13 +24465,13 @@ define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events'],
                     // Now call this function again 
                     pos.line++;
                     pos.ch = 1;
-                    return loop(pos, maxLines, token);
+                    return loop(pos, maxLines, token, false);
                 }
 
                 return currentToken;
             }
 
-            return loop(pos, maxLines, currentToken);
+            return loop(pos, maxLines, currentToken, firstRun);
         }
 
         Editor = function (settings) {

@@ -4295,11 +4295,12 @@ window.CodeMirror = (function() {
   // Run the given mode's parser over a line, update the styles
   // array, which contains alternating fragments of text and CSS
   // classes.
-  function runMode(cm, text, mode, state, f) {
+  // FNC HACK added lineNo Parameter
+  function runMode(cm, lineNo, text, mode, state, f) {
     var flattenSpans = mode.flattenSpans;
     if (flattenSpans == null) flattenSpans = cm.options.flattenSpans;
     var curStart = 0, curStyle = null;
-    var stream = new StringStream(text, cm.options.tabSize), style;
+    var stream = new StringStream(text, cm.options.tabSize, lineNo), style;
     if (text == "" && mode.blankLine) mode.blankLine(state);
     while (!stream.eol()) {
       if (stream.pos > cm.options.maxHighlightLength) {
@@ -4328,12 +4329,14 @@ window.CodeMirror = (function() {
     // mode/overlays that it is based on (for easy invalidation).
     var st = [cm.state.modeGen];
     // Compute the base array of styles
-    runMode(cm, line.text, cm.doc.mode, state, function(end, style) {st.push(end, style);});
+    // FNC HACK added lineNo Parameter
+    runMode(cm, lineNo(line), line.text, cm.doc.mode, state, function(end, style) {st.push(end, style);});
 
     // Run overlays, adjust style array.
     for (var o = 0; o < cm.state.overlays.length; ++o) {
       var overlay = cm.state.overlays[o], i = 1, at = 0;
-      runMode(cm, line.text, overlay.mode, true, function(end, style) {
+      // FNC HACK added lineNo Parameter
+      runMode(cm, lineNo(line), line.text, overlay.mode, true, function(end, style) {
         var start = i;
         // Ensure there's a token end at the current position, and that i points at it
         while (at < end) {

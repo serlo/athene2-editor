@@ -19,7 +19,8 @@ define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events'],
         function getCompleteToken(editor, pos, maxLines, currentToken, firstRun) {
             var prevStartPos = {};
 
-            function loop(pos, maxLines, currentToken) {
+
+            function loop(pos, maxLines, currentToken, firstRun) {
                 // Get the token at current position
                 var token = editor.getTokenAt(pos),
                     endPos;
@@ -50,13 +51,13 @@ define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events'],
                     // Now call this function again 
                     pos.line++;
                     pos.ch = 1;
-                    return loop(pos, maxLines, token);
+                    return loop(pos, maxLines, token, false);
                 }
 
                 return currentToken;
             }
 
-            return loop(pos, maxLines, currentToken);
+            return loop(pos, maxLines, currentToken, firstRun);
         }
 
         Editor = function (settings) {
