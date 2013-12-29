@@ -1,5 +1,5 @@
 /*global define*/
-define(['formfield', 'events'], function (Field, eventScope) {
+define(['formfield', 'events', 'jquery'], function (Field, eventScope, $) {
     "use strict";
     var Preview,
         slice = Array.prototype.slice;
@@ -15,27 +15,27 @@ define(['formfield', 'events'], function (Field, eventScope) {
     };
 
     Preview.prototype.createFromForm = function ($form) {
-        var self = this,
-            label;
+        var self = this;
 
         if ($form.children().length) {
             self.formFields = [];
 
-            $form.children().each(function () {
+            $('input,textarea,select', $form).each(function () {
                 var field,
+                    $label,
                     type = self.getFieldType(this);
 
                 if (type) {
-                    if (type === 'Label') {
-                        label = this.innerText;
-                        return true;
-                    }
-
                     field = new Field[type](this);
 
-                    if (label) {
-                        field.setLabel(label);
-                        label = null;
+                    if (type === 'Checkbox') {
+                        $label = $(this).parent();
+                    } else {
+                        $label = $('label[name="' + $(this).attr('name') + '"],label[for="' + $(this).attr('name') + '"]');
+                    }
+
+                    if ($label.length) {
+                        field.setLabel($label.text());
                     }
 
                     field.addEventListener('column-add', function () {
@@ -61,6 +61,47 @@ define(['formfield', 'events'], function (Field, eventScope) {
                     self.$el.append(field.$el);
                 }
             });
+
+            // $form.children().each(function () {
+            //     var field,
+            //         type = self.getFieldType(this);
+
+            //     if (type) {
+            //         if (type === 'Label') {
+            //             label = this.innerText;
+            //             return true;
+            //         }
+
+            //         field = new Field[type](this);
+
+            //         if (label) {
+            //             field.setLabel(label);
+            //             label = null;
+            //         }
+
+            //         field.addEventListener('column-add', function () {
+            //             self.trigger.apply(self, ['column-add'].concat(slice.call(arguments)));
+            //         });
+
+            //         field.addEventListener('select', function () {
+            //             self.trigger.apply(self, ['field-select'].concat(slice.call(arguments)));
+            //         });
+
+            //         field.addEventListener('update', function () {
+            //             self.trigger.apply(self, ['update'].concat(slice.call(arguments)));
+            //         });
+
+            //         if (type === 'Textarea') {
+            //             if (!self.layoutBuilderConfiguration) {
+            //                 throw new Error('No Layout Builder Configuration set');
+            //             }
+            //             field.addLayoutBuilder(self.layoutBuilderConfiguration);
+            //         }
+
+            //         self.formFields.push(field);
+            //         self.$el.append(field.$el);
+            //     }
+            // });
         }
     };
 
@@ -78,6 +119,8 @@ define(['formfield', 'events'], function (Field, eventScope) {
             break;
         case 'INPUT':
             switch (field.type) {
+            case 'hidden':
+                return;
             case 'submit':
                 self.submit = field;
                 break;

@@ -29,7 +29,7 @@
             </div>
             <div id="content"></div>
         </header>
-        <form id="editor-form" action="/test/action" method="post">
+        <!--<form id="editor-form" action="/test/action" method="post">
 <label>Published</label>
 <input name="published" type="checkbox" value="1" checked="checked"/>
 <label>Visible</label>
@@ -49,7 +49,17 @@
 <label>Summary</label>
 <textarea name="summary" class="plain"></textarea>
 <input type="submit" value="Save">
-                    </form>
+                    </form>-->
+
+<form action="" method="post" name="article" class="clearfix form-horizontal" role="form" id="editor-form">
+<div class="form-group "><label class="control-label" for="title">Title:</label><div class=""><input type="text" name="title" class="form-control" value=""></div></div>
+<div class="form-group "><label class="control-label" for="content">Content:</label><div class=""><textarea name="content" class="form-control"></textarea></div></div>
+<div class="form-group "><label class="control-label" for="reasoning">Reasoning:</label><div class=""><textarea name="reasoning" class="form-control"></textarea></div></div>
+<fieldset><fieldset><div class="form-group ">Benachrichtigungen zu diesem Inhalt erhalten.<div class=""><div class="checkbox"><input type="hidden" name="controls[subscription][subscribe]" value="0"><label><input type="checkbox" name="controls[subscription][subscribe]" value="1" checked="checked">Benachrichtigungen zu diesem Inhalt erhalten.</label></div></div></div>
+<div class="form-group ">Benachrichtigungen auch als E-Mail erhalten.<div class=""><div class="checkbox"><input type="hidden" name="controls[subscription][mailman]" value="0"><label><input type="checkbox" name="controls[subscription][mailman]" value="1" checked="checked">Benachrichtigungen auch als E-Mail erhalten.</label></div></div></div>
+</fieldset><div class="form-group "><div class=""><input type="submit" name="controls[submit]" class="btn btn-success pull-right" value="Save"></div></div>
+</fieldset></form>
+
         <section id="editor-wrap">
             <div id="preview" class="editor-main content-editor">
                 <div class="editor-main-inner content">

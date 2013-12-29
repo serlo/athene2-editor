@@ -13,12 +13,6 @@ define(
             latex2mml = 'http://www.wiris.net/demo/editor/latex2mathml',
             mml2latex = 'http://www.wiris.net/demo/editor/mathml2latex';
 
-        require(['http://www.wiris.net/demo/editor/editor'], function () {
-            wiris = com.wiris.jsEditor.JsEditor.newInstance({
-                'language': 'en'
-            });
-        });
-
         function ajax (url, data, method) {
             return $.ajax({
                 url: url,
@@ -52,21 +46,34 @@ define(
             var that = this,
                 formular;
 
-            formular = token.string;
-            that.data.content = formular.substr(2, formular.length - 4);
+            function asyncActivate() {
+                formular = token.string;
+                that.data.content = formular.substr(2, formular.length - 4);
 
-            wiris.insertInto($('.content', that.$el)[0]);
+                wiris.insertInto($('.content', that.$el)[0]);
 
-            ajax(latex2mml, "latex=" + encodeURIComponent(that.data.content))
-                .success(function (mml) {
-                    wiris.setMathML(mml);
-                })
-                .fail(Common.genericError);
+                ajax(latex2mml, "latex=" + encodeURIComponent(that.data.content))
+                    .success(function (mml) {
+                        wiris.setMathML(mml);
+                    })
+                    .fail(Common.genericError);
 
 
-            that.$el.on('click', '.btn-success', function () {
-                that.save();
-            });
+                that.$el.on('click', '.btn-success', function () {
+                    that.save();
+                });
+            }
+
+            if (wiris) {
+                asyncActivate();
+            } else {
+                require(['http://www.wiris.net/demo/editor/editor'], function () {
+                    wiris = com.wiris.jsEditor.JsEditor.newInstance({
+                        'language': 'en'
+                     });
+                    asyncActivate();
+                });
+            }
         };
 
         FormulaPlugin.prototype.deactivate = function () {
