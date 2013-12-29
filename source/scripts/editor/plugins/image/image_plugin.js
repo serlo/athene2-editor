@@ -17,11 +17,11 @@ define(['jquery', 'underscore', 'text!./editor/templates/plugins/image/image_plu
     ImagePlugin.prototype.constructor = ImagePlugin;
 
     ImagePlugin.prototype.init = function () {
-        var self = this;
+        var that = this;
 
-        self.template = _.template(plugin_template);
+        that.template = _.template(plugin_template);
 
-        self.data.name = 'Image';
+        that.data.name = 'Image';
     };
 
     ImagePlugin.prototype.updateContentString = function () {
@@ -29,30 +29,30 @@ define(['jquery', 'underscore', 'text!./editor/templates/plugins/image/image_plu
     };
 
     ImagePlugin.prototype.activate = function (token) {
-        var self = this,
+        var that = this,
             title,
             href;
 
-        self.data.content = token.string;
-        title = _.first(self.data.content.match(titleRegexp));
-        self.data.title = title.substr(1, title.length - 3);
+        that.data.content = token.string;
+        title = _.first(that.data.content.match(titleRegexp));
+        that.data.title = title.substr(1, title.length - 3);
 
-        href = _.first(self.data.content.match(hrefRegexp));
-        self.data.href = href.substr(1, href.length - 2);
+        href = _.first(that.data.content.match(hrefRegexp));
+        that.data.href = href.substr(1, href.length - 2);
 
-        self.$el = $(self.template(self.data));
+        that.$el = $(that.template(that.data));
 
-        self.$el.on('change', '.title', function () {
-            self.setData('title', this.value);
+        that.$el.on('change', '.title', function () {
+            that.setData('title', this.value);
         });
 
-        self.$el.on('change', '.href', function () {
-            self.setData('href', this.value);
+        that.$el.on('change', '.href', function () {
+            that.setData('href', this.value);
         });
 
-        self.$el.on('click', '.btn-success', function (e) {
+        that.$el.on('click', '.btn-success', function (e) {
             e.preventDefault();
-            self.trigger('save', self);
+            that.trigger('save', that);
             return;
         });
     };

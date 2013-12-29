@@ -84,10 +84,16 @@ define(['formfield', 'events'], function (Field, eventScope) {
             case 'checkbox':
                 type = 'Checkbox';
                 break;
+            case 'radio':
+                type = 'Radio';
+                break;
             default:
                 type = 'Input';
                 break;
             }
+            break;
+        case 'SELECT' :
+            type = 'Select';
             break;
         case 'LABEL':
             type = 'Label';

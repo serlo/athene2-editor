@@ -25,7 +25,8 @@ define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events'],
                     endPos;
 
                 // Check if it's the other one than before
-                if ((_.isEqual(token.state.startPos, prevStartPos && !firstRun)) || (!_.isEqual(token.state.startPos, prevStartPos && firstRun))) {
+                if ((_.isEqual(token.state.startPos, prevStartPos && !firstRun)) ||
+                    (!_.isEqual(token.state.startPos, prevStartPos && firstRun))) {
 
                     if (token.state.endPos) {
                         // YIPPIE, COMPLETE NEW TOKEN
@@ -135,7 +136,7 @@ define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events'],
                             self.$widget = null;
 
                             detailedToken = getCompleteToken(self.textEditor, self.textEditor.getCursor(), maxLines, {}, true);
-
+                            console.log(detailedToken);
                             // detailedToken.state.string = self.textEditor.doc.getRange(detailedToken.state.startPos, detailedToken.state.endPos);
 
                             self.pluginManager.activate(plugin, detailedToken);

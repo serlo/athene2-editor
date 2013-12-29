@@ -5,3 +5,5 @@ source/bower_components
 .grunt
 !.bowerrc
 !.jshintrc
+*.sublime-project
+*.sublime-workspace

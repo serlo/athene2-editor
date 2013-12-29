@@ -25,7 +25,7 @@ header {
     outline: 1px solid $gray;
     background: white;
 
-    label {
+    .preview-label {
         display: block;
         padding: 5px 20px 5px 20px;
 
@@ -33,25 +33,42 @@ header {
         border-top: 1px solid $gray;
     }
 
+    .field-checkbox {
+        + .preview-content {
+            display: none;
+        }
+    }
+
+    .preview-checkbox {
+        margin-right: 8px;
+    }
+
+    .preview-radio {
+        margin-right: 8px;
+    }
+
+    .preview-select {
+
+    }
 }
 
 .preview-content {
     padding: 5px 20px 5px 20px;
+}
 
-    input {
-        width: 100%;
-        border: none;
-        padding: 5px 0;
+.preview-input {
+    width: 100%;
+    border: none;
+    padding: 5px 0;
+}
 
-        &[type="checkbox"] {
-            width: auto;
-        }
-    }
+.preview-textarea {
+    width: 100%;
+    max-width: 100%;
+}
 
-    textarea {
-        width: 100%;
-        max-width: 100%;
-    }
+.preview-radio-container {
+    font-weight: normal;
 }
 
 #editor-form {

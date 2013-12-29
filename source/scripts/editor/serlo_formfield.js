@@ -9,6 +9,7 @@ define(['jquery', 'underscore', 'layout_builder', 'events'], function ($, _, Lay
     var Field = function (field, type, label) {
         this.field = field;
         this.$field = $(field);
+        this.$label = $('<label class="preview-label">');
         this.type = type;
         this.label = label || '';
 
@@ -32,7 +33,9 @@ define(['jquery', 'underscore', 'layout_builder', 'events'], function ($, _, Lay
 
     Field.prototype.setLabel = function (label) {
         this.label = label;
-        this.$el.prepend('<label>' + label + '</label>');
+        this.$label.append(label);
+        this.$el.prepend(this.$label);
+        window[label] = this.data;
     };
 
     Field.Textarea = function (field, label) {
@@ -118,7 +121,10 @@ define(['jquery', 'underscore', 'layout_builder', 'events'], function ($, _, Lay
         self.data = {};
         self.data.value = self.$field.text();
 
-        self.$input = $('<textarea>').text(self.data.value);
+        self.$input = $('<textarea>')
+            .addClass('preview-textarea')
+            .text(self.data.value);
+
         self.$inner.append(self.$input);
         self.$input.on('keyup', function () {
             self.data.value = this.value;
@@ -134,9 +140,12 @@ define(['jquery', 'underscore', 'layout_builder', 'events'], function ($, _, Lay
         self.data.value = self.field.value;
         self.data.placeholder = self.$field.attr('placeholder') || '';
 
-        self.$input = $('<input type="text">').attr({
-            placeholder: self.data.placeholder
-        }).val(self.data.value);
+        self.$input = $('<input type="text">')
+            .attr({
+                placeholder: self.data.placeholder
+            })
+            .addClass('preview-input')
+            .val(self.data.value);
 
         self.$inner.append(self.$input);
 
@@ -149,16 +158,69 @@ define(['jquery', 'underscore', 'layout_builder', 'events'], function ($, _, Lay
         var self = this;
         invoke(self, Field, field, 'input', label);
 
-        self.data = self.$field.attr('checked');
+        self.data = self.$field.is(':checked');
 
-        self.$field = $('<input type="checkbox">').attr('checked', self.data);
+        self.$checkbox = $('<input type="checkbox">')
+            .addClass('preview-checkbox')
+            .attr('checked', self.data);
 
-        self.$inner.append(self.$field).append(' whatever');
+        self.$label
+            .addClass('field-checkbox')
+            .prepend(self.$checkbox);
+
+        self.$checkbox.change(function () {
+            self.data = self.$checkbox.is(':checked');
+            self.$field
+                .attr('checked', self.data)
+                .val(self.data ? 1 : 0);
+        });
     };
 
-    // Field.Select = function (field, label) {
-    //     this = new Field(field, 'select', label);
-    // };
+    Field.Select = function (field, label) {
+        var self = this;
+        invoke(self, Field, field, 'input', label);
+
+        self.$select = $('<select>')
+            .addClass('preview-select');
+
+        if (self.$field.attr('multiple')) {
+            self.$select.attr('multiple', true);
+        }
+
+        $('option', self.$field).each(function () {
+            self.$select.append($(this).clone());
+        });
+
+        self.$select.change(function () {
+            self.data = $(this).val();
+            self.$field.val(self.data);
+        });
+
+        self.$inner.append(self.$select);
+    };
+
+    Field.Radio = function (field, label) {
+        var self = this;
+        invoke(self, Field, field, 'input', label);
+
+        self.$radio = $('<input type="radio">')
+            .addClass('preview-radio')
+            .attr('name', self.$field.attr('name'));
+
+        if (self.$field.is(':checked')) {
+            self.$radio.attr('checked', true);
+        }
+
+        self.$inner = $('<label class="preview-content preview-radio-container">');
+        self.$el.append(self.$inner);
+
+        self.$radio.change(function () {
+            self.data = self.$radio.is(':checked');
+            self.$field.attr('checked', self.data);
+        });
+
+        self.$inner.append(self.$radio).append(self.$field.val());
+    };
 
     return Field;
 });
