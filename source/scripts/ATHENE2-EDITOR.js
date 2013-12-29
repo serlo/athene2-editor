@@ -130,17 +130,16 @@ define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events'],
                     if (plugin) {
                         self.$widget = plugin.getActivateLink();
                         self.$widget.click(function () {
-                            var maxLines = self.textEditor.doc.size,
-                                detailedToken;
+                            var maxLines = self.textEditor.doc.size;
 
                             self.$widget.remove();
                             self.$widget = null;
 
-                            detailedToken = getCompleteToken(self.textEditor, self.textEditor.getCursor(), maxLines, {}, true);
-                            console.log(detailedToken);
-                            // detailedToken.state.string = self.textEditor.doc.getRange(detailedToken.state.startPos, detailedToken.state.endPos);
+                            self.currentToken = getCompleteToken(self.textEditor, self.textEditor.getCursor(), maxLines, {}, true);
 
-                            self.pluginManager.activate(plugin, detailedToken);
+                            self.currentToken.state.string = self.textEditor.doc.getRange(self.currentToken.state.startPos, self.currentToken.state.endPos);
+
+                            self.pluginManager.activate(plugin, self.currentToken);
                             self.activePlugin = plugin;
 
                             $body.append(plugin.$el);
@@ -152,16 +151,13 @@ define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events'],
             });
 
             self.pluginManager.addEventListener('save', function (plugin) {
-                console.log(plugin.data.content);
                 // plugin.data.content is the updated value
                 //
-                // self.textEditor.replaceRange(plugin.data, {
-                //     line: self.currentToken.line,
-                //     ch: self.currentToken.from
-                // }, {
-                //     line: self.currentToken.line,
-                //     ch: self.currentToken.to
-                // });
+                self.textEditor.replaceRange(
+                    plugin.data.content,
+                    self.currentToken.state.startPos,
+                    self.currentToken.state.endPos
+                );
             });
 
             self.preview.addEventListener('field-select', function (field, column) {

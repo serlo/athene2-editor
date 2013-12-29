@@ -46,8 +46,10 @@ define(
             var that = this,
                 formular;
 
+            that.token = token;
+
             function asyncActivate() {
-                formular = token.string;
+                formular = token.state.string;
                 that.data.content = formular.substr(2, formular.length - 4);
 
                 wiris.insertInto($('.content', that.$el)[0]);
@@ -70,7 +72,7 @@ define(
                 require(['http://www.wiris.net/demo/editor/editor'], function () {
                     wiris = com.wiris.jsEditor.JsEditor.newInstance({
                         'language': 'en'
-                     });
+                    });
                     asyncActivate();
                 });
             }
@@ -87,7 +89,7 @@ define(
 
             ajax(mml2latex, "mml=" + encodeURIComponent(data), 'post')
                 .success(function (latex) {
-                    that.data.content = latex;
+                    that.data.content = '$$' + latex + '$$';
                     that.trigger('save', that);
                 }).fail(Common.genericError);
         };
