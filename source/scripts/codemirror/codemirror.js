@@ -3718,7 +3718,7 @@ window.CodeMirror = (function() {
     this.string = string;
     this.tabSize = tabSize || 8;
     this.lastColumnPos = this.lastColumnValue = 0;
-    this.lineNo = lineNo || undefined;
+    this.lineNo = lineNo || 0;
   }
   /*
    * FNC HACK END
