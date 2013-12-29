@@ -35,7 +35,6 @@ define(['jquery', 'underscore', 'layout_builder', 'events'], function ($, _, Lay
         this.label = label;
         this.$label.append(label);
         this.$el.prepend(this.$label);
-        window[label] = this.data;
     };
 
     Field.Textarea = function (field, label) {
