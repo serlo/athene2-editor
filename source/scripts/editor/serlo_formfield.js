@@ -96,7 +96,11 @@ define(['jquery', 'underscore', 'layout_builder', 'events'], function ($, _, Lay
         try {
             data = JSON.parse(data);
         } catch (e) {
-            throw new Error(e.message);
+            // throw new Error(e.message);
+            data = [[{
+                col: 24,
+                content: data
+            }]];
         }
 
         _.each(data, function (columns) {

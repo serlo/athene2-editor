@@ -278,34 +278,34 @@ require(['jquery',
             }
         });
 
-        // Setup a filter for comparing mathInline spans.
-        $.fn.quickdiff("filter", "mathSpanInline",
-            function (node) {
-                return (node.nodeName === "SPAN" && $(node).hasClass("mathInline"));
-            },
-            function (a, b) {
-                var aHTML = $.trim($("script", a).html()), bHTML = $.trim($(b).html());
-                return ("%%" + aHTML + "%%") !== bHTML;
-            });
-
-        // Setup a filter for comparing math spans.
-        $.fn.quickdiff("filter", "mathSpan",
-            function (node) {
-                return (node.nodeName === "SPAN" && $(node).hasClass("math"));
-            },
-            function (a, b) {
-                var aHTML = $.trim($("script", a).html()), bHTML = $.trim($(b).html());
-                return ("$$" + aHTML + "$$") !== bHTML;
-            });
-
-        $.fn.quickdiff("attributes", {
-            "td" : ["align"],
-            "th" : ["align"],
-            "img" : ["src", "alt", "title"],
-            "a" : ["href", "title"]
-        });
-
         $(function () {
+            // Setup a filter for comparing mathInline spans.
+            $.fn.quickdiff("filter", "mathSpanInline",
+                function (node) {
+                    return (node.nodeName === "SPAN" && $(node).hasClass("mathInline"));
+                },
+                function (a, b) {
+                    var aHTML = $.trim($("script", a).html()), bHTML = $.trim($(b).html());
+                    return ("%%" + aHTML + "%%") !== bHTML;
+                });
+
+            // Setup a filter for comparing math spans.
+            $.fn.quickdiff("filter", "mathSpan",
+                function (node) {
+                    return (node.nodeName === "SPAN" && $(node).hasClass("math"));
+                },
+                function (a, b) {
+                    var aHTML = $.trim($("script", a).html()), bHTML = $.trim($(b).html());
+                    return ("$$" + aHTML + "$$") !== bHTML;
+                });
+
+            $.fn.quickdiff("attributes", {
+                "td" : ["align"],
+                "th" : ["align"],
+                "img" : ["src", "alt", "title"],
+                "a" : ["href", "title"]
+            });
+
             function init() {
                 var editor,
                     textEditor,

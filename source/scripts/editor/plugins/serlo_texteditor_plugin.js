@@ -42,7 +42,7 @@ define(['jquery', 'events', 'translator', 'text!./editor/templates/plugins/defau
     };
 
     EditorPlugin.prototype.getActivateLink = function () {
-        return this.widget || (this.widget = $('<a class="editor-widget" href="#">').text(t('Edit %s', this.data.name)));
+        return this.widget || (this.widget = $('<a class="editor-widget" href="#">').text(t('Edit %s', this.data.name)));
     };
 
     return EditorPlugin;

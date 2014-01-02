@@ -241,7 +241,13 @@ header {
     z-index: 200;
 }
 
+/* Codemirror specific */
 .CodeMirror-linewidget {
     z-index: 5;
     overflow: visible;
+}
+
+/* Wiris plugin specific */
+.wrs_editor img {
+    max-width: initial;
 }

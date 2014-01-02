@@ -35,9 +35,10 @@ function render(input, callback) {
 
     // parse input to object
     try {
+        input = input.trim().replace(/&quot;/g, '"');
         data = JSON.parse(input);
     } catch(e) {
-        callback('', 'InvalidArgumentException', 'No valid json string given');
+        callback('', 'InvalidArgumentException', 'No valid json string given: ' + input);
         return;
     }
 
