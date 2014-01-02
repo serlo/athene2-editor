@@ -186,6 +186,7 @@ define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events'],
                         }
 
                         self.textEditor.options.readOnly = false;
+                        self.textEditor.execCommand('selectAll');
                         self.textEditor.focus();
 
                         return;
@@ -315,6 +316,7 @@ require(['jquery',
                     pluginManager = new PluginManager();
 
                 converter.config.math = true;
+                converter.config.stripHTML = true;
 
                 parser.setConverter(converter, 'makeHtml');
 
@@ -341,7 +343,7 @@ require(['jquery',
                 });
 
                 editor = editor || new Editor({
-                    $form: $('#editor-form').first(),
+                    $form: $('form').first(),
                     $helpers : $('#editor-helpers'),
                     $submit : $('#editor-actions .btn-success'),
                     parser: parser,

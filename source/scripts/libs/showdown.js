@@ -170,7 +170,7 @@ this.makeHtml = function(text) {
   text = text.replace(/~T/g,"~");
   
   if (config.stripHTML) {
-    text = stripUnwantedHTML(text);
+    text = stripUnwantedHTML(text, '');
   }
   
   if (config.refprint && g_print_refs_count) {

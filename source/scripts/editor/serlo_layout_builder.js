@@ -34,6 +34,10 @@ define(['jquery', 'underscore', 'events', 'translator', 'text!./editor/templates
         return patch;
     };
 
+    Column.prototype.focus = function () {
+        this.$el.focus().trigger('click');
+    };
+
     Row = function (columns, index, data) {
         var self = this;
         eventScope(self);
@@ -97,7 +101,7 @@ define(['jquery', 'underscore', 'events', 'translator', 'text!./editor/templates
         self.$add = $('<a href="#" class="plus">+</a>');
         self.$layoutList = $('<div class="layout-list">');
 
-        this.layoutListVisible = true;
+        this.layoutListVisible = false;
         self.layouts = configuration.layouts;
         self.rows = [];
 
@@ -106,8 +110,11 @@ define(['jquery', 'underscore', 'events', 'translator', 'text!./editor/templates
 
             $add.click(function (e) {
                 e.preventDefault();
-                self.addRow(columns);
+                var row = self.addRow(columns);
                 self.hideLayouts();
+
+                // Select first created column
+                row.columns[0].focus();
                 return;
             });
 
@@ -123,17 +130,18 @@ define(['jquery', 'underscore', 'events', 'translator', 'text!./editor/templates
         });
     };
 
-    LayoutBuilder.prototype.showOrHideLayouts = function () {
-        this.layoutListVisible = !this.layoutListVisible;
-        if (this.layoutListVisible) {
+    LayoutBuilder.prototype.showOrHideLayouts = function (forceClose) {
+        if (forceClose || this.layoutListVisible) {
             this.$layoutList.detach();
+            this.layoutListVisible = false;
         } else {
             this.$el.append(this.$layoutList);
+            this.layoutListVisible = true;
         }
     };
 
     LayoutBuilder.prototype.hideLayouts = function () {
-        this.$layoutList.detach();
+        this.showOrHideLayouts(true);
     };
 
     LayoutBuilder.prototype.addRow = function (requestedLayout, data) {
@@ -147,6 +155,8 @@ define(['jquery', 'underscore', 'events', 'translator', 'text!./editor/templates
                 newRow.addEventListener('remove', function (row) {
                     self.removeRow(row);
                 });
+
+
 
                 self.rows.push(newRow);
                 self.trigger('add', newRow);

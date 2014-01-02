@@ -1,7 +1,8 @@
-// uncomment the following line to include twitter bootstrap
 @import "base/variables";
 @import "base/bootstrap-override";
 @import "sass-bootstrap/lib/bootstrap";
+
+@import "base/content_layout";
 
 @import "modules/mixins";
 @import "modules/states";
