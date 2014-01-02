@@ -42,7 +42,7 @@ define(['jquery', 'underscore', 'layout_builder', 'events'], function ($, _, Lay
         invoke(self, Field, field, 'textarea', label);
 
         self.$inner.unbind('click');
-        self.data = this.$field.html();
+        self.data = this.$field.val();
 
         self.updateField = _.throttle(function () {
             var updatedValue = [];
@@ -59,7 +59,12 @@ define(['jquery', 'underscore', 'layout_builder', 'events'], function ($, _, Lay
                 updatedValue.push(_row);
             });
 
-            self.$field.html(JSON.stringify(updatedValue));
+            if (updatedValue.length) {
+                self.$field.val(JSON.stringify(updatedValue));
+            } else {
+                // Truly empty the field when there is no content.
+                self.$field.val('');
+            }
         }, 2000);
     };
 
