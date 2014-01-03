@@ -14,6 +14,7 @@ var dnode = require('dnode'),
     port = 7070;
 
 converter.config.math = true;
+converter.config.stripHTML = true;
 
 // **render** 
 // @param {String} input Json string,
