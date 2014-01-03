@@ -170,7 +170,10 @@ this.makeHtml = function(text) {
   text = text.replace(/~T/g,"~");
   
   if (config.stripHTML) {
-    text = stripUnwantedHTML(text, '');
+    text = stripUnwantedHTML(text, 
+        'a|b|blockquote|code|del|dd|dl|dt|em|h1|h2|h3|h4|h5|h6|'+
+        'i|img|li|ol|p|pre|sup|sub|strong|strike|ul|br|hr|span|'+
+        'table|th|tr|td|tbody|thead|tfoot');
   }
   
   if (config.refprint && g_print_refs_count) {
