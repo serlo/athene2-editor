@@ -12,6 +12,10 @@ header {
     z-index: 2;
 }
 
+#serlo-menu {
+    margin-bottom: 0;
+}
+
 #editor-wrap {
     position: absolute;
     top: $header-height;
@@ -49,6 +53,13 @@ header {
 
     .preview-select {
 
+    }
+
+    .has-error {
+        .preview-label {
+            background: #FAC1C1;
+            border-top-color: #FD2222;
+        }
     }
 }
 

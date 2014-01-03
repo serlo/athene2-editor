@@ -1,5 +1,5 @@
 /*global define*/
-define(['jquery', 'underscore', 'layout_builder', 'events'], function ($, _, LayoutBuilder, eventScope) {
+define(['jquery', 'underscore', 'layout_builder', 'system_notification', 'events'], function ($, _, LayoutBuilder, SystemNotification, eventScope) {
     "use strict";
     function invoke(instance, constructor) {
         $.extend(instance, constructor.prototype);
@@ -7,11 +7,20 @@ define(['jquery', 'underscore', 'layout_builder', 'events'], function ($, _, Lay
     }
 
     var Field = function (field, type, label) {
+        var $errorList;
         this.field = field;
         this.$field = $(field);
         this.$label = $('<label class="preview-label">');
         this.type = type;
         this.label = label || '';
+
+        this.hasError = !!this.$field.parents('.has-error').length
+        if (this.hasError) {
+            $errorList = this.$field.siblings().filter('.help-block');
+            $('li', $errorList).each(function () {
+                SystemNotification.notify(this.innerHTML, 'danger', true);
+            });
+        }
 
         eventScope(this);
 
@@ -22,6 +31,11 @@ define(['jquery', 'underscore', 'layout_builder', 'events'], function ($, _, Lay
         var self = this;
         self.$el = $('<div>');
         self.$inner = $('<div>').addClass('preview-content');
+
+        if (self.hasError) {
+            self.$el.addClass('has-error');
+        }
+
         self.$el.append(self.$inner);
 
         self.$inner.click(function () {
