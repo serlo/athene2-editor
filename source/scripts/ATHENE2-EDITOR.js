@@ -267,17 +267,19 @@ require(['jquery',
         SystemNotification) {
         "use strict";
 
-        MathJax.Hub.Config({
-            displayAlign: 'left',
-            extensions: ["tex2jax.js"],
-            jax: ["input/TeX", "output/HTML-CSS"],
-            tex2jax: {
-                inlineMath: [["%%", "%%"]]
-            },
-            "HTML-CSS": {
-                scale: 100
-            }
-        });
+        if (typeof MathJax !== 'undefined') {
+            MathJax.Hub.Config({
+                displayAlign: 'left',
+                extensions: ["tex2jax.js"],
+                jax: ["input/TeX", "output/HTML-CSS"],
+                tex2jax: {
+                    inlineMath: [["%%", "%%"]]
+                },
+                "HTML-CSS": {
+                    scale: 100
+                }
+            });
+        }
 
         $(function () {
             // Setup a filter for comparing mathInline spans.

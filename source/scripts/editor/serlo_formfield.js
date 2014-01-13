@@ -171,6 +171,12 @@ define(['jquery', 'underscore', 'layout_builder', 'system_notification', 'events
 
         self.$inner.append(self.$input);
 
+        if ($.fn.datepicker && self.$field.hasClass('datepicker')) {
+            self.$input.datepicker({
+                format: 'dd.mm.yyyy'
+            });
+        }
+
         self.$input.on('keyup', function () {
             self.data.value = self.field.value = this.value;
         });

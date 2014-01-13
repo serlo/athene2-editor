@@ -22323,6 +22323,12 @@ define('formfield',['jquery', 'underscore', 'layout_builder', 'system_notificati
 
         self.$inner.append(self.$input);
 
+        if ($.fn.datepicker && self.$field.hasClass('datepicker')) {
+            self.$input.datepicker({
+                format: 'dd.mm.yyyy'
+            });
+        }
+
         self.$input.on('keyup', function () {
             self.data.value = self.field.value = this.value;
         });
@@ -24765,17 +24771,19 @@ require(['jquery',
         SystemNotification) {
         
 
-        MathJax.Hub.Config({
-            displayAlign: 'left',
-            extensions: ["tex2jax.js"],
-            jax: ["input/TeX", "output/HTML-CSS"],
-            tex2jax: {
-                inlineMath: [["%%", "%%"]]
-            },
-            "HTML-CSS": {
-                scale: 100
-            }
-        });
+        if (typeof MathJax !== 'undefined') {
+            MathJax.Hub.Config({
+                displayAlign: 'left',
+                extensions: ["tex2jax.js"],
+                jax: ["input/TeX", "output/HTML-CSS"],
+                tex2jax: {
+                    inlineMath: [["%%", "%%"]]
+                },
+                "HTML-CSS": {
+                    scale: 100
+                }
+            });
+        }
 
         $(function () {
             // Setup a filter for comparing mathInline spans.
