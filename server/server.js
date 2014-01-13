@@ -60,7 +60,7 @@ function render(input, callback) {
     callback(output);
 }
 
-server = dnode(function (remove, connection) {
+server = dnode(function (remote, connection) {
     // Populate `render` function for
     // dnode clients.
     this.render = render;
