@@ -22015,8 +22015,6 @@ define('layout_builder',['jquery', 'underscore', 'events', 'translator', 'text!.
                     self.removeRow(row);
                 });
 
-
-
                 self.rows.push(newRow);
                 self.trigger('add', newRow);
                 return;
@@ -22250,6 +22248,10 @@ define('formfield',['jquery', 'underscore', 'layout_builder', 'system_notificati
                 self.trigger('update', column);
             });
 
+            row.addEventListener('remove', function (row) {
+                self.trigger('removed-row');
+            });
+
             _.each(row.columns, function (column) {
                 self.trigger('column-add', column);
             });
@@ -22326,6 +22328,8 @@ define('formfield',['jquery', 'underscore', 'layout_builder', 'system_notificati
         if ($.fn.datepicker && self.$field.hasClass('datepicker')) {
             self.$input.datepicker({
                 format: 'dd.mm.yyyy'
+            }).on('changeDate', function () {
+                self.$input.trigger('keyup');
             });
         }
 
@@ -22454,6 +22458,10 @@ define('preview',['formfield', 'events', 'jquery'], function (Field, eventScope,
 
                     field.addEventListener('update', function () {
                         self.trigger.apply(self, ['update'].concat(slice.call(arguments)));
+                    });
+
+                    field.addEventListener('removed-row', function () {
+                        self.trigger.apply(self, ['removed-row'].concat(slice.call(arguments)));
                     });
 
                     if (type === 'Textarea') {
@@ -24689,17 +24697,14 @@ define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events'],
                             self.textEditor.setHistory(self.editable.history);
                         }
 
-                        self.textEditor.options.readOnly = false;
+                        self.textEditor.setOption('readOnly', false);
                         self.textEditor.execCommand('selectAll');
                         self.textEditor.focus();
 
                         return;
                     });
                 } else {
-                    self.textEditor.operation(function () {
-                        self.textEditor.setValue('');
-                        self.textEditor.options.readOnly = true;
-                    });
+                    self.emptyTextEditor();
                 }
             });
 
@@ -24707,8 +24712,12 @@ define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events'],
                 column.$el.html(self.parser.parse(column.data));
             });
 
+            self.preview.addEventListener('removed-row', function () {
+                self.emptyTextEditor();
+            });
+
             // self.preview.addEventListener('update', function (column) {
-                
+
             // });
 
             self.preview.setLayoutBuilderConfiguration(self.layoutBuilderConfiguration);
@@ -24736,6 +24745,15 @@ define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events'],
                 this.textEditor.setSize($window.width() / 2, $window.height() - 81);
             }
             return this;
+        };
+
+        Editor.prototype.emptyTextEditor = function () {
+            var self = this;
+
+            self.textEditor.operation(function () {
+                self.textEditor.setValue('');
+                self.textEditor.setOption('readOnly', true);
+            });
         };
 
         return Editor;
