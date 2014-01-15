@@ -174,6 +174,8 @@ define(['jquery', 'underscore', 'layout_builder', 'system_notification', 'events
         if ($.fn.datepicker && self.$field.hasClass('datepicker')) {
             self.$input.datepicker({
                 format: 'dd.mm.yyyy'
+            }).on('changeDate', function () {
+                self.$input.trigger('keyup');
             });
         }
 
