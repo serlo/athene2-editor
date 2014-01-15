@@ -156,8 +156,6 @@ define(['jquery', 'underscore', 'events', 'translator', 'text!./editor/templates
                     self.removeRow(row);
                 });
 
-
-
                 self.rows.push(newRow);
                 self.trigger('add', newRow);
                 return;

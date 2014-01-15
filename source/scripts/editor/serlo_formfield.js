@@ -98,6 +98,10 @@ define(['jquery', 'underscore', 'layout_builder', 'system_notification', 'events
                 self.trigger('update', column);
             });
 
+            row.addEventListener('remove', function (row) {
+                self.trigger('removed-row');
+            });
+
             _.each(row.columns, function (column) {
                 self.trigger('column-add', column);
             });
