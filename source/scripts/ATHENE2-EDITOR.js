@@ -185,17 +185,14 @@ define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events'],
                             self.textEditor.setHistory(self.editable.history);
                         }
 
-                        self.textEditor.options.readOnly = false;
+                        self.textEditor.setOption('readOnly', false);
                         self.textEditor.execCommand('selectAll');
                         self.textEditor.focus();
 
                         return;
                     });
                 } else {
-                    self.textEditor.operation(function () {
-                        self.textEditor.setValue('');
-                        self.textEditor.options.readOnly = true;
-                    });
+                    self.emptyTextEditor();
                 }
             });
 
@@ -203,8 +200,12 @@ define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events'],
                 column.$el.html(self.parser.parse(column.data));
             });
 
+            self.preview.addEventListener('removed-row', function () {
+                self.emptyTextEditor();
+            });
+
             // self.preview.addEventListener('update', function (column) {
-                
+
             // });
 
             self.preview.setLayoutBuilderConfiguration(self.layoutBuilderConfiguration);
@@ -232,6 +233,15 @@ define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events'],
                 this.textEditor.setSize($window.width() / 2, $window.height() - 81);
             }
             return this;
+        };
+
+        Editor.prototype.emptyTextEditor = function () {
+            var self = this;
+
+            self.textEditor.operation(function () {
+                self.textEditor.setValue('');
+                self.textEditor.setOption('readOnly', true);
+            });
         };
 
         return Editor;
