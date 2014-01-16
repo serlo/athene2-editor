@@ -182,7 +182,7 @@ define(['formfield', 'events', 'jquery'], function (Field, eventScope, $) {
     };
 
     Preview.prototype.scrollTo = function ($elem, offset) {
-        offset = offset || 0;
+        offset = offset || 0;
 
         var $parent = this.$el.parent(),
             top = $elem.offset().top + $parent.scrollTop(),

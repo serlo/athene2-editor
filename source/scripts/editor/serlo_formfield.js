@@ -14,7 +14,8 @@ define(['jquery', 'underscore', 'layout_builder', 'system_notification', 'events
         this.type = type;
         this.label = label || '';
 
-        this.hasError = !!this.$field.parents('.has-error').length
+        this.hasError = !!this.$field.parents('.has-error').length;
+
         if (this.hasError) {
             $errorList = this.$field.siblings().filter('.help-block');
             $('li', $errorList).each(function () {
@@ -99,7 +100,7 @@ define(['jquery', 'underscore', 'layout_builder', 'system_notification', 'events
             });
 
             row.addEventListener('remove', function (row) {
-                self.trigger('removed-row');
+                self.trigger('removed-row', row);
             });
 
             _.each(row.columns, function (column) {
@@ -114,7 +115,7 @@ define(['jquery', 'underscore', 'layout_builder', 'system_notification', 'events
 
     Field.Textarea.prototype.parseFieldData = function () {
         var self = this,
-            data = $(self.field).val() || '[]';
+            data = $(self.field).val() || '[]';
 
         try {
             data = JSON.parse(data);

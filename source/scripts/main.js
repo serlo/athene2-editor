@@ -14,7 +14,17 @@ require.config({
     baseUrl: "/build/scripts",
     paths: {
         "jquery": "../bower_components/jquery/jquery",
+        "jquery.ui.widget": "../bower_components/jquery-ui/ui/jquery.ui.widget",
         "quickdiff": "libs/quickdiff",
+
+        "loadimage": "../bower_components/blueimp-load-image/js/load-image",
+        "canvas_to_blob": "../bower_components/blueimp-canvas-to-blob/js/canvas-to-blob",
+        "fileupload": "../bower_components/blueimp-file-upload/js/jquery.fileupload",
+        "fileupload_iframetransport": "../bower_components/blueimp-file-upload/js/jquery.iframe-transport",
+        "./jquery.fileupload-process": "../bower_components/blueimp-file-upload/js/jquery.fileupload-process",
+        "fileupload_validate": "../bower_components/blueimp-file-upload/js/jquery.fileupload-validate",
+        "fileupload_ui": "../bower_components/blueimp-file-upload/js/jquery.fileupload-ui",
+
         "bootstrap": "../bower_components/sass-bootstrap/dist/js/bootstrap",
         "underscore": "../bower_components/underscore/underscore",
         "moment" : "../bower_components/momentjs/min/moment.min",
@@ -64,6 +74,9 @@ require.config({
         datepicker: {
             deps: ['jquery', 'bootstrap']
         },
+        fileupload: {
+            deps: ['jquery']
+        },
         markdownmode: {
             deps: ['codemirror']
         },
@@ -74,7 +87,7 @@ require.config({
             exports: "CodeMirror"
         },
         "ATHENE2-EDITOR": {
-            deps: ['bootstrap', 'polyfills', 'datepicker', 'quickdiff', 'markdownmode', 'searchcursor', 'texteditor_plugin_image', 'texteditor_plugin_wiris']
+            deps: ['bootstrap', 'polyfills', 'datepicker', 'fileupload', 'quickdiff', 'markdownmode', 'searchcursor', 'texteditor_plugin_image', 'texteditor_plugin_wiris']
         }
     },
     waitSeconds: 12

@@ -1,5 +1,5 @@
 /*global define*/
-define(['jquery', 'router'], function ($, Router) {
+define(['jquery', 'router'], function ($, Router) {
     "use strict";
     var SerloModals,
         Modal,
@@ -12,9 +12,9 @@ define(['jquery', 'router'], function ($, Router) {
         this.type = options.type || false;
         this.title = options.title || false;
         this.content = options.content;
-        this.href = options.href || false;
+        this.href = options.href || false;
         this.cancel = options.cancel === undefined ? true : options.cancel;
-        this.okayLabel = options.okayLabel || false;
+        this.okayLabel = options.okayLabel || false;
 
         this.render().show();
     };
@@ -71,7 +71,7 @@ define(['jquery', 'router'], function ($, Router) {
                     title: $self.attr('data-title'),
                     content: $self.attr('data-content'),
                     href: $self.attr('href'),
-                    cancel: $self.attr('data-cancel') === "false" ? false : true,
+                    cancel: $self.attr('data-cancel') === "false" ? false : true,
                     label: $self.attr('data-label')
                 };
 

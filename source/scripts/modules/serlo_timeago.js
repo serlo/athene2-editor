@@ -12,7 +12,7 @@ define(['jquery', 'moment'], function ($, moment) {
             var self = this,
                 $self = $(self),
                 text = $self.text(),
-                datetime = $self.attr('title') || null;
+                datetime = $self.attr('title') || null;
 
             if (!datetime) {
                 return;

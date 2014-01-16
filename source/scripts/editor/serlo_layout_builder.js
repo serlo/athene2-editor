@@ -27,7 +27,7 @@ define(['jquery', 'underscore', 'events', 'translator', 'text!./editor/templates
     Column.prototype.update = function (data, html) {
         this.data = data;
         // this.$el.html(html);
-        html = html || '<span>&nbsp;</span>';
+        html = html || '<span>&nbsp;</span>';
         var patch = this.$el.quickdiff('patch', $("<div></div>").html(html), ["mathSpan", "mathSpanInline"]);
 
         this.trigger('update', this);
@@ -179,7 +179,7 @@ define(['jquery', 'underscore', 'events', 'translator', 'text!./editor/templates
     };
 
     LayoutBuilder.prototype.updateRowIndexes = function () {
-        _.each(this.rows, function (row, i) {
+        _.each(this.rows, function (row, i) {
             row.index = i;
         });
     };

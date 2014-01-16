@@ -32,7 +32,7 @@ define(['jquery'], function ($) {
 
             if (selection) {
                 this.textEditor.replaceSelection(this.settings.replaceBefore + selection + this.settings.replaceAfter);
-                anchor.ch = cursor.ch + this.settings.cursorDelta - selection.length;
+                anchor.ch = cursor.ch + this.settings.cursorDelta - selection.length;
             } else {
                 this.textEditor.replaceRange(this.settings.replaceBefore + this.settings.replaceAfter, cursor);
                 anchor.ch = cursor.ch + this.settings.cursorDelta;

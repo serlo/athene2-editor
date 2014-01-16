@@ -60,7 +60,7 @@ define(['jquery', 'translator'], function ($, t) {
             showNotification(message, status, html, uniqueID);
         },
         error: function (message) {
-            this.notify(message || errorMessage, 'danger', false, 'generic-error');
+            this.notify(message || errorMessage, 'danger', false, 'generic-error');
         }
     };
 });
