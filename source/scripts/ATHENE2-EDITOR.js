@@ -99,7 +99,7 @@ define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events'],
                 self.textEditor.operation(function () {
                     var token = self.textEditor.getTokenAt(cursor);
 
-                    if (!self.currentToken || !_.isEqual(self.currentToken, token)) {
+                    if (!self.currentToken || !_.isEqual(self.currentToken, token)) {
                         token.line = cursor.line;
                         self.currentToken = token;
                         self.trigger('tokenChange', token);
