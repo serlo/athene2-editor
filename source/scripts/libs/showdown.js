@@ -173,7 +173,7 @@ this.makeHtml = function(text) {
     text = stripUnwantedHTML(text, 
         'a|b|blockquote|code|del|dd|dl|dt|em|h1|h2|h3|h4|h5|h6|'+
         'i|img|li|ol|p|pre|sup|sub|strong|strike|ul|br|hr|span|'+
-        'table|th|tr|td|tbody|thead|tfoot');
+        'table|th|tr|td|tbody|thead|tfoot', undefined, false);
   }
   
   if (config.refprint && g_print_refs_count) {
@@ -1580,7 +1580,7 @@ var stripUnwantedHTML = function (html /*, allowedTags, allowedAttributes, force
             'td': 'colspan|align',
             'th': 'rowspan|align',
             'div': 'class'
-        }, forceProtocol = arguments[3] || true;
+        }, forceProtocol = arguments[3] === undefined ? true : false;
         
         testAllowed = new RegExp('^('+allowedTags.toLowerCase()+')$'),
         findTags = /<(\/?)\s*([\w:\-]+)([^>]*)>/g,
