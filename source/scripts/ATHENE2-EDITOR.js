@@ -343,7 +343,13 @@ require(['jquery',
 
                 // new EditorPlugin();
                 pluginManager
-                    .addPlugin(new EditorPlugin.Image())
+                    .addPlugin(new EditorPlugin.Image({
+                        dataType: 'json',
+                        type: 'post',
+                        url: '/upload',
+                        loadImageMaxFileSize: 8000000,
+                        maxNumberOfFiles: 1
+                    }))
                     .addPlugin(new EditorPlugin.Wiris());
 
                 textEditor = new CodeMirror($('#main .editor-main-inner')[0], {

@@ -8,12 +8,11 @@ define([
     'texteditor_plugin',
     'translator',
     'loadimage',
-    'canvas_to_blob',
+    'fileupload',
     'fileupload_iframetransport',
-    // 'fileupload_process',
-    // 'fileupload_validate',
-    // 'fileupload_ui',
-    'fileupload'],
+    // needs to be loaded directly, because of its relative dependencies
+    // '../bower_components/blueimp-file-upload/js/jquery.fileupload-ui'
+    ],
     function ($, _, Common, SystemNotification, plugin_template, EditorPlugin, t) {
         "use strict";
         var ImagePlugin,
@@ -23,16 +22,18 @@ define([
         titleRegexp = new RegExp(/\[[^\]]*\]\(/);
         hrefRegexp =  new RegExp(/\([^\)]*\)/);
 
-        ImagePlugin = function () {
+        ImagePlugin = function (fileuploadOptions) {
             this.state = 'image';
-            this.init();
+            this.init(fileuploadOptions);
         };
 
         ImagePlugin.prototype = new EditorPlugin();
         ImagePlugin.prototype.constructor = ImagePlugin;
 
-        ImagePlugin.prototype.init = function () {
+        ImagePlugin.prototype.init = function (fileuploadOptions) {
             var that = this;
+
+            that.fileuploadOptions = fileuploadOptions || {};
 
             that.template = _.template(plugin_template);
 
@@ -41,6 +42,10 @@ define([
 
         ImagePlugin.prototype.updateContentString = function () {
             this.data.content = '![' + this.data.title + '](' + this.data.href + ')';
+        };
+
+        ImagePlugin.prototype.onError = function (err) {
+            this.$uploadStatus.text(err.join("\n"));
         };
 
         ImagePlugin.prototype.activate = function (token) {
@@ -78,15 +83,31 @@ define([
             that.$upload = $('#fileupload', that.$el);
 
             // initialize fileupload
-            that.$upload.fileupload({
-                dataType: 'json',
-                type: 'post',
-                url: '/upload',
-                acceptFileTypes: /(\.|\/)(gif|jpe?g|png)$/i,
+            that.$upload.fileupload(_.extend({}, that.fileuploadOptions, {
                 add: function (e, data) {
                     that.$el.addClass('uploading');
                     that.$uploadStatus.text(t('Uploading.'));
-                    data.submit();
+
+                    var uploadErrors = [],
+                        acceptFileTypes = that.fileuploadOptions.acceptFileTypes || /^image\/(gif|jpe?g|png)$/i;
+
+                    if (data.originalFiles.length > that.fileuploadOptions.maxNumberOfFiles) {
+                        uploadErrors.push(t('You only can upload one file'));
+                    }
+
+                    if(data.originalFiles[0].type && !acceptFileTypes.test(data.originalFiles[0].type)) {
+                        uploadErrors.push(t('Not an accepted file type'));
+                    }
+
+                    if(data.originalFiles[0].size && data.originalFiles[0].size > that.fileuploadOptions.loadImageMaxFileSize) {
+                        uploadErrors.push(t('Filesize is too big'));
+                    }
+
+                    if(uploadErrors.length > 0) {
+                        that.onError(uploadErrors);
+                    } else {
+                        data.submit();
+                    }
                 },
                 error: function () {
                     that.$el.removeClass('uploading');
@@ -104,8 +125,9 @@ define([
                         Common.genericError();
                         that.$uploadStatus.text(t('An error occured.'));
                     }
+
                 }
-            });
+            }));
         };
 
         EditorPlugin.Image = ImagePlugin;

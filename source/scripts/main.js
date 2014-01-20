@@ -18,12 +18,8 @@ require.config({
         "quickdiff": "libs/quickdiff",
 
         "loadimage": "../bower_components/blueimp-load-image/js/load-image",
-        "canvas_to_blob": "../bower_components/blueimp-canvas-to-blob/js/canvas-to-blob",
         "fileupload": "../bower_components/blueimp-file-upload/js/jquery.fileupload",
         "fileupload_iframetransport": "../bower_components/blueimp-file-upload/js/jquery.iframe-transport",
-        "./jquery.fileupload-process": "../bower_components/blueimp-file-upload/js/jquery.fileupload-process",
-        "fileupload_validate": "../bower_components/blueimp-file-upload/js/jquery.fileupload-validate",
-        "fileupload_ui": "../bower_components/blueimp-file-upload/js/jquery.fileupload-ui",
 
         "bootstrap": "../bower_components/sass-bootstrap/dist/js/bootstrap",
         "underscore": "../bower_components/underscore/underscore",
