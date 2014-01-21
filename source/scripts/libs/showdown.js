@@ -153,10 +153,13 @@ Showdown.converter = function() {
         // contorted like /[ \t]*\n+/ .
         text = text.replace(/^[ \t]+$/mg, "");
 
+        // Serlo Flavored Markdown: References
+        text = _DoReferences(text);
+
         // Turn block-level HTML blocks into hash entries
         text = _HashHTMLBlocks(text);
 
-        // Serlo Flavored Markdown
+        // Serlo Flavored Markdown: Spoilers
         text = _SpoilerBlocks(text);
 
         // Strip link definitions, store in hashes.
@@ -176,7 +179,7 @@ Showdown.converter = function() {
             text = stripUnwantedHTML(text,
                 'a|b|blockquote|code|del|dd|dl|dt|em|h1|h2|h3|h4|h5|h6|' +
                 'i|img|li|ol|p|pre|sup|sub|strong|strike|ul|br|hr|span|' +
-                'table|th|tr|td|tbody|thead|tfoot', undefined, false);
+                'table|th|tr|td|tbody|thead|tfoot|div', undefined, false);
         }
 
         if (config.refprint && g_print_refs_count) {
@@ -1575,6 +1578,7 @@ Showdown.converter = function() {
 
     /**
      * Serlo Flavored Markdown
+     * Spoilers:
      * Transforms ///.../// blocks into spoilers
      **/
     var _SpoilerBlocks = function(text) {
@@ -1582,6 +1586,21 @@ Showdown.converter = function() {
 
         return text.replace(findSpoilers, function(original, title, content) {
             return '<div class="reference spoiler"><a href="#" class="spoiler-teaser">' + _RunSpanGamut(title) + '</a><div class="spoiler-content">' + _RunBlockGamut(content) + '</div></div>';
+        });
+    };
+
+    /**
+     * Serlo Flavored Markdown
+     * References:
+     * Transforms >[Title](referenceUrl)
+     * into <div class="reference"><a href="referenceUrl" class="reference-link">Title</a></div>
+     * MUST RUN BEFORE _DoBlockQuotes!
+     **/
+    var _DoReferences = function (text) {
+        var findReferences = new RegExp(/>\[(.*)\]\((.*)\)/g);
+
+        return text.replace(findReferences, function (original, title, url) {
+            return '<div class="reference"><a href="' + url + '" class="reference-link">' + title + '</a></div>';
         });
     };
 
