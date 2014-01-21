@@ -1,128 +1,128 @@
 CodeMirror.defineMode("sfm", function(cmCfg, modeCfg) {
 
 
-var defStartPos = function (stream, state) {
-  state.startPos = {
-    line : stream.lineNo,
-    ch : stream.start
-  }
-  state.endPos = undefined;
-},
-defEndPos = function (stream, state) {
-  state.endPos = {
-    line : stream.lineNo,
-    ch : stream.pos
-  }
-};
-
-return {
-
-    startState: function () {
-      return {};
+    var defStartPos = function(stream, state) {
+        state.startPos = {
+            line: stream.lineNo,
+            ch: stream.start
+        }
+        state.endPos = undefined;
     },
+        defEndPos = function(stream, state) {
+            state.endPos = {
+                line: stream.lineNo,
+                ch: stream.pos
+            }
+        };
 
-    blankLine: function (state) {
-          //state.wasBlank = true;
-          state.inEm = false;
-          state.inStrong = false;
-          state.inReference = false;
-          state.endPos = undefined;
-          state.startPos = undefined;
-    },
+    return {
 
-    token: function (stream, state) {
-      // START OF LINE
-      if (stream.sol()) {
-        if (stream.match(/^\s*$/, true)) {
-          state.wasBlank = true;
-        } else {
-          state.wasBlank = false;
-        }
-      }
+        startState: function() {
+            return {};
+        },
 
-      var peek = stream.peek();
-
-      // MATH
-      if (!state.inMath && stream.match(/^\$\$/,true)) {
-          state.inMath = true;
-          defStartPos(stream, state);
-      } 
-      if (state.inMath) {
-        if (stream.skipTo('$') && stream.next() == '$') {
-          stream.next();
-          state.inMath = false;
-          defEndPos(stream, state);
-        } else {
-           stream.skipToEnd();
-        }
-        return "math";
-      }
-
-
-      // EM & STRONG      
-      if (!state.inEm && !state.inStrong && peek === '*') {
-        stream.next();
-        var anotherPeek = stream.peek();
-        if (anotherPeek === '*') {
-          state.inStrong = true;
-          stream.next();
-        } else {
-          state.inEm = true;
-        }
-        defStartPos(stream, state);
-      }
-
-      if (state.inStrong || state.inEm) {
-        if (stream.skipTo('*')) {
-          stream.next();
-          var anotherPeek = stream.peek();
-          if (stream.peek() === '*') {
-            state.inStrong = false;
-            stream.next();
-          } else {
+        blankLine: function(state) {
+            //state.wasBlank = true;
             state.inEm = false;
-          }
-          defEndPos(stream, state);
+            state.inStrong = false;
+            state.inReference = false;
+            state.endPos = undefined;
+            state.startPos = undefined;
+        },
 
-        } else {
-           stream.skipToEnd();
-        }
-        return "string";
-      }
+        token: function(stream, state) {
+            // START OF LINE
+            if (stream.sol()) {
+                if (stream.match(/^\s*$/, true)) {
+                    state.wasBlank = true;
+                } else {
+                    state.wasBlank = false;
+                }
+            }
 
-      // REFERENCE
-      
-      if (!state.inReference && stream.match(/(!|>)?\[[^\]]*\] ?(?:\()/, false)) {
-        if(peek === '!') {
-          state.referenceType = 'image';
-        }
-        if(peek === '>') {
-          state.referenceType = 'reference';
-        }
-        if(peek === '[') {
-          state.referenceType = 'link';
-        }
-        state.inReference = true;
-        stream.next();
-        defStartPos(stream, state);
-      }
+            var peek = stream.peek();
 
-      if (state.inReference) {
-        if (stream.match(/(\[)?[^\]]*\]\([^\)]*\)/, true)) {
-          state.inReference = false;
-          defEndPos(stream, state);
-        } else {
-           stream.skipToEnd();
+            // MATH
+            if (!state.inMath && stream.match(/^\$\$/, true)) {
+                state.inMath = true;
+                defStartPos(stream, state);
+            }
+            if (state.inMath) {
+                if (stream.skipTo('$') && stream.next() == '$') {
+                    stream.next();
+                    state.inMath = false;
+                    defEndPos(stream, state);
+                } else {
+                    stream.skipToEnd();
+                }
+                return "math";
+            }
+
+
+            // EM & STRONG      
+            if (!state.inEm && !state.inStrong && peek === '*') {
+                stream.next();
+                var anotherPeek = stream.peek();
+                if (anotherPeek === '*') {
+                    state.inStrong = true;
+                    stream.next();
+                } else {
+                    state.inEm = true;
+                }
+                defStartPos(stream, state);
+            }
+
+            if (state.inStrong || state.inEm) {
+                if (stream.skipTo('*')) {
+                    stream.next();
+                    var anotherPeek = stream.peek();
+                    if (stream.peek() === '*') {
+                        state.inStrong = false;
+                        stream.next();
+                    } else {
+                        state.inEm = false;
+                    }
+                    defEndPos(stream, state);
+
+                } else {
+                    stream.skipToEnd();
+                }
+                return "string";
+            }
+
+            // REFERENCE
+
+            if (!state.inReference && stream.match(/(!|>)?\[[^\]]*\] ?(?:\()/, false)) {
+                if (peek === '!') {
+                    state.referenceType = 'image';
+                }
+                if (peek === '>') {
+                    state.referenceType = 'reference';
+                }
+                if (peek === '[') {
+                    state.referenceType = 'link';
+                }
+                state.inReference = true;
+                stream.next();
+                defStartPos(stream, state);
+            }
+
+            if (state.inReference) {
+                if (stream.match(/(\[)?[^\]]*\]\([^\)]*\)/, true)) {
+                    state.inReference = false;
+                    defEndPos(stream, state);
+                } else {
+                    stream.skipToEnd();
+                }
+                return state.referenceType;
+            }
+
+            stream.next();
+
+            return null; // Unstyled token
+
         }
-        return state.referenceType;
-      }
-
-        stream.next();
-
-        return null; // Unstyled token
-      
-    }
-  };
+    };
 
 });
 
