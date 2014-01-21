@@ -26,6 +26,7 @@ CodeMirror.defineMode("sfm", function(cmCfg, modeCfg) {
             state.inEm = false;
             state.inStrong = false;
             state.inReference = false;
+            state.inInlineMath = false;
             state.endPos = undefined;
             state.startPos = undefined;
         },
@@ -58,6 +59,22 @@ CodeMirror.defineMode("sfm", function(cmCfg, modeCfg) {
                 return "math";
             }
 
+            // INLINE MATH
+            if (!state.inInlineMath && stream.match(/\%\%/, true)) {
+                state.inInlineMath = true;
+                defStartPos(stream, state);
+            }
+
+            if (state.inInlineMath) {
+                if (stream.skipTo('%') && stream.next() === '%') {
+                    stream.next();
+                    state.inInlineMath = false;
+                    defEndPos(stream, state);
+                } else {
+                    stream.skipToEnd();
+                }
+                return "inline-math";
+            }
 
             // EM & STRONG      
             if (!state.inEm && !state.inStrong && peek === '*') {

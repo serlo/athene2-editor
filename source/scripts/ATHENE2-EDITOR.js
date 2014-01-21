@@ -352,6 +352,13 @@ require(['jquery',
                         maxNumberOfFiles: 1
                     }))
                     .addPlugin(new EditorPlugin.Wiris())
+                    .addPlugin((function () {
+                        // Inline Math Plugin
+                        var plugin = new EditorPlugin.Wiris();
+                        plugin.state = 'inline-math';
+                        plugin.wrap = '%%';
+                        return plugin;
+                    })())
                     .addPlugin(new EditorPlugin.Reference());
 
                 textEditor = new CodeMirror($('#main .editor-main-inner')[0], {

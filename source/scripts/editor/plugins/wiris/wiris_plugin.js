@@ -35,8 +35,7 @@ define(
             that.template = _.template(plugin_template);
 
             that.data.name = 'Wiris';
-
-            // that.data.content = '\\lim_{n\\to\\infty} \\frac{n(n-1)(n-2)...(n-k)(n-k-1)...(1)}{(n-k)(n-k-1)...(1)}\\Big(\\frac{1}{n^k}\\Big)';
+            that.wrap = '$$';
 
             that.$el = $(that.template(that.data));
             $('.content', that.$el).height(450);
@@ -89,7 +88,7 @@ define(
 
             ajax(mml2latex, "mml=" + encodeURIComponent(data), 'post')
                 .success(function (latex) {
-                    that.data.content = '$$' + latex + '$$';
+                    that.data.content = that.wrap + latex + that.wrap;
                     that.trigger('save', that);
                 }).fail(Common.genericError);
         };
