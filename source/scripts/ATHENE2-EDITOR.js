@@ -261,7 +261,8 @@ require(['jquery',
     'texteditor_plugin',
     'system_notification',
     'texteditor_plugin_image',
-    'texteditor_plugin_wiris'],
+    'texteditor_plugin_wiris',
+    'texteditor_plugin_reference'],
     function ($,
         _,
         Common,
@@ -346,11 +347,12 @@ require(['jquery',
                     .addPlugin(new EditorPlugin.Image({
                         dataType: 'json',
                         type: 'post',
-                        url: '/upload',
+                        url: '/attachment/upload',
                         loadImageMaxFileSize: 8000000,
                         maxNumberOfFiles: 1
                     }))
-                    .addPlugin(new EditorPlugin.Wiris());
+                    .addPlugin(new EditorPlugin.Wiris())
+                    .addPlugin(new EditorPlugin.Reference());
 
                 textEditor = new CodeMirror($('#main .editor-main-inner')[0], {
                     lineNumbers: true,
@@ -379,6 +381,7 @@ require(['jquery',
                 editor.addHelper(new TextEditorHelper.Link(textEditor));
                 editor.addHelper(new TextEditorHelper.Image(textEditor));
                 editor.addHelper(new TextEditorHelper.Formula(textEditor));
+                editor.addHelper(new TextEditorHelper.Spoiler(textEditor));
                 editor.addHelper(new TextEditorHelper.Undo(textEditor));
                 editor.addHelper(new TextEditorHelper.Redo(textEditor));
                 editor.addHelper(new TextEditorHelper.HidePlugins(textEditor));
