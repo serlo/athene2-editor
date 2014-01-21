@@ -9,9 +9,7 @@ define([
     'translator',
     'loadimage',
     'fileupload',
-    'fileupload_iframetransport',
-    // needs to be loaded directly, because of its relative dependencies
-    // '../bower_components/blueimp-file-upload/js/jquery.fileupload-ui'
+    'fileupload_iframetransport'
     ],
     function ($, _, Common, SystemNotification, plugin_template, EditorPlugin, t) {
         "use strict";
@@ -118,8 +116,8 @@ define([
                     var upload = arguments[1];
                     that.$el.removeClass('uploading');
 
-                    if (upload.result && upload.result.success) {
-                        $('.href', that.$el).val(upload.result.location).trigger('change');
+                    if (upload.result && upload.result.success && upload.result.files.length) {
+                        $('.href', that.$el).val(upload.result.files[0].location).trigger('change');
                         that.$uploadStatus.text(t('Image successfully uploaded.'));
                     } else {
                         Common.genericError();
