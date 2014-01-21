@@ -6,12 +6,25 @@ define(['jquery', 'translator'], function ($, t) {
         var that = this;
 
         that.settings = $.extend({
-            cursorDelta: 0
+            cursorDelta: 0,
+            icon: undefined
         }, settings);
 
         that.textEditor = textEditor;
 
-        that.$el = $('<a class="helper" href="#">').text(settings.title);
+        that.$el = $('<a>')
+            .addClass('helper')
+            .attr({
+                href: '#',
+                title: settings.title
+            });
+
+        if (that.settings.icon) {
+            that.$el.html('<i class="glyphicon glyphicon-' + that.settings.icon + '"></i>');
+        } else {
+            that.$el.text(settings.title);
+        }
+
         that.$el.click(function (e) {
             e.preventDefault();
             that.action();
@@ -57,7 +70,8 @@ define(['jquery', 'translator'], function ($, t) {
 
     TextEditorHelper.Bold = function (textEditor) {
         return new TextEditorHelper(textEditor, {
-            title: 'B',
+            title: 'Bold',
+            icon: 'bold',
             replaceBefore: '**',
             replaceAfter: '**',
             cursorDelta: 2,
@@ -67,7 +81,8 @@ define(['jquery', 'translator'], function ($, t) {
 
     TextEditorHelper.Italic = function (textEditor) {
         return new TextEditorHelper(textEditor, {
-            title: 'I',
+            title: 'Italic',
+            icon: 'italic',
             replaceBefore: '*',
             replaceAfter: '*',
             cursorDelta: 1,
@@ -78,6 +93,7 @@ define(['jquery', 'translator'], function ($, t) {
     TextEditorHelper.List = function (textEditor) {
         return new TextEditorHelper(textEditor, {
             title: 'List',
+            icon: 'list',
             replaceBefore: '* ',
             replaceAfter: '\n* ',
             cursorDelta: 2,
@@ -88,6 +104,7 @@ define(['jquery', 'translator'], function ($, t) {
     TextEditorHelper.Link = function (textEditor) {
         return new TextEditorHelper(textEditor, {
             title: 'Link',
+            icon: 'link',
             replaceBefore: '[Link Title](',
             replaceAfter: ')',
             cursorDelta: 1,
@@ -95,9 +112,21 @@ define(['jquery', 'translator'], function ($, t) {
         });
     };
 
+    TextEditorHelper.Reference = function (textEditor) {
+        return new TextEditorHelper(textEditor, {
+            title: 'Reference',
+            icon: 'paperclip',
+            replaceBefore: '>[Reference Title](',
+            replaceAfter: ')',
+            cursorDelta: 2,
+            selectionDelta: 15
+        });
+    };
+
     TextEditorHelper.Image = function (textEditor) {
         return new TextEditorHelper(textEditor, {
             title: 'Image',
+            icon: 'picture',
             replaceBefore: '![Image Title](',
             replaceAfter: ')',
             cursorDelta: 2,
@@ -118,7 +147,7 @@ define(['jquery', 'translator'], function ($, t) {
     TextEditorHelper.Undo = function (textEditor) {
         var that = this;
         that.title = 'Undo';
-        that.$el = $('<a class="helper" href="#">').text(that.title);
+        that.$el = $('<a class="helper" href="#" title="' + that.title + '">').html('<i class="glyphicon glyphicon-chevron-left"></i>');
         that.$el.click(function (e) {
             e.preventDefault();
             textEditor.undo();
@@ -129,12 +158,40 @@ define(['jquery', 'translator'], function ($, t) {
     TextEditorHelper.Redo = function (textEditor) {
         var that = this;
         that.title = 'Redo';
-        that.$el = $('<a class="helper" href="#">').text(that.title);
+        that.$el = $('<a class="helper" href="#" title="' + that.title + '">').html('<i class="glyphicon glyphicon-chevron-right"></i>');
         that.$el.click(function (e) {
             e.preventDefault();
             textEditor.redo();
             return;
         });
+    };
+
+    TextEditorHelper.Fullscreen = function () {
+        var that = this,
+            fullScreenElement;
+
+        fullScreenElement = document.body;
+
+        if (!!fullScreenElement.webkitRequestFullScreen &&
+            typeof Element !== 'undefined' &&
+            Element.ALLOW_KEYBOARD_INPUT) {
+            that.title = 'Fullscreen';
+            that.$el = $('<a class="helper" href="#" title="' + that.title + '">').html('<i class="glyphicon glyphicon-fullscreen"></i>');
+
+
+            that.$el.click(function (e) {
+                e.preventDefault();
+                if (fullScreenElement.requestFullScreen) {
+                    fullScreenElement.requestFullScreen();
+                } else if (fullScreenElement.mozRequestFullScreen) {
+                    fullScreenElement.mozRequestFullScreen();
+                } else if (fullScreenElement.webkitRequestFullScreen) {
+                    fullScreenElement.webkitRequestFullScreen(Element.ALLOW_KEYBOARD_INPUT);
+                }
+                return;
+            });
+        }
+
     };
 
     TextEditorHelper.HidePlugins = function (textEditor) {
@@ -153,6 +210,7 @@ define(['jquery', 'translator'], function ($, t) {
     TextEditorHelper.HidePlugins.prototype.action = function () {
         this.active = this.editor.hidePlugins = !this.active;
         this.$el.toggleClass('active', this.active);
+        this.$el.text(this.active ? 'Show Plugins' : 'Hide Plugins');
     };
 
     TextEditorHelper.Spoiler = function (textEditor) {

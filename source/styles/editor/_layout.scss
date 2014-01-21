@@ -113,8 +113,13 @@ header {
         background: rgba(255, 255, 255, 0.5);
         color: #333;
 
+        transition: 0.3s box-shadow 0s;
+    
         &:hover {
+            color: black;
             background: rgba(255, 255, 255, 0.75);
+            box-shadow: 0 0 10px #CECECE inset;
+            text-shadow: 0px 0px 5px #D8D8D8;
         }
 
         + .helper {
