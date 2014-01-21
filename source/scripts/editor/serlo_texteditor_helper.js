@@ -1,20 +1,20 @@
 /*global define*/
-define(['jquery'], function ($) {
+define(['jquery', 'translator'], function ($, t) {
     var TextEditorHelper;
 
     TextEditorHelper = function (textEditor, settings) {
-        var self = this;
+        var that = this;
 
-        self.settings = $.extend({
+        that.settings = $.extend({
             cursorDelta: 0
         }, settings);
 
-        self.textEditor = textEditor;
+        that.textEditor = textEditor;
 
-        self.$el = $('<a class="helper" href="#">').text(settings.title);
-        self.$el.click(function (e) {
+        that.$el = $('<a class="helper" href="#">').text(settings.title);
+        that.$el.click(function (e) {
             e.preventDefault();
-            self.action();
+            that.action();
             return;
         });
     };
@@ -116,10 +116,10 @@ define(['jquery'], function ($) {
     };
 
     TextEditorHelper.Undo = function (textEditor) {
-        var self = this;
-        self.title = 'Undo';
-        self.$el = $('<a class="helper" href="#">').text(self.title);
-        self.$el.click(function (e) {
+        var that = this;
+        that.title = 'Undo';
+        that.$el = $('<a class="helper" href="#">').text(that.title);
+        that.$el.click(function (e) {
             e.preventDefault();
             textEditor.undo();
             return;
@@ -127,10 +127,10 @@ define(['jquery'], function ($) {
     };
 
     TextEditorHelper.Redo = function (textEditor) {
-        var self = this;
-        self.title = 'Redo';
-        self.$el = $('<a class="helper" href="#">').text(self.title);
-        self.$el.click(function (e) {
+        var that = this;
+        that.title = 'Redo';
+        that.$el = $('<a class="helper" href="#">').text(that.title);
+        that.$el.click(function (e) {
             e.preventDefault();
             textEditor.redo();
             return;
@@ -138,14 +138,14 @@ define(['jquery'], function ($) {
     };
 
     TextEditorHelper.HidePlugins = function (textEditor) {
-        var self = this;
-        self.title = 'Hide Plugins';
-        self.editor = textEditor;
-        self.hide = self.editor.hidePlugins = false;
-        self.$el = $('<a class="helper" href="#">').text(self.title);
-        self.$el.click(function (e) {
+        var that = this;
+        that.title = 'Hide Plugins';
+        that.editor = textEditor;
+        that.hide = that.editor.hidePlugins = false;
+        that.$el = $('<a class="helper" href="#">').text(that.title);
+        that.$el.click(function (e) {
             e.preventDefault();
-            self.action();
+            that.action();
             return;
         });
     };
@@ -153,6 +153,17 @@ define(['jquery'], function ($) {
     TextEditorHelper.HidePlugins.prototype.action = function () {
         this.active = this.editor.hidePlugins = !this.active;
         this.$el.toggleClass('active', this.active);
+    };
+
+    TextEditorHelper.Spoiler = function (textEditor) {
+        var titleText = t('Title');
+        return new TextEditorHelper(textEditor, {
+            title: 'Spoiler',
+            replaceBefore: "/// " + titleText + "\n",
+            replaceAfter: "\n///",
+            cursorDelta: 4,
+            selectionDelta: titleText.length
+        });
     };
 
     return TextEditorHelper;
