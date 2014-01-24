@@ -32,6 +32,10 @@ define(['jquery', 'events', 'translator', 'text!./editor/templates/plugins/defau
         return this.data;
     };
 
+    EditorPlugin.prototype.close = function () {
+        this.trigger('close');
+    };
+
     EditorPlugin.prototype.activate = function () {
         this.$el = $(this.template(this.data));
         return this.$el;

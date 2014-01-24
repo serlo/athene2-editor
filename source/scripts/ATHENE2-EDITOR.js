@@ -78,6 +78,8 @@ define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events'],
                 self.resize();
             }).resize();
 
+            self.$pluginWrapper = $('<div class="editor-plugin-wrapper">');
+
             self.textEditor.on('change', function () {
                 if (self.editable) {
                     var value = self.textEditor.getValue(),
@@ -142,12 +144,16 @@ define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events'],
                             self.pluginManager.activate(plugin, self.currentToken);
                             self.activePlugin = plugin;
 
-                            $body.append(plugin.$el);
+                            self.showPlugin(plugin);
                         });
 
                         self.textEditor.addWidget(self.textEditor.getCursor(), self.$widget[0]);
                     }
                 }
+            });
+
+            self.pluginManager.addEventListener('close', function () {
+                self.$pluginWrapper.detach();
             });
 
             self.pluginManager.addEventListener('save', function (plugin) {
@@ -158,6 +164,11 @@ define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events'],
                     self.currentToken.state.startPos,
                     self.currentToken.state.endPos
                 );
+            });
+
+            self.pluginManager.addEventListener('toggle-plugin', function (plugin) {
+                self.activePlugin = plugin;
+                self.showPlugin(plugin);
             });
 
             self.preview.addEventListener('field-select', function (field, column) {
@@ -228,6 +239,12 @@ define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events'],
             return this;
         };
 
+        Editor.prototype.showPlugin = function (plugin) {
+            this.$pluginWrapper
+                .append(plugin.$el)
+                .appendTo($body);
+        };
+
         Editor.prototype.resize = function () {
             if (this.textEditor) {
                 this.textEditor.setSize($window.width() / 2, $window.height() - 81);
@@ -260,9 +277,16 @@ require(['jquery',
     'texteditor_plugin_manager',
     'texteditor_plugin',
     'system_notification',
+    'showdown_table',
+    'showdown_spoiler',
+    'showdown_htmlstrip',
+    'showdown_latex',
+    'showdown_references',
     'texteditor_plugin_image',
     'texteditor_plugin_wiris',
-    'texteditor_plugin_reference'],
+    'texteditor_plugin_reference',
+    'texteditor_plugin_default_reference',
+    'texteditor_plugin_geogebra_reference'],
     function ($,
         _,
         Common,
@@ -325,11 +349,14 @@ require(['jquery',
                     textEditor,
                     layoutBuilderConfiguration = new LayoutBuilderConfiguration(),
                     parser = new Parser(),
-                    converter = new Showdown.converter(),
+                    converter = new Showdown.converter({ extensions: ['references', 'table', 'spoiler', 'htmlstrip', 'latex'] }),
+                    // converter = new Showdown.converter(),
                     pluginManager = new PluginManager();
 
-                converter.config.math = true;
-                converter.config.stripHTML = true;
+
+                // converter.config.math = true;
+                // converter.config.stripHTML = true;
+                // converter.config.tables = true;
 
                 parser.setConverter(converter, 'makeHtml');
 
@@ -358,7 +385,15 @@ require(['jquery',
                         plugin.state = 'inline-math';
                         plugin.wrap = '%%';
                         return plugin;
-                    })())
+                    }()))
+                    .addPlugin(new EditorPlugin.DefaultReference())
+                    .addPlugin(new EditorPlugin.GeogebraReference({
+                        dataType: 'json',
+                        type: 'post',
+                        url: '/attachment/upload',
+                        loadImageMaxFileSize: 8000000,
+                        maxNumberOfFiles: 1
+                    }))
                     .addPlugin(new EditorPlugin.Reference());
 
                 textEditor = new CodeMirror($('#main .editor-main-inner')[0], {

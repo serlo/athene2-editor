@@ -248,13 +248,26 @@ header {
     }
 }
 
-.editor-plugin {
+.editor-plugin-wrapper {
     position: absolute;
-    top: 45px;
-    right: 50%;
-    width: 40%;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+
+    background: white;
+    background: rgba(200,200,200,0.54);
+    
+    text-align: center;
 
     z-index: 200;
+    overflow-y: auto;
+}
+
+.editor-plugin {
+    margin-top: 50px;
+    display: inline-block;
+    text-align: left;
 }
 
 /* Codemirror specific */
@@ -276,4 +289,12 @@ header {
 /* Wiris plugin specific */
 .wrs_editor img {
     max-width: initial;
+}
+
+/* Geogebra plugin specific */
+
+.gwt-MenuBarPopup,
+.gwt-DialogBox,
+.gwt-PopupPanel {
+    z-index: 350;
 }

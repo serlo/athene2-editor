@@ -11,15 +11,31 @@ define(['underscore', 'events'], function (_, eventScope) {
     };
 
     PluginManager.prototype.addPlugin = function (plugin) {
-        var self = this;
-        self.plugins.push(plugin);
+        var that = this;
+        that.plugins.push(plugin);
 
         plugin.addEventListener('save', function (plugin) {
-            self.trigger('save', plugin);
+            that.trigger('save', plugin);
+            that.trigger('close');
+        });
+
+        plugin.addEventListener('close', function () {
+            that.trigger('close');
         });
 
         plugin.addEventListener('update', function (plugin) {
-            self.trigger('update', plugin);
+            that.trigger('update', plugin);
+        });
+
+        plugin.addEventListener('toggle-plugin', function (pluginName, token, data) {
+            var newPlugin = that.matchState(pluginName);
+            if (newPlugin) {
+                that.deactivate();
+                that.activate(newPlugin, token, data);
+                that.trigger('toggle-plugin', newPlugin);
+            } else {
+                throw new Error('Cannot load plugin: ' + pluginName);
+            }
         });
 
         this.updateChain();

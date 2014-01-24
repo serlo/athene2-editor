@@ -74,6 +74,12 @@ define([
                 return;
             });
 
+            that.$el.on('click', '.btn-cancel', function (e) {
+                e.preventDefault();
+                that.trigger('close');
+                return;
+            });
+
             // Simple status message object
             that.$uploadStatus = $('.fileupload-process', that.$el);
 

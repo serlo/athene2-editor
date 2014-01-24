@@ -38,7 +38,15 @@ require.config({
         "codemirror" : "codemirror/codemirror",
         "markdownmode" : "codemirror/mode/sfm/sfm",
         "searchcursor" : "codemirror/addon/search/searchcursor",
-        "showdown": "libs/showdown",
+
+        // "showdown": "libs/showdown",
+        "showdown": "../bower_components/showdown/src/showdown",
+        "showdown_table" : "editor/showdown/extensions/table",
+        "showdown_spoiler" : "editor/showdown/extensions/spoiler",
+        "showdown_htmlstrip" : "editor/showdown/extensions/htmlstrip",
+        "showdown_latex" : "editor/showdown/extensions/latex",
+        "showdown_references" : "editor/showdown/extensions/references",
+
         "parser" : "editor/serlo_parser",
         "preview" : "editor/serlo_editor_previewer",
         "layout_builder" : "editor/serlo_layout_builder",
@@ -49,13 +57,15 @@ require.config({
         "texteditor_plugin" : "editor/plugins/serlo_texteditor_plugin",
         "texteditor_plugin_image" : "editor/plugins/image/image_plugin",
         "texteditor_plugin_wiris" : "editor/plugins/wiris/wiris_plugin",
-        "texteditor_plugin_reference" : "editor/plugins/reference/reference_plugin"
+        "texteditor_plugin_reference" : "editor/plugins/reference/reference_plugin",
+        "texteditor_plugin_default_reference" : "editor/plugins/reference/reference_default_plugin",
+        "texteditor_plugin_geogebra_reference" : "editor/plugins/reference/reference_geogebra_plugin"
     },
     shim: {
         underscore: {
             exports: '_',
             init: function () {
-                // mustache templates to the rescue
+                // mustache template style
                 this._.templateSettings = {
                     interpolate: /\{\{(.+?)\}\}/g
                 };

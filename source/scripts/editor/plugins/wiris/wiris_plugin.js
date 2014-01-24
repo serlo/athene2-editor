@@ -38,6 +38,13 @@ define(
             that.wrap = '$$';
 
             that.$el = $(that.template(that.data));
+
+            that.$el.on('click', '.btn-cancel', function (e) {
+                e.preventDefault();
+                that.trigger('close');
+                return;
+            });
+
             $('.content', that.$el).height(450);
         };
 
@@ -60,9 +67,10 @@ define(
                     .fail(Common.genericError);
 
 
-                that.$el.on('click', '.btn-success', function () {
+                that.$el.on('click', '.btn-save', function () {
                     that.save();
                 });
+
             }
 
             if (wiris) {
