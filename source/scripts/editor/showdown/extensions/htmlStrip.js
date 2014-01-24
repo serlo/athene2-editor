@@ -109,7 +109,6 @@
     if (typeof define === 'function' && define.amd) {
         define('showdown_htmlstrip', ['showdown'], function (Showdown) {
             Showdown.extensions = Showdown.extensions || {};
-            console.log('add htmlstrip to showdown');
             Showdown.extensions.htmlstrip = htmlstrip;
         });
     } else if (typeof window !== 'undefined' && window.Showdown && window.Showdown.extensions) {
