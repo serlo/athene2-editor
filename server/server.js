@@ -8,13 +8,31 @@
  */
 
 var dnode = require('dnode'),
-    Showdown = require('../source/scripts/libs/showdown').Showdown,
-    converter = new Showdown.converter(),
+    Showdown = require('../source/bower_components/showdown/src/showdown'),
+    converter,
     server,
     port = 7070;
 
-converter.config.math = true;
-converter.config.stripHTML = true;
+// Load custom extensions
+Showdown.extensions.references = require('../source/scripts/editor/showdown/extensions/references');
+Showdown.extensions.table = require('../source/scripts/editor/showdown/extensions/table');
+Showdown.extensions.spoiler = require('../source/scripts/editor/showdown/extensions/spoiler');
+Showdown.extensions.latex = require('../source/scripts/editor/showdown/extensions/latex');
+Showdown.extensions.htmlstrip = require('../source/scripts/editor/showdown/extensions/htmlstrip');
+console.log(Showdown.extensions);
+
+converter = new Showdown.converter({
+    extensions: [
+        'references',
+        'table',
+        'spoiler',
+        'htmlstrip',
+        'latex'
+    ]
+});
+
+// converter.config.math = true;
+// converter.config.stripHTML = true;
 
 // **render** 
 // @param {String} input Json string,
