@@ -34,30 +34,35 @@ function render(input, callback) {
         return;
     }
 
-    // parse input to object
-    try {
-        input = input.trim().replace(/&quot;/g, '"');
-        data = JSON.parse(input);
-    } catch(e) {
-        callback('', 'InvalidArgumentException', 'No valid json string given: ' + input);
-        return;
-    }
+    if(input === "") {
+        callback("");
+    } else {
 
-    output = '';
+        // parse input to object
+        try {
+            input = input.trim().replace(/&quot;/g, '"');
+            data = JSON.parse(input);
+        } catch(e) {
+            callback('', 'InvalidArgumentException', 'No valid json string given: ' + input);
+            return;
+        }
 
-    for (i = 0, l = data.length; i < l; i++) {
-        row = data[i];
-        output += '<div class="r">';
-        for (j = 0, lj = row.length; j < lj; j++) {
-            column = row[j];
-            output += '<div class="c' + column.col + '">';
-            output += converter.makeHtml(column.content);
+        output = '';
+
+        for (i = 0, l = data.length; i < l; i++) {
+            row = data[i];
+            output += '<div class="r">';
+            for (j = 0, lj = row.length; j < lj; j++) {
+                column = row[j];
+                output += '<div class="c' + column.col + '">';
+                output += converter.makeHtml(column.content);
+                output += '</div>';
+            }
             output += '</div>';
         }
-        output += '</div>';
-    }
 
-    callback(output);
+        callback(output);
+    }
 }
 
 server = dnode(function (remote, connection) {
