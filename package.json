@@ -9,7 +9,8 @@
   "description" : "Athene2 Markdown Editor - Further information will be available soon",
   "version": "0.1.1",
   "dependencies" : {
-    "dnode" : "1.2.0"
+    "dnode" : "1.2.0",
+    "showdown" : "~0.3.1"
   },
   "devDependencies": {
     "grunt": "~0.4.1",

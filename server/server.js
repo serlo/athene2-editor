@@ -8,7 +8,7 @@
  */
 
 var dnode = require('dnode'),
-    Showdown = require('../source/bower_components/showdown/src/showdown'),
+    Showdown = require('showdown'),
     converter,
     server,
     port = 7070;
