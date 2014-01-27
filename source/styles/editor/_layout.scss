@@ -274,6 +274,23 @@ header {
     text-align: left;
 }
 
+
+/* SPOILERS */
+
+.spoiler {
+    > a {
+        background: #eee;
+        padding: 4px 5px;
+    }
+}
+
+.spoiler-content {
+    display: none;
+    background: #eee;
+    padding: 19px 9px 9px;
+}
+
+
 /* Codemirror specific */
 .CodeMirror-linewidget {
     z-index: 5;

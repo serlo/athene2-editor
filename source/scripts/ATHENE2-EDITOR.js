@@ -65,9 +65,13 @@ define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events', 'content', 'spoiler'
             eventScope(this);
 
             Content.add(function (context) {
+                var $context = $(context);
                 MathJax.Hub.Typeset(context);
-                if ($(context).parents('.spoiler').length) {
-                    $(context).parents('.spoiler').Spoiler();
+
+                if ($context.parents('.spoiler').length) {
+                    $context.parents('.spoiler').Spoiler();
+                } else if ($context.hasClass('spoiler')) {
+                    $context.Spoiler();
                 }
             });
 
