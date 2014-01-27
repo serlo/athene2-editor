@@ -1,8 +1,8 @@
 /**
  * This plugin only determines
- * wether to use "DefaultReferencePlugin"
- * of the "GeogebraReferencePlugin", since
- * a reference can have different types.
+ * wether to use "DefaultInjectionPlugin"
+ * of the "GeogebraInjectionPlugin", since
+ * an injection can have different types.
  **/
 
 /*global define*/
@@ -13,34 +13,34 @@ define([
     'system_notification',
     'texteditor_plugin',
     'translator',
-    'text!./editor/templates/plugins/reference/reference_plugin.html'
+    'text!./editor/templates/plugins/injection/injection_plugin.html'
     ],
     function ($, _, Common, SystemNotification, EditorPlugin, t, plugin_template) {
         "use strict";
-        var ReferencePlugin,
+        var InjectionPlugin,
             titleRegexp,
             hrefRegexp;
 
         titleRegexp = new RegExp(/\[[^\]]*\]\(/);
         hrefRegexp =  new RegExp(/\([^\)]*\)/);
 
-        ReferencePlugin = function (fileuploadOptions) {
-            this.state = 'reference';
+        InjectionPlugin = function (fileuploadOptions) {
+            this.state = 'injection';
             this.init(fileuploadOptions);
         };
 
-        ReferencePlugin.prototype = new EditorPlugin();
-        ReferencePlugin.prototype.constructor = ReferencePlugin;
+        InjectionPlugin.prototype = new EditorPlugin();
+        InjectionPlugin.prototype.constructor = InjectionPlugin;
 
-        ReferencePlugin.prototype.init = function () {
+        InjectionPlugin.prototype.init = function () {
             var that = this;
 
             that.template = _.template(plugin_template);
 
-            that.data.name = 'Reference';
+            that.data.name = 'Injection';
         };
 
-        ReferencePlugin.prototype.activate = function (token) {
+        InjectionPlugin.prototype.activate = function (token) {
             var that = this,
                 href,
                 availablePlugins,
@@ -59,44 +59,57 @@ define([
                 that.trigger('close');
                 return;
             });
-            
-            if (href !== '') {
-                $body.html('<div class="alert alert-info">Loading reference data</div>');
 
-                setTimeout(function () {
-                    $.ajax(that.data.href)
+            if (href !== '') {
+                href = href.split('/');
+                // check for attachment
+                if (href[1] === 'attachment' && href[2] === 'file' && href[3] && href[4]) {
+
+                    $body.html('<div class="alert alert-info">' + t('Loading injection data') + '</div>');
+
+                    // Load attachments info:
+                    // /attachment/info/:aid
+                    href[2] = 'info';
+                    href.pop();
+                    $.ajax(href.join('/'))
                         .success(function (data) {
-                            that.ready = true;
+                            // 
                             if (data && data.success) {
-                                if (data.type === 'geogebra') {
-                                    that.trigger('toggle-plugin', 'geogebra-reference', token, data);
+                                if (data.type === 'geogebra' || data.files.length === 2) {
+                                    that.trigger('toggle-plugin', 'geogebra-injection', token, data);
                                 } else {
-                                    that.trigger('toggle-plugin', 'default-reference', token, data);
+                                    that.trigger('toggle-plugin', 'default-injection', token);
                                 }
                             } else {
                                 Common.genericError();
-                                that.trigger('toggle-plugin', 'default-reference', token);
+                                that.trigger('close');
                             }
                         })
                         .error(function () {
                             Common.genericError();
-                            that.trigger('toggle-plugin', 'default-reference', token);
+                            that.trigger('close');
                         });
-                }, 2000);
+                } else {
+                    // normal injections get treated as
+                    // default injections
+                    // Could also be invalid!
+                    that.trigger('toggle-plugin', 'default-injection', token);
+                }
+
             } else {
                 // to be done
                 availablePlugins = [{
                     name: t('Normal'),
-                    key: 'default-reference'
+                    key: 'default-injection'
                 }, {
                     name: t('Geogebra'),
-                    key: 'geogebra-reference'
+                    key: 'geogebra-injection'
                 }];
 
                 $body.empty();
                 $group = $('<div class="btn-group">');
 
-                $group.append($('<a class="btn btn-default disabled" disabled>').text(t('Pick a reference type:')));
+                $group.append($('<a class="btn btn-default disabled" disabled>').text(t('Pick a injection type:')));
 
                 _.each(availablePlugins, function (plugin) {
                     var key = plugin.key;
@@ -121,6 +134,6 @@ define([
         };
 
 
-        EditorPlugin.Reference = ReferencePlugin;
+        EditorPlugin.Injection = InjectionPlugin;
     }
 );

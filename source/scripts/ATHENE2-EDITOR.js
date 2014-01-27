@@ -9,8 +9,8 @@
  * @copyright Copyright (c) 2013 Gesellschaft für freie Bildung e.V. (http://www.open-education.eu/)
  */
 /*global define, require, MathJax*/
-define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events'],
-    function ($, _, eventScope) {
+define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events', 'content', 'spoiler'],
+    function ($, _, eventScope, Content) {
         "use strict";
         var $body = $('body'),
             $window = $(window),
@@ -64,6 +64,13 @@ define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events'],
             this.helpers = [];
             eventScope(this);
 
+            Content.add(function (context) {
+                MathJax.Hub.Typeset(context);
+                if ($(context).parents('.spoiler').length) {
+                    $(context).parents('.spoiler').Spoiler();
+                }
+            });
+
             return this.updateSettings(settings);
         };
 
@@ -88,7 +95,7 @@ define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events'],
                     if (patch.type !== "identical" && patch.replace.length > 0) {
                         _.each(patch.replace, function (el) {
                             if (el.innerHTML) {
-                                MathJax.Hub.Typeset(el);
+                                Content.init(el);
                             }
                         });
                     }
@@ -281,12 +288,12 @@ require(['jquery',
     'showdown_spoiler',
     'showdown_htmlstrip',
     'showdown_latex',
-    'showdown_references',
+    'showdown_injections',
     'texteditor_plugin_image',
     'texteditor_plugin_wiris',
-    'texteditor_plugin_reference',
-    'texteditor_plugin_default_reference',
-    'texteditor_plugin_geogebra_reference'],
+    'texteditor_plugin_injection',
+    'texteditor_plugin_default_injection',
+    'texteditor_plugin_geogebra_injection'],
     function ($,
         _,
         Common,
@@ -349,7 +356,7 @@ require(['jquery',
                     textEditor,
                     layoutBuilderConfiguration = new LayoutBuilderConfiguration(),
                     parser = new Parser(),
-                    converter = new Showdown.converter({ extensions: ['references', 'table', 'spoiler', 'htmlstrip', 'latex'] }),
+                    converter = new Showdown.converter({ extensions: ['injections', 'table', 'spoiler', 'htmlstrip', 'latex'] }),
                     // converter = new Showdown.converter(),
                     pluginManager = new PluginManager();
 
@@ -386,15 +393,15 @@ require(['jquery',
                         plugin.wrap = '%%';
                         return plugin;
                     }()))
-                    .addPlugin(new EditorPlugin.DefaultReference())
-                    .addPlugin(new EditorPlugin.GeogebraReference({
+                    .addPlugin(new EditorPlugin.DefaultInjection())
+                    .addPlugin(new EditorPlugin.GeogebraInjection({
                         dataType: 'json',
                         type: 'post',
                         url: '/attachment/upload',
                         loadImageMaxFileSize: 8000000,
                         maxNumberOfFiles: 1
                     }))
-                    .addPlugin(new EditorPlugin.Reference());
+                    .addPlugin(new EditorPlugin.Injection());
 
                 textEditor = new CodeMirror($('#main .editor-main-inner')[0], {
                     lineNumbers: true,
@@ -421,7 +428,7 @@ require(['jquery',
                 editor.addHelper(new TextEditorHelper.Italic(textEditor));
                 editor.addHelper(new TextEditorHelper.List(textEditor));
                 editor.addHelper(new TextEditorHelper.Link(textEditor));
-                editor.addHelper(new TextEditorHelper.Reference(textEditor));
+                editor.addHelper(new TextEditorHelper.Injection(textEditor));
                 editor.addHelper(new TextEditorHelper.Image(textEditor));
                 editor.addHelper(new TextEditorHelper.Undo(textEditor));
                 editor.addHelper(new TextEditorHelper.Redo(textEditor));

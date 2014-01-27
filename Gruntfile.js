@@ -126,7 +126,7 @@ module.exports = function (grunt) {
                 options: {
                     banner: '/**\n' +
                             ' * \n' +
-                            ' * Athene2 Editor - v0.1.0 \n' +
+                            ' * Athene2 Editor - v0.1.1 \n' +
                             ' *\n' +
                             ' * @license LGPL-3.0\n' +
                             ' * @license http://opensource.org/licenses/LGPL-3.0 The GNU Lesser General Public License, version 3.0\n' +
@@ -370,6 +370,7 @@ module.exports = function (grunt) {
     });
 
     grunt.registerMultiTask('language-update', 'Fetches translation strings from source files', function () {
+        grunt.file.defaultEncoding = 'utf8';
         var data = grunt.config('language-update'),
             files = grunt.file.expand(data.src),
             languages = grunt.file.expand(data.langSrc),

@@ -14,16 +14,15 @@ var dnode = require('dnode'),
     port = 7070;
 
 // Load custom extensions
-Showdown.extensions.references = require('../source/scripts/editor/showdown/extensions/references');
+Showdown.extensions.injections = require('../source/scripts/editor/showdown/extensions/injections');
 Showdown.extensions.table = require('../source/scripts/editor/showdown/extensions/table');
 Showdown.extensions.spoiler = require('../source/scripts/editor/showdown/extensions/spoiler');
 Showdown.extensions.latex = require('../source/scripts/editor/showdown/extensions/latex');
 Showdown.extensions.htmlstrip = require('../source/scripts/editor/showdown/extensions/htmlstrip');
-console.log(Showdown.extensions);
 
 converter = new Showdown.converter({
     extensions: [
-        'references',
+        'injections',
         'table',
         'spoiler',
         'htmlstrip',

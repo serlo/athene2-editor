@@ -51,4 +51,23 @@
     img {
         max-width: 100%;
     }
+
+    .spoiler-content {
+        background: #eee;
+        padding: 19px 9px 9px;
+    }
+}
+
+// Content aware
+// (also frontend)
+
+.spoiler {
+    > a {
+        background: #eee;
+        padding: 4px 5px;
+    }
+}
+
+.spoiler-content {
+    display: none;
 }

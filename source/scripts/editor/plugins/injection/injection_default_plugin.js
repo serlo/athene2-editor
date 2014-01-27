@@ -6,35 +6,35 @@ define([
     'system_notification',
     'texteditor_plugin',
     'translator',
-    'text!./editor/templates/plugins/reference/reference_plugin_default.html'
+    'text!./editor/templates/plugins/injection/injection_plugin_default.html'
     ],
     function ($, _, Common, SystemNotification, EditorPlugin, t, plugin_template) {
         "use strict";
-        var DefaultReferencePlugin,
+        var DefaultInjectionPlugin,
             titleRegexp,
             hrefRegexp;
 
         titleRegexp = new RegExp(/\[[^\]]*\]\(/);
         hrefRegexp =  new RegExp(/\([^\)]*\)/);
 
-        DefaultReferencePlugin = function (data) {
-            this.state = 'default-reference';
+        DefaultInjectionPlugin = function (data) {
+            this.state = 'default-injection';
             this.info = data || {};
             this.init();
         };
 
-        DefaultReferencePlugin.prototype = new EditorPlugin();
-        DefaultReferencePlugin.prototype.constructor = DefaultReferencePlugin;
+        DefaultInjectionPlugin.prototype = new EditorPlugin();
+        DefaultInjectionPlugin.prototype.constructor = DefaultInjectionPlugin;
 
-        DefaultReferencePlugin.prototype.init = function () {
+        DefaultInjectionPlugin.prototype.init = function () {
             var that = this;
 
             that.template = _.template(plugin_template);
 
-            that.data.name = 'Reference';
+            that.data.name = 'Injection';
         };
 
-        DefaultReferencePlugin.prototype.activate = function (token) {
+        DefaultInjectionPlugin.prototype.activate = function (token) {
             var that = this,
                 title,
                 href;
@@ -59,11 +59,11 @@ define([
             });
         };
 
-        DefaultReferencePlugin.prototype.save = function () {
+        DefaultInjectionPlugin.prototype.save = function () {
             this.data.content = '>[' + $('.title', this.$el).val() + '](' + $('.href', this.$el).val() + ')';
             this.trigger('save', this);
         };
 
-        EditorPlugin.DefaultReference = DefaultReferencePlugin;
+        EditorPlugin.DefaultInjection = DefaultInjectionPlugin;
     }
 );

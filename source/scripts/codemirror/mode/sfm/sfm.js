@@ -114,7 +114,7 @@ CodeMirror.defineMode("sfm", function(cmCfg, modeCfg) {
                     state.referenceType = 'image';
                 }
                 if (peek === '>') {
-                    state.referenceType = 'reference';
+                    state.referenceType = 'injection';
                 }
                 if (peek === '[') {
                     state.referenceType = 'link';

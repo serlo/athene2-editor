@@ -112,11 +112,11 @@ define(['jquery', 'translator'], function ($, t) {
         });
     };
 
-    TextEditorHelper.Reference = function (textEditor) {
+    TextEditorHelper.Injection = function (textEditor) {
         return new TextEditorHelper(textEditor, {
-            title: 'Reference',
+            title: 'Injection',
             icon: 'paperclip',
-            replaceBefore: '>[Reference Title](',
+            replaceBefore: '>[Injection Title](',
             replaceAfter: ')',
             cursorDelta: 2,
             selectionDelta: 15

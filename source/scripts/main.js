@@ -45,7 +45,10 @@ require.config({
         "showdown_spoiler" : "editor/showdown/extensions/spoiler",
         "showdown_htmlstrip" : "editor/showdown/extensions/htmlstrip",
         "showdown_latex" : "editor/showdown/extensions/latex",
-        "showdown_references" : "editor/showdown/extensions/references",
+        "showdown_injections" : "editor/showdown/extensions/injections",
+
+        "content" : "modules/serlo_content",
+        "spoiler" : "modules/serlo_spoiler",
 
         "parser" : "editor/serlo_parser",
         "preview" : "editor/serlo_editor_previewer",
@@ -57,9 +60,9 @@ require.config({
         "texteditor_plugin" : "editor/plugins/serlo_texteditor_plugin",
         "texteditor_plugin_image" : "editor/plugins/image/image_plugin",
         "texteditor_plugin_wiris" : "editor/plugins/wiris/wiris_plugin",
-        "texteditor_plugin_reference" : "editor/plugins/reference/reference_plugin",
-        "texteditor_plugin_default_reference" : "editor/plugins/reference/reference_default_plugin",
-        "texteditor_plugin_geogebra_reference" : "editor/plugins/reference/reference_geogebra_plugin"
+        "texteditor_plugin_injection" : "editor/plugins/injection/injection_plugin",
+        "texteditor_plugin_default_injection" : "editor/plugins/injection/injection_default_plugin",
+        "texteditor_plugin_geogebra_injection" : "editor/plugins/injection/injection_geogebra_plugin"
     },
     shim: {
         underscore: {

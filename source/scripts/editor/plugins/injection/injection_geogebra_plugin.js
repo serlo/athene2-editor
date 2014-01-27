@@ -12,14 +12,14 @@ define([
     'system_notification',
     'texteditor_plugin',
     'translator',
-    'text!./editor/templates/plugins/reference/reference_plugin_geogebra.html',
+    'text!./editor/templates/plugins/injection/injection_plugin_geogebra.html',
     'loadimage',
     'fileupload',
     'fileupload_iframetransport'
     ],
     function ($, _, Common, SystemNotification, EditorPlugin, t, plugin_template) {
         "use strict";
-        var GeogebraReferencePlugin,
+        var GeogebraInjectionPlugin,
             titleRegexp,
             hrefRegexp,
             geogebraScriptSource;
@@ -49,16 +49,16 @@ define([
                 }, 100);
         }
 
-        GeogebraReferencePlugin = function (fileuploadOptions) {
-            this.state = 'geogebra-reference';
+        GeogebraInjectionPlugin = function (fileuploadOptions) {
+            this.state = 'geogebra-injection';
 
             this.init(fileuploadOptions);
         };
 
-        GeogebraReferencePlugin.prototype = new EditorPlugin();
-        GeogebraReferencePlugin.prototype.constructor = GeogebraReferencePlugin;
+        GeogebraInjectionPlugin.prototype = new EditorPlugin();
+        GeogebraInjectionPlugin.prototype.constructor = GeogebraInjectionPlugin;
 
-        GeogebraReferencePlugin.prototype.init = function (fileuploadOptions) {
+        GeogebraInjectionPlugin.prototype.init = function (fileuploadOptions) {
 
             this.template = _.template(plugin_template);
 
@@ -67,12 +67,14 @@ define([
             this.fileuploadOptions = fileuploadOptions || {};
         };
 
-        GeogebraReferencePlugin.prototype.activate = function (token, data) {
+        GeogebraInjectionPlugin.prototype.activate = function (token, data) {
             var that = this,
                 title,
                 href;
 
-            that.data.info = data || {};
+            this.isActive = true;
+
+            that.data.info = data;
 
             that.data.content = token.string;
             title = _.first(that.data.content.match(titleRegexp));
@@ -93,6 +95,8 @@ define([
                 return;
             });
 
+            $('.editor-plugin-wrapper').bind('scroll', that.onScroll);
+
             // that.$upload = $('#fileupload', that.$el);
             // that.$uploadInput = $('input', that.$upload);
             // that.$upload.fileupload(_.extend({}, that.fileuploadOptions, {
@@ -107,21 +111,45 @@ define([
                     SystemNotification.notify(t('Geogebra plugin could not be loaded, please try again.'));
                 }
 
+                function loadOriginalXML() {
+                    var xmlUrl,
+                        i = 0,
+                        length = that.data.info.files.length;
+
+                    while (i < length) {
+                        if (that.data.info.files[i].type === 'application/xml') {
+                            xmlUrl = that.data.info.files[i].location;
+                            i = length;
+                        }
+                        i += 1;
+                    }
+
+                    $.ajax({
+                        url: xmlUrl
+                    }).success(function (xml) {
+                        ggbApplet.setXML(xml.documentElement.outerHTML);
+                        ggbApplet.startEditing();
+                    }).error(Common.genericError);
+                }
+
                 function doneWaitingForGgbApplet(error) {
                     if (error) {
                         SystemNotification.notify(t('Geogebra plugin could not be loaded, please try again.'));
                     } else {
-                        /// VERY BAD!!
-                        /// Have to wait for Geogebra to initialize
-                        /// and I couldnt find a callback or event
-                        /// for that...... sorry!
-                        setTimeout(function () {
-                            if (that.data.info.xml) {
-                                ggbApplet.setXML(that.data.info.xml);
-                            }
-
-                            ggbApplet.startEditing();
-                        }, 2000);
+                        if (!that.isActive) {
+                            return;
+                        }
+                        if (that.data.info && that.data.info.files) {
+                            loadOriginalXML();
+                        } else {
+                            /// VERY BAD!!
+                            /// Have to wait for Geogebra to initialize
+                            /// and I couldnt find a callback or event
+                            /// for that...... sorry!
+                            setTimeout(function () {
+                                ggbApplet.startEditing();
+                            }, 2000);
+                        }
                     }
                 }
 
@@ -134,7 +162,19 @@ define([
             });
         };
 
-        GeogebraReferencePlugin.prototype.save = function (asImage) {
+        GeogebraInjectionPlugin.prototype.deactivate = function () {
+            this.isActive = false;
+            $('.editor-plugin-wrapper').unbind('scroll', this.onScroll);
+            this.$el.detach();
+        };
+
+        GeogebraInjectionPlugin.prototype.onScroll = _.debounce(function () {
+            if (typeof ggbApplet === 'object' && ggbApplet.startEditing) {
+                ggbApplet.startEditing();
+            }
+        }, 500);
+
+        GeogebraInjectionPlugin.prototype.save = function (asImage) {
             var that = this,
                 context,
                 imageData,
@@ -200,7 +240,7 @@ define([
             // this.trigger('save', this);
         };
 
-        GeogebraReferencePlugin.prototype.createUploadFormData = function (data, type, filename) {
+        GeogebraInjectionPlugin.prototype.createUploadFormData = function (data, type, filename) {
             var array = [],
                 file,
                 formdata;
@@ -215,10 +255,10 @@ define([
 
             formdata = new FormData();
             formdata.append("file", file, filename);
-
+            formdata.append("type", "geogebra");
             return formdata;
         };
 
-        EditorPlugin.GeogebraReference = GeogebraReferencePlugin;
+        EditorPlugin.GeogebraInjection = GeogebraInjectionPlugin;
     }
 );

@@ -4,6 +4,7 @@ $gray: #C5C5C5;
 
 body {
     overflow-y: hidden;
+    background: white;
 }
 
 header {
@@ -26,8 +27,13 @@ header {
 }
 
 #preview {
-    outline: 1px solid $gray;
+    border-left: 1px solid $gray;
+
+    float: none;
+
     background: white;
+    // rendering perf hack
+    transform: translateZ(0);
 
     .preview-label {
         display: block;
@@ -98,11 +104,6 @@ header {
 }
 
 #editor-helpers {
-    position: absolute;
-    left: 50%;
-    top: 0;
-    padding-left: 20px;
-
     .helper {
         display: inline-block;
         padding: 3px 12px 0 12px;
@@ -133,7 +134,10 @@ header {
 }
 
 #main {
+    outline: 1px solid $gray;
     overflow-x: hidden;
+    // rendering perf hack
+    transform: translateZ(0);
 }
 
 .editor-main {
@@ -277,7 +281,7 @@ header {
 }
 
 .CodeMirror-code {
-    .cm-reference,
+    .cm-injection,
     .cm-link,
     .cm-image,
     .cm-math,
