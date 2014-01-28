@@ -17,7 +17,7 @@
         findTags = /<(\/?)\s*([\w:\-]+)([^>]*)>/g,
         findAttribs = /(\s*)([\w:-]+)\s*=\s*(?:(?:(["'])([^\3]+?)(?:\3))|([^\s]+))/g;
 
-    var htmlstrip = function (converter) {
+    var htmlstrip = function(converter) {
         var filter;
 
         filter = function (text) {
