@@ -12,10 +12,7 @@ define([
     'system_notification',
     'texteditor_plugin',
     'translator',
-    'text!./editor/templates/plugins/injection/injection_plugin_geogebra.html',
-    'loadimage',
-    'fileupload',
-    'fileupload_iframetransport'
+    'text!./editor/templates/plugins/injection/injection_plugin_geogebra.html'
     ],
     function ($, _, Common, SystemNotification, EditorPlugin, t, plugin_template) {
         "use strict";
@@ -49,22 +46,34 @@ define([
                 }, 100);
         }
 
-        GeogebraInjectionPlugin = function (fileuploadOptions) {
+        // Geogebra Plugin requires
+        // some technologies that
+        // may not be available:
+        function browserSupported() {
+            return !!window.Blob && !!window.FormData && !!window.Uint8Array;
+        }
+
+        GeogebraInjectionPlugin = function () {
             this.state = 'geogebra-injection';
 
-            this.init(fileuploadOptions);
+            this.init();
         };
 
         GeogebraInjectionPlugin.prototype = new EditorPlugin();
         GeogebraInjectionPlugin.prototype.constructor = GeogebraInjectionPlugin;
 
-        GeogebraInjectionPlugin.prototype.init = function (fileuploadOptions) {
+        GeogebraInjectionPlugin.prototype.init = function () {
 
             this.template = _.template(plugin_template);
 
             this.data = {};
             this.data.name = 'Geogebra';
-            this.fileuploadOptions = fileuploadOptions || {};
+
+            if (!browserSupported()) {
+                this.activate = function () {
+                    SystemNotification.notify(t('You need to update your browser to use the Geogebra plugin.'), 'error');
+                }
+            }
         };
 
         GeogebraInjectionPlugin.prototype.activate = function (token, data) {
@@ -96,14 +105,6 @@ define([
             });
 
             $('.editor-plugin-wrapper').bind('scroll', that.onScroll);
-
-            // that.$upload = $('#fileupload', that.$el);
-            // that.$uploadInput = $('input', that.$upload);
-            // that.$upload.fileupload(_.extend({}, that.fileuploadOptions, {
-            //     add: function () {
-            //         console.log(arguments);
-            //     }
-            // }));
 
             require([geogebraScriptSource], function () {
                 // geogebra related stuff.
@@ -201,7 +202,6 @@ define([
             }
 
             // Prepare XML File Upload
-            // this.$upload.fileupload('add', xml);
             formData = that.createUploadFormData(xml, 'application/xml', 'geogebra.xml');
 
             uploadFile(formData)
