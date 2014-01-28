@@ -278,6 +278,7 @@ define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events', 'content', 'spoiler'
 require(['jquery',
     'underscore',
     'common',
+    'translator',
     'ATHENE2-EDITOR',
     'codemirror',
     'parser',
@@ -301,6 +302,7 @@ require(['jquery',
     function ($,
         _,
         Common,
+        t,
         Editor,
         CodeMirror,
         Parser,
@@ -328,6 +330,11 @@ require(['jquery',
         }
 
         $(function () {
+            // Set language
+            t.config({
+                language: $('html').attr('lang') || 'de'
+            });
+
             // Setup a filter for comparing mathInline spans.
             $.fn.quickdiff("filter", "mathSpanInline",
                 function (node) {
