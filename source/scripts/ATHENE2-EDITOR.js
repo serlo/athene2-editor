@@ -91,7 +91,7 @@ define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events', 'content', 'spoiler'
 
             self.$pluginWrapper = $('<div class="editor-plugin-wrapper">');
 
-            self.textEditor.on('change', function () {
+            self.textEditor.on('change', _.throttle(function () {
                 if (self.editable) {
                     var value = self.textEditor.getValue(),
                         patch = self.editable.update(value, self.parser.parse(value));
@@ -104,7 +104,7 @@ define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events', 'content', 'spoiler'
                         });
                     }
                 }
-            });
+            }, 150));
 
             self.textEditor.on('cursorActivity', _.throttle(function () {
                 var cursor = self.textEditor.getCursor();
@@ -334,7 +334,7 @@ require(['jquery',
                     return (node.nodeName === "SPAN" && $(node).hasClass("mathInline"));
                 },
                 function (a, b) {
-                    var aHTML = $.trim($("script", a).html()), bHTML = $.trim($(b).html());
+                    var aHTML = $.trim($("script", a).text()), bHTML = $.trim($(b).text());
                     return ("%%" + aHTML + "%%") !== bHTML;
                 });
 
@@ -344,7 +344,7 @@ require(['jquery',
                     return (node.nodeName === "SPAN" && $(node).hasClass("math"));
                 },
                 function (a, b) {
-                    var aHTML = $.trim($("script", a).html()), bHTML = $.trim($(b).html());
+                    var aHTML = $.trim($("script", a).text()), bHTML = $.trim($(b).text());
                     return ("$$" + aHTML + "$$") !== bHTML;
                 });
 
