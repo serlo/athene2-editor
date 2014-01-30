@@ -54,7 +54,7 @@
         text = text.replace(/~E124E/g, "\\|");
 
         // Now, escape characters that are magic in Markdown:
-        text = escapeCharacters(text, "\*_{}[]\\", false);
+        text = escapeCharacters(text, "\*`_{}[]\\", false);
 
         return text;
     };
