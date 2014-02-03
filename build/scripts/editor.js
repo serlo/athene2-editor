@@ -23691,13 +23691,14 @@ define('layout_builder',['jquery', 'underscore', 'events', 'translator', 'text!.
         Row,
         LayoutBuilder,
         columnTemplate = _.template(column_template),
-        rowTemplate = _.template(row_template);
+        rowTemplate = _.template(row_template),
+        emptyColumnHtml = '<p>' + t('Click to edit') + '</p>';
 
     Column = function (width, data) {
         var self = this;
         eventScope(self);
 
-        self.data = data || t('Click to edit');
+        self.data = data || '';
 
         self.$el = $(columnTemplate({
             width: width
@@ -23705,19 +23706,31 @@ define('layout_builder',['jquery', 'underscore', 'events', 'translator', 'text!.
 
         self.type = width;
 
+        // prevent links from being clicked
+        self.$el.on('click', 'a', function (e) {
+            e.preventDefault();
+            return;
+        });
+
         self.$el.click(function () {
             self.trigger('select', self);
         });
     };
 
     Column.prototype.update = function (data, html) {
+        var patch;
+
         this.data = data;
-        // this.$el.html(html);
-        html = html || '<span>&nbsp;</span>';
-        var patch = this.$el.quickdiff('patch', $("<div></div>").html(html), ["mathSpan", "mathSpanInline"]);
+        html = (html && html !== '') ? html : emptyColumnHtml;
+
+        patch = this.$el.quickdiff('patch', $("<div></div>").html(html), ["mathSpan", "mathSpanInline"]);
 
         this.trigger('update', this);
         return patch;
+    };
+
+    Column.prototype.set = function (html) {
+        this.$el.html(html || emptyColumnHtml);
     };
 
     Column.prototype.focus = function () {
@@ -24303,47 +24316,6 @@ define('preview',['formfield', 'events', 'jquery'], function (Field, eventScope,
                     self.$el.append(field.$el);
                 }
             });
-
-            // $form.children().each(function () {
-            //     var field,
-            //         type = self.getFieldType(this);
-
-            //     if (type) {
-            //         if (type === 'Label') {
-            //             label = this.innerText;
-            //             return true;
-            //         }
-
-            //         field = new Field[type](this);
-
-            //         if (label) {
-            //             field.setLabel(label);
-            //             label = null;
-            //         }
-
-            //         field.addEventListener('column-add', function () {
-            //             self.trigger.apply(self, ['column-add'].concat(slice.call(arguments)));
-            //         });
-
-            //         field.addEventListener('select', function () {
-            //             self.trigger.apply(self, ['field-select'].concat(slice.call(arguments)));
-            //         });
-
-            //         field.addEventListener('update', function () {
-            //             self.trigger.apply(self, ['update'].concat(slice.call(arguments)));
-            //         });
-
-            //         if (type === 'Textarea') {
-            //             if (!self.layoutBuilderConfiguration) {
-            //                 throw new Error('No Layout Builder Configuration set');
-            //             }
-            //             field.addLayoutBuilder(self.layoutBuilderConfiguration);
-            //         }
-
-            //         self.formFields.push(field);
-            //         self.$el.append(field.$el);
-            //     }
-            // });
         }
     };
 
@@ -26594,7 +26566,7 @@ define('texteditor_plugin',['jquery', 'events', 'translator', 'text!./editor/tem
         text = text.replace(/~E124E/g, "\\|");
 
         // Now, escape characters that are magic in Markdown:
-        text = escapeCharacters(text, "\*_{}[]\\", false);
+        text = escapeCharacters(text, "\*`_{}[]\\", false);
 
         return text;
     };
@@ -28112,16 +28084,12 @@ define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events', 'content', 'spoiler'
             });
 
             self.preview.addEventListener('column-add', function (column) {
-                column.$el.html(self.parser.parse(column.data));
+                column.set(self.parser.parse(column.data));
             });
 
             self.preview.addEventListener('removed-row', function () {
                 self.emptyTextEditor();
             });
-
-            // self.preview.addEventListener('update', function (column) {
-
-            // });
 
             self.preview.setLayoutBuilderConfiguration(self.layoutBuilderConfiguration);
             self.preview.createFromForm(self.$form);

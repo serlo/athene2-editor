@@ -5,13 +5,14 @@ define(['jquery', 'underscore', 'events', 'translator', 'text!./editor/templates
         Row,
         LayoutBuilder,
         columnTemplate = _.template(column_template),
-        rowTemplate = _.template(row_template);
+        rowTemplate = _.template(row_template),
+        emptyColumnHtml = '<p>' + t('Click to edit') + '</p>';
 
     Column = function (width, data) {
         var self = this;
         eventScope(self);
 
-        self.data = data || t('Click to edit');
+        self.data = data || '';
 
         self.$el = $(columnTemplate({
             width: width
@@ -19,19 +20,31 @@ define(['jquery', 'underscore', 'events', 'translator', 'text!./editor/templates
 
         self.type = width;
 
+        // prevent links from being clicked
+        self.$el.on('click', 'a', function (e) {
+            e.preventDefault();
+            return;
+        });
+
         self.$el.click(function () {
             self.trigger('select', self);
         });
     };
 
     Column.prototype.update = function (data, html) {
+        var patch;
+
         this.data = data;
-        // this.$el.html(html);
-        html = html || '<span>&nbsp;</span>';
-        var patch = this.$el.quickdiff('patch', $("<div></div>").html(html), ["mathSpan", "mathSpanInline"]);
+        html = (html && html !== '') ? html : emptyColumnHtml;
+
+        patch = this.$el.quickdiff('patch', $("<div></div>").html(html), ["mathSpan", "mathSpanInline"]);
 
         this.trigger('update', this);
         return patch;
+    };
+
+    Column.prototype.set = function (html) {
+        this.$el.html(html || emptyColumnHtml);
     };
 
     Column.prototype.focus = function () {

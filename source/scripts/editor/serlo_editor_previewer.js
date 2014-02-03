@@ -65,47 +65,6 @@ define(['formfield', 'events', 'jquery'], function (Field, eventScope, $) {
                     self.$el.append(field.$el);
                 }
             });
-
-            // $form.children().each(function () {
-            //     var field,
-            //         type = self.getFieldType(this);
-
-            //     if (type) {
-            //         if (type === 'Label') {
-            //             label = this.innerText;
-            //             return true;
-            //         }
-
-            //         field = new Field[type](this);
-
-            //         if (label) {
-            //             field.setLabel(label);
-            //             label = null;
-            //         }
-
-            //         field.addEventListener('column-add', function () {
-            //             self.trigger.apply(self, ['column-add'].concat(slice.call(arguments)));
-            //         });
-
-            //         field.addEventListener('select', function () {
-            //             self.trigger.apply(self, ['field-select'].concat(slice.call(arguments)));
-            //         });
-
-            //         field.addEventListener('update', function () {
-            //             self.trigger.apply(self, ['update'].concat(slice.call(arguments)));
-            //         });
-
-            //         if (type === 'Textarea') {
-            //             if (!self.layoutBuilderConfiguration) {
-            //                 throw new Error('No Layout Builder Configuration set');
-            //             }
-            //             field.addLayoutBuilder(self.layoutBuilderConfiguration);
-            //         }
-
-            //         self.formFields.push(field);
-            //         self.$el.append(field.$el);
-            //     }
-            // });
         }
     };
 
