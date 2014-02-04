@@ -52,6 +52,9 @@ require.config({
 
         "parser" : "editor/serlo_parser",
         "preview" : "editor/serlo_editor_previewer",
+        "row" : "editor/serlo_layout_row",
+        "column" : "editor/serlo_layout_column",
+        "layout_add" : "editor/serlo_layout_add",
         "layout_builder" : "editor/serlo_layout_builder",
         "layout_builder_configuration" : "editor/serlo_layout_builder_configuration",
         "formfield" : "editor/serlo_formfield",

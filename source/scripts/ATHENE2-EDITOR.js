@@ -222,8 +222,10 @@ define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events', 'content', 'spoiler'
                 column.set(self.parser.parse(column.data));
             });
 
-            self.preview.addEventListener('removed-row', function () {
-                self.emptyTextEditor();
+            self.preview.addEventListener('removed-row', function (row) {
+                if (self.editable && _.contains(row.columns, self.editable)) {
+                    self.emptyTextEditor();
+                }
             });
 
             self.preview.setLayoutBuilderConfiguration(self.layoutBuilderConfiguration);

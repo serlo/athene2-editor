@@ -150,9 +150,16 @@ header {
 .add-layout {
     position: relative;
     margin: 0 40px;
-    padding-top: 20px;
+    padding-top: 10px;
 
     text-align: center;
+
+    opacity: 0;
+    transition: 0.3s opacity 0.1s;
+
+    #preview:hover & {
+        opacity: 1;
+    }
 
     &:hover {
         &:before {
@@ -168,8 +175,8 @@ header {
         content: "";
         position: absolute;
         left: 0;
-        top: inherit;
-        border-top: 4px solid $gray;
+        top: 1px;
+        border-top: 2px solid $gray;
         display: block;
         width: 100%;
     }
@@ -177,20 +184,15 @@ header {
     .plus {
         position: relative;
         display: inline-block;
-        width: 60px;
-        height: 60px;
-        top: -22px;
+        width: 20px;
+        height: 23px;
+        top: -20px;
 
-        font-size: 50px;
+        font-size: 26px;
         line-height: 1;
 
         color: #A5A5A5;
-        text-shadow: 5px  0px 0 white,
-                    -5px  0px 0 white,
-                     5px  5px 0 white,
-                    -5px  5px 0 white,
-                     5px -5px 0 white,
-                    -5px -5px 0 white;
+        background: white;
 
         cursor: pointer;
         user-drag: none;
@@ -205,7 +207,7 @@ header {
 
 .layout-list {
     position: relative;
-    top: -30px;
+    top: -10px;
 
     > a {
         display: inline-block;

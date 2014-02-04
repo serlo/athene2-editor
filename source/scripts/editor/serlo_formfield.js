@@ -88,7 +88,12 @@ define(['jquery', 'underscore', 'layout_builder', 'system_notification', 'events
         self.layoutBuilder = new LayoutBuilder(layoutBuilderConfiguration);
 
         self.layoutBuilder.addEventListener('add', function (row) {
-            self.$inner.append(row.$el);
+            var $rows = $('.r', self.$inner);
+            if ($rows.length && row.index < $rows.length) {
+                $($rows.eq(row.index)).before(row.$el);
+            } else {
+                self.$inner.append(row.$el);
+            }
 
             row.addEventListener('select', function (column) {
                 self.trigger('select', self, column);
