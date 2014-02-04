@@ -69,6 +69,8 @@ define([
 
             that.trigger('add', newRow);
 
+            newRow.trigger('select', newRow.columns[0]);
+
             return newRow;
         };
 
