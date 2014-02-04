@@ -115,6 +115,7 @@ define(['jquery', 'underscore', 'layout_builder', 'system_notification', 'events
             row.addEventListener('reorder', function () {
                 row.$el.detach();
                 putRowInPlace(row);
+                self.updateField();
             });
 
             _.each(row.columns, function (column) {
