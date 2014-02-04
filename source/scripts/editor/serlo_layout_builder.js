@@ -49,6 +49,14 @@ define([
                 that.addRow(layout, null, newRow.index);
             });
 
+            newRow.addEventListener('move-up', function () {
+                that.reOrderRows(newRow, -1);
+            });
+
+            newRow.addEventListener('move-down', function () {
+                that.reOrderRows(newRow, +1);
+            });
+
             newRow.index = atIndex === undefined ? that.rows.length : atIndex;
 
             // insert newRow in that.rows
@@ -56,6 +64,8 @@ define([
             before = that.rows.splice(0, newRow.index);
             before.push(newRow);
             that.rows = before.concat(that.rows);
+
+            that.updateRowIndexes();
 
             that.trigger('add', newRow);
 
@@ -70,6 +80,22 @@ define([
 
             row.trigger('update');
             row = null;
+        };
+
+        LayoutBuilder.prototype.reOrderRows = function (rowToUpdate, upOrDown) {
+            var that = this,
+                before;
+
+            that.rows.splice(rowToUpdate.index, 1);
+
+            before = that.rows.splice(0, rowToUpdate.index + upOrDown);
+
+            before.push(rowToUpdate);
+            that.rows = before.concat(that.rows);
+
+            that.updateRowIndexes();
+
+            rowToUpdate.trigger('reorder');
         };
 
         LayoutBuilder.prototype.updateRowIndexes = function () {

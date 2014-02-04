@@ -87,13 +87,17 @@ define(['jquery', 'underscore', 'layout_builder', 'system_notification', 'events
         var self = this;
         self.layoutBuilder = new LayoutBuilder(layoutBuilderConfiguration);
 
-        self.layoutBuilder.addEventListener('add', function (row) {
+        function putRowInPlace(row) {
             var $rows = $('.r', self.$inner);
             if ($rows.length && row.index < $rows.length) {
                 $($rows.eq(row.index)).before(row.$el);
             } else {
                 self.$inner.append(row.$el);
             }
+        }
+
+        self.layoutBuilder.addEventListener('add', function (row) {
+            putRowInPlace(row);
 
             row.addEventListener('select', function (column) {
                 self.trigger('select', self, column);
@@ -106,6 +110,11 @@ define(['jquery', 'underscore', 'layout_builder', 'system_notification', 'events
 
             row.addEventListener('remove', function (row) {
                 self.trigger('removed-row', row);
+            });
+
+            row.addEventListener('reorder', function () {
+                row.$el.detach();
+                putRowInPlace(row);
             });
 
             _.each(row.columns, function (column) {

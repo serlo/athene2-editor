@@ -33,6 +33,23 @@ define([
 
             that.$actions = $('<div class="row-actions btn-group"></div>');
             that.$remove = $('<a href="#" class="btn btn-xs btn-danger">').text(t('Remove Row'));
+            that.$up = $('<a href="#" class="btn btn-xs btn-default">')
+                .attr({
+                    title: t('Move up')
+                })
+                .click(function () {
+                    that.trigger('move-up');
+                })
+                .html('<i class="glyphicon glyphicon-chevron-up"/>');
+
+            that.$down = $('<a href="#" class="btn btn-xs btn-default">')
+                .attr({
+                    title: t('Move down')
+                })
+                .click(function () {
+                    that.trigger('move-down');
+                })
+                .html('<i class="glyphicon glyphicon-chevron-down"/>');
 
             that.$remove.click(function (e) {
                 e.preventDefault();
@@ -41,6 +58,8 @@ define([
             });
 
             that.$actions.append(that.$remove);
+            that.$actions.append(that.$up);
+            that.$actions.append(that.$down);
 
             _.each(columns, function (width, index) {
                 var column = new Column(width, that.data[index]);
