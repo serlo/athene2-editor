@@ -23293,6 +23293,276 @@ define('parser',[], function () {
 
     return Parser;
 });
+/*global window, jQuery, define*/
+define('cache',[],function () {
+    
+    return (function (window, undefined) {
+        var cacheInstance,
+            usedStorage,
+            /**
+             *  supports
+             */
+            supports = {
+                Storage: !!window.Storage,
+                localStorage: !!window.localStorage,
+                sessionStorage: !!window.sessionStorage,
+                JSON: !!window.JSON,
+                jQueryCookie: (typeof jQuery === 'function' && typeof jQuery.cookie === 'function')
+            },
+
+            /**
+             * is the cache supposed to use JSON?
+             *  defaults to true if JSON is available
+             */
+
+            useJSON = supports.JSON;
+
+        /** FakeStorage
+         *
+         *   emulates basic behaviour for Storages
+         *   - gets used, when there is no Storage available
+         *   - uses jQuery.cookie if available
+         */
+
+        function FakeStorage() {
+            this.values = {};
+        }
+
+        FakeStorage.prototype.isFake = function () {
+            return !supports.jQueryCookie;
+        };
+
+        FakeStorage.prototype.setItem = function (key, value) {
+            if (supports.jQueryCookie) {
+                return jQuery.cookie(key, value, {
+                    json: useJSON
+                });
+            }
+            this.values[key] = value;
+            return value;
+        };
+
+        FakeStorage.prototype.getItem = function (key) {
+            if (supports.jQueryCookie) {
+                return jQuery.cookie(key, undefined, {
+                    json: useJSON
+                });
+            }
+            return this.values[key] || null;
+        };
+
+        FakeStorage.prototype.removeItem = function (key) {
+            if (supports.jQueryCookie) {
+                return jQuery.removeCookie(key);
+            }
+            this.values[key] = undefined;
+            return true;
+        };
+
+        FakeStorage.prototype.clear = function () {
+            if (supports.jQueryCookie) {
+                deleteAllCookies();
+            } else {
+                var key;
+                for (key in this.values) {
+                    if (this.values.hasOwnProperty(key)) {
+                        this.values[key] = null;
+                    }
+                }
+            }
+            return true;
+        };
+
+        /* the Storage in use. Defaults to localStorage or FakeStorage */
+        usedStorage = supports.localStorage ? window.localStorage : new FakeStorage();
+
+        /***********
+         *  Private available functions
+         **********/
+
+        /** FN CacheInit
+         *   returns the Cache itself
+         */
+
+        function CacheInit() {
+            return Cache;
+        }
+
+
+        /**
+         * decodes JSON
+         */
+
+        function decodeData(data) {
+            if (useJSON) {
+                try {
+                    return JSON.parse(data);
+                } catch (ignore) {
+                    console.log('aint no json');
+                }
+            }
+            return data;
+        }
+
+        /**
+         * encodes JSON
+         */
+
+        function encodeData(data) {
+            if (useJSON) {
+                try {
+                    return JSON.stringify(data);
+                } catch (ignore) {}
+            }
+            return data;
+        }
+
+        /** FN Cache
+         *   returns all available actions on the given memorykey
+         */
+
+        function Cache(memoryKey) {
+            return Cache.prototype.functions(memoryKey);
+        }
+
+        /**
+         *  memorize function
+         */
+
+        function memorize(value) {
+            /*jshint validthis:true */
+            usedStorage.setItem(this.memoryKey, encodeData(value));
+            return value;
+        }
+
+        /**
+         *  remember function
+         */
+
+        function remember() {
+            /*jshint validthis:true */
+            var value = usedStorage.getItem(this.memoryKey);
+            return decodeData(value);
+        }
+
+        /**
+         *  forget function
+         */
+
+        function forget() {
+            /*jshint validthis:true */
+            return usedStorage.removeItem(this.memoryKey);
+        }
+
+
+        /** prototype.functions
+         *    returns an object of actions
+         */
+
+        Cache.prototype.functions = function (memoryKey) {
+            if (memoryKey === undefined) {
+                throw "No valid memory key given";
+            }
+
+            return {
+                memoryKey: memoryKey,
+                memorize: memorize,
+                remember: remember,
+                forget: forget
+            };
+        };
+
+        /* 
+         * helper function to delete all javascript cookies
+         * see http://stackoverflow.com/questions/179355/clearing-all-cookies-with-javascript
+         */
+
+        function deleteAllCookies() {
+            var cookies = window.document.cookie.split(";"),
+                i,
+                length,
+                cookie,
+                eqPos,
+                name;
+            for (i = 0, length = cookies.length; i < length; i += 1) {
+                cookie = cookies[i];
+                eqPos = cookie.indexOf("=");
+                name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+                window.document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT";
+            }
+        }
+
+        /***********
+         *  Public available functions
+         **********/
+
+        /** FN runs
+         *  returns false if Cache has no possibility to store any data
+         */
+
+        Cache.runs = function () {
+            return !(typeof usedStorage.isFake === 'function' && usedStorage.isFake() === true);
+        };
+
+        /** FN setStorage
+         *  Sets the Storage Type, if it is supported
+         *   "localStorage" || "sessionStorage"
+         */
+
+        Cache.setStorage = function (storageType) {
+            if ((storageType === "localStorage" || storageType === "sessionStorage") && supports[storageType]) {
+                usedStorage = window[storageType];
+                return true;
+            }
+            return false;
+        };
+
+        /**
+         *  returns the current used storage
+         */
+
+        Cache.getStorage = function () {
+            return usedStorage;
+        };
+
+        /**
+         *  tells the cache to use JSON
+         */
+
+        Cache.json = function () {
+            useJSON = true;
+            return useJSON;
+        };
+
+        /**
+         *  tells the cache not to use JSON
+         */
+
+        Cache.nojson = function () {
+            useJSON = false;
+            return !useJSON;
+        };
+
+        /**
+         *  tells the cache, to go out, get drunk and forget about everything
+         */
+
+        Cache.getDrunk = function () {
+            return usedStorage.clear();
+        };
+
+        return (function () {
+            /**
+             *   creates of returns an existing Cache instance
+             */
+            if (!cacheInstance) {
+                cacheInstance = new CacheInit();
+            }
+
+            return cacheInstance;
+        }());
+    }(window));
+});
 /**
  * @license RequireJS text 2.0.10 Copyright (c) 2010-2012, The Dojo Foundation All Rights Reserved.
  * Available via the MIT or new BSD license.
@@ -23680,248 +23950,390 @@ define('text',['module'], function (module) {
     return text;
 });
 
-define('text!editor/templates/layout/row.html',[],function () { return '<div class="r"></div>';});
-
 define('text!editor/templates/layout/column.html',[],function () { return '<div class="c{{ width }}"></div>';});
 
 /*global define*/
-define('layout_builder',['jquery', 'underscore', 'events', 'translator', 'text!./editor/templates/layout/row.html', 'text!./editor/templates/layout/column.html'], function ($, _, eventScope, t, row_template, column_template) {
-    
-    var Column,
-        Row,
-        LayoutBuilder,
-        columnTemplate = _.template(column_template),
-        rowTemplate = _.template(row_template),
-        emptyColumnHtml = '<p>' + t('Click to edit') + '</p>';
+define('column',[
+    'jquery',
+    'underscore',
+    'events',
+    'translator',
+    'text!./editor/templates/layout/column.html'
+],
+    function ($, _, eventScope, t, column_template) {
+        
+        var Column,
+            columnTemplate = _.template(column_template),
+            emptyColumnHtml = '<p>' + t('Click to edit') + '</p>';
 
-    Column = function (width, data) {
-        var self = this;
-        eventScope(self);
+        Column = function (width, data) {
+            var that = this;
+            eventScope(that);
 
-        self.data = data || '';
+            that.data = data || '';
 
-        self.$el = $(columnTemplate({
-            width: width
-        }));
+            that.$el = $(columnTemplate({
+                width: width
+            }));
 
-        self.type = width;
+            that.type = width;
 
-        // prevent links from being clicked
-        self.$el.on('click', 'a', function (e) {
-            e.preventDefault();
-            return;
-        });
-
-        self.$el.click(function () {
-            self.trigger('select', self);
-        });
-    };
-
-    Column.prototype.update = function (data, html) {
-        var patch;
-
-        this.data = data;
-        html = (html && html !== '') ? html : emptyColumnHtml;
-
-        patch = this.$el.quickdiff('patch', $("<div></div>").html(html), ["mathSpan", "mathSpanInline"]);
-
-        this.trigger('update', this);
-        return patch;
-    };
-
-    Column.prototype.set = function (html) {
-        this.$el.html(html || emptyColumnHtml);
-    };
-
-    Column.prototype.focus = function () {
-        this.$el.focus().trigger('click');
-    };
-
-    Row = function (columns, index, data) {
-        var self = this;
-        eventScope(self);
-
-        self.data = data || [];
-        self.title = columns.toString();
-        self.index = index;
-
-        self.columns = [];
-
-        self.$el = $(rowTemplate());
-        self.$el.mouseenter(function (e) {
-            self.onMouseEnter(e);
-        });
-        self.$el.mouseleave(function (e) {
-            self.onMouseLeave(e);
-        });
-
-        self.$actions = $('<div class="row-actions btn-group"></div>');
-        self.$remove = $('<a href="#" class="btn btn-xs btn-danger">').text(t('Remove Row'));
-        self.$remove.click(function (e) {
-            e.preventDefault();
-            self.trigger('remove', self);
-            return;
-        });
-
-        self.$actions.append(self.$remove);
-
-        _.each(columns, function (width, index) {
-            var column = new Column(width, self.data[index]);
-
-            column.addEventListener('select', function (column) {
-                self.trigger('select', column);
-            });
-
-            column.addEventListener('update', function (column) {
-                self.trigger('update', column);
-            });
-
-            self.$el.append(column.$el);
-            self.columns.push(column);
-        });
-    };
-
-    Row.prototype.onMouseEnter = function () {
-        this.$el.append(this.$actions);
-    };
-
-    Row.prototype.onMouseLeave = function () {
-        this.$actions.detach();
-    };
-
-    LayoutBuilder = function (configuration) {
-        if (configuration === undefined) {
-            throw new Error('No LayoutBuilderConfiguration set for LayoutBuilder');
-        }
-        var self = this;
-        eventScope(this);
-
-        self.$el = $('<div class="add-layout"></div>');
-        self.$add = $('<a href="#" class="plus">+</a>');
-        self.$layoutList = $('<div class="layout-list">');
-
-        this.layoutListVisible = false;
-        self.layouts = configuration.layouts;
-        self.rows = [];
-
-        _.each(self.layouts, function (columns) {
-            var $add = $('<a href="#">' + createIconTag(columns) + '</a>');
-
-            $add.click(function (e) {
+            // prevent links from being clicked
+            that.$el.on('click', 'a', function (e) {
                 e.preventDefault();
-                var row = self.addRow(columns);
-                self.hideLayouts();
-
-                // Select first created column
-                row.columns[0].focus();
                 return;
             });
 
-            self.$layoutList.append($add);
-        });
+            that.$el.click(function () {
+                that.trigger('select', that);
+            });
+        };
 
-        self.$el.append(self.$add);
+        Column.prototype.update = function (data, html) {
+            var patch;
 
-        self.$add.click(function (e) {
-            e.preventDefault();
-            self.showOrHideLayouts();
-            return;
-        });
-    };
+            this.data = data;
+            html = (html && html !== '') ? html : emptyColumnHtml;
 
-    LayoutBuilder.prototype.showOrHideLayouts = function (forceClose) {
-        if (forceClose || this.layoutListVisible) {
-            this.$layoutList.detach();
-            this.layoutListVisible = false;
-        } else {
-            this.$el.append(this.$layoutList);
-            this.layoutListVisible = true;
+            patch = this.$el.quickdiff('patch', $("<div></div>").html(html), ["mathSpan", "mathSpanInline"]);
+
+            this.trigger('update', this);
+            return patch;
+        };
+
+        Column.prototype.set = function (html) {
+            this.$el.html(html || emptyColumnHtml);
+        };
+
+        Column.prototype.focus = function () {
+            this.$el.focus().trigger('click');
+        };
+
+        return Column;
+    }
+);
+
+/*global define*/
+define('layout_add',[
+    'jquery',
+    'underscore',
+    'cache',
+    'events'
+],
+    function ($, _, Cache, eventScope) {
+        
+        var LayoutAdd,
+            imageCache = new Cache('athene2-editor-image');
+
+        function createIconTag(columns) {
+            var canvas = $('<canvas>')[0],
+                context,
+                width = 90,
+                height = 60,
+                gutter = 5,
+                iterateX = 5,
+                iconName = columns.toString(),
+                cached = imageCache.remember() || {};
+
+
+            function drawColumn(column) {
+                var x = iterateX + gutter,
+                    w = (width - 20 - 23 * gutter) / 24 * column + (column - 1) * gutter;
+
+                iterateX += w + gutter;
+
+                context.beginPath();
+                context.fillStyle = '#C5C5C5';
+                context.rect(x, 10, w, height - 20);
+                context.fill();
+            }
+
+
+            function buildImageTag(dataURL, iconName) {
+                return '<img src="' + dataURL + '" alt="' + iconName + '" />';
+            }
+
+            if (cached[iconName]) {
+                return buildImageTag(cached[iconName], iconName);
+            }
+
+            canvas.width = width;
+            canvas.height = height;
+
+            context = canvas.getContext('2d');
+            context.beginPath();
+            context.fillStyle = '#EEEEEE';
+            context.rect(0, 0, width, height);
+
+            context.fill();
+
+            _.each(columns, function (column, index) {
+                drawColumn(column, index);
+            });
+
+            cached[iconName] = canvas.toDataURL("image/png");
+            imageCache.memorize(cached);
+
+            return buildImageTag(cached[iconName], iconName);
         }
-    };
 
-    LayoutBuilder.prototype.hideLayouts = function () {
-        this.showOrHideLayouts(true);
-    };
+        LayoutAdd = function (layouts) {
+            var that = this;
 
-    LayoutBuilder.prototype.addRow = function (requestedLayout, data) {
-        var newRow,
-            self = this;
+            eventScope(that);
 
-        _.each(self.layouts, function (layout) {
-            if (_.isEqual(layout, requestedLayout)) {
-                newRow = new Row(requestedLayout, self.rows.length, data);
+            that.$el = $('<div class="add-layout"></div>');
+            that.$plus = $('<a href="#" class="plus">+</a>');
+            that.$layoutList = $('<div class="layout-list">');
 
-                newRow.addEventListener('remove', function (row) {
-                    self.removeRow(row);
+            _.each(layouts, function (columns) {
+                var $addLayout = $('<a href="#">' + createIconTag(columns) + '</a>');
+
+                $addLayout.click(function () {
+                    that.trigger('add-layout', columns);
+                    that.toggleLayouts(true);
                 });
 
-                self.rows.push(newRow);
-                self.trigger('add', newRow);
+                that.$layoutList.append($addLayout);
+            });
+
+            that.$el.append(that.$plus);
+            that.$plus.click(function (e) {
+                e.preventDefault();
+                that.toggleLayouts();
                 return;
+            });
+
+            that.addEventListener('close', function () {
+                that.toggleLayouts(true);
+            });
+        };
+
+        LayoutAdd.prototype.toggleLayouts = function (forceClose) {
+            if (forceClose || this.opened) {
+                this.$layoutList.detach();
+                this.opened = false;
+            } else {
+                this.$el.append(this.$layoutList);
+                this.opened = true;
             }
-        });
+        };
 
-        if (!newRow) {
-            throw new Error('Layout does not exist: ' + requestedLayout.toString());
-        }
-
-        return newRow;
-    };
-
-    LayoutBuilder.prototype.removeRow = function (row) {
-        row.$el.remove();
-        this.rows.splice(row.index, 1);
-        this.updateRowIndexes();
-
-        row.trigger('update');
-        row = null;
-    };
-
-    LayoutBuilder.prototype.updateRowIndexes = function () {
-        _.each(this.rows, function (row, i) {
-            row.index = i;
-        });
-    };
-
-    function createIconTag(columns) {
-        var canvas = $('<canvas>')[0],
-            context,
-            width = 90,
-            height = 60,
-            gutter = 5,
-            iterateX = 5;
-
-        function drawColumn(column) {
-            var x = iterateX + gutter,
-                w = (width - 20 - 23 * gutter) / 24 * column + (column - 1) * gutter;
-
-            iterateX += w + gutter;
-
-            context.beginPath();
-            context.fillStyle = '#C5C5C5';
-            context.rect(x, 10, w, height - 20);
-            context.fill();
-        }
-
-        canvas.width = width;
-        canvas.height = height;
-
-        context = canvas.getContext('2d');
-        context.beginPath();
-        context.fillStyle = '#EEEEEE';
-        context.rect(0, 0, width, height);
-
-        context.fill();
-
-        _.each(columns, function (column, index) {
-            drawColumn(column, index);
-        });
-
-        return '<img src="' + canvas.toDataURL("image/png") + '" alt="' + columns.toString() + '"/>';
+        return LayoutAdd;
     }
+);
+define('text!editor/templates/layout/row.html',[],function () { return '<div class="r"></div>';});
 
-    return LayoutBuilder;
-});
+/*global define*/
+define('row',[
+    'jquery',
+    'underscore',
+    'events',
+    'column',
+    'layout_add',
+    'translator',
+    'text!./editor/templates/layout/row.html'
+],
+    function ($, _, eventScope, Column, LayoutAdd, t, row_template) {
+        
+        var Row,
+            rowTemplate = _.template(row_template);
+
+        Row = function (columns, index, data, layouts) {
+            var that = this;
+            eventScope(that);
+
+            that.data = data || [];
+            that.title = columns.toString();
+            that.index = index;
+
+            that.columns = [];
+
+            that.$el = $(rowTemplate());
+            that.$el.mouseenter(function (e) {
+                that.onMouseEnter(e);
+            });
+            that.$el.mouseleave(function (e) {
+                that.onMouseLeave(e);
+            });
+
+            that.$actions = $('<div class="row-actions btn-group"></div>');
+            that.$remove = $('<a href="#" class="btn btn-xs btn-danger">').text(t('Remove Row'));
+            that.$up = $('<a href="#" class="btn btn-xs btn-default">')
+                .attr({
+                    title: t('Move up')
+                })
+                .click(function () {
+                    that.trigger('move-up');
+                })
+                .html('<i class="glyphicon glyphicon-chevron-up"/>');
+
+            that.$down = $('<a href="#" class="btn btn-xs btn-default">')
+                .attr({
+                    title: t('Move down')
+                })
+                .click(function () {
+                    that.trigger('move-down');
+                })
+                .html('<i class="glyphicon glyphicon-chevron-down"/>');
+
+            that.$remove.click(function (e) {
+                e.preventDefault();
+                that.trigger('remove', that);
+                return;
+            });
+
+            that.$actions.append(that.$remove);
+            that.$actions.append(that.$up);
+            that.$actions.append(that.$down);
+
+            _.each(columns, function (width, index) {
+                var column = new Column(width, that.data[index]);
+
+                column.addEventListener('select', function (column) {
+                    that.trigger('select', column);
+                });
+
+                column.addEventListener('update', function (column) {
+                    that.trigger('update', column);
+                });
+
+                that.$el.append(column.$el);
+                that.columns.push(column);
+            });
+
+            that.layoutAdd = new LayoutAdd(layouts);
+
+            that.layoutAdd.addEventListener('add-layout', function (layout) {
+                that.trigger('add-layout', layout);
+            });
+
+            that.$el.prepend(that.layoutAdd.$el);
+        };
+
+        Row.prototype.onMouseEnter = function () {
+            this.$el.append(this.$actions);
+        };
+
+        Row.prototype.onMouseLeave = function () {
+            this.$actions.detach();
+        };
+
+        return Row;
+    }
+);
+
+/*global define*/
+define('layout_builder',[
+    'jquery',
+    'underscore',
+    'cache',
+    'row',
+    'column',
+    'layout_add',
+    'events'
+],
+    function ($, _, Cache, Row, Column, LayoutAdd, eventScope) {
+        
+        var LayoutBuilder;
+
+        LayoutBuilder = function (configuration) {
+            if (configuration === undefined) {
+                throw new Error('No LayoutBuilderConfiguration set for LayoutBuilder');
+            }
+
+            var that = this,
+                layoutAdd;
+
+            eventScope(this);
+
+            that.layouts = configuration.layouts;
+            that.rows = [];
+
+            layoutAdd = new LayoutAdd(that.layouts);
+
+            layoutAdd.addEventListener('add-layout', function (layout) {
+                that.addRow(layout);
+            });
+
+            that.$el = layoutAdd.$el;
+        };
+
+        LayoutBuilder.prototype.addRow = function (requestedLayout, data, atIndex) {
+            var newRow,
+                before,
+                that = this;
+
+            newRow = new Row(requestedLayout, that.rows.length, data, that.layouts);
+
+            newRow.addEventListener('remove', function (row) {
+                that.removeRow(row);
+            });
+
+            newRow.addEventListener('add-layout', function (layout) {
+                that.addRow(layout, null, newRow.index);
+            });
+
+            newRow.addEventListener('move-up', function () {
+                that.reOrderRows(newRow, -1);
+            });
+
+            newRow.addEventListener('move-down', function () {
+                that.reOrderRows(newRow, +1);
+            });
+
+            newRow.index = atIndex === undefined ? that.rows.length : atIndex;
+
+            // insert newRow in that.rows
+            // at given index
+            before = that.rows.splice(0, newRow.index);
+            before.push(newRow);
+            that.rows = before.concat(that.rows);
+
+            that.updateRowIndexes();
+
+            that.trigger('add', newRow);
+
+            newRow.trigger('select', newRow.columns[0]);
+
+            return newRow;
+        };
+
+        LayoutBuilder.prototype.removeRow = function (row) {
+            row.$el.remove();
+
+            this.rows.splice(row.index, 1);
+            this.updateRowIndexes();
+
+            row.trigger('update');
+            row = null;
+        };
+
+        LayoutBuilder.prototype.reOrderRows = function (rowToUpdate, upOrDown) {
+            var that = this,
+                before;
+
+            that.rows.splice(rowToUpdate.index, 1);
+
+            before = that.rows.splice(0, rowToUpdate.index + upOrDown);
+
+            before.push(rowToUpdate);
+            that.rows = before.concat(that.rows);
+
+            that.updateRowIndexes();
+
+            rowToUpdate.trigger('reorder');
+        };
+
+        LayoutBuilder.prototype.updateRowIndexes = function () {
+            _.each(this.rows, function (row, i) {
+                row.index = i;
+            });
+        };
+
+        return LayoutBuilder;
+    }
+);
 /*global define*/
 define('system_notification',['jquery', 'translator'], function ($, t) {
     
@@ -24077,8 +24489,17 @@ define('formfield',['jquery', 'underscore', 'layout_builder', 'system_notificati
         var self = this;
         self.layoutBuilder = new LayoutBuilder(layoutBuilderConfiguration);
 
+        function putRowInPlace(row) {
+            var $rows = $('.r', self.$inner);
+            if ($rows.length && row.index < $rows.length) {
+                $($rows.eq(row.index)).before(row.$el);
+            } else {
+                self.$inner.append(row.$el);
+            }
+        }
+
         self.layoutBuilder.addEventListener('add', function (row) {
-            self.$inner.append(row.$el);
+            putRowInPlace(row);
 
             row.addEventListener('select', function (column) {
                 self.trigger('select', self, column);
@@ -24091,6 +24512,12 @@ define('formfield',['jquery', 'underscore', 'layout_builder', 'system_notificati
 
             row.addEventListener('remove', function (row) {
                 self.trigger('removed-row', row);
+            });
+
+            row.addEventListener('reorder', function () {
+                row.$el.detach();
+                putRowInPlace(row);
+                self.updateField();
             });
 
             _.each(row.columns, function (column) {
@@ -28087,8 +28514,10 @@ define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events', 'content', 'spoiler'
                 column.set(self.parser.parse(column.data));
             });
 
-            self.preview.addEventListener('removed-row', function () {
-                self.emptyTextEditor();
+            self.preview.addEventListener('removed-row', function (row) {
+                if (self.editable && _.contains(row.columns, self.editable)) {
+                    self.emptyTextEditor();
+                }
             });
 
             self.preview.setLayoutBuilderConfiguration(self.layoutBuilderConfiguration);
