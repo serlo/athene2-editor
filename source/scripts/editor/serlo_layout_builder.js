@@ -1,11 +1,21 @@
 /*global define*/
-define(['jquery', 'underscore', 'events', 'translator', 'text!./editor/templates/layout/row.html', 'text!./editor/templates/layout/column.html'], function ($, _, eventScope, t, row_template, column_template) {
+define([
+    'jquery',
+    'underscore',
+    'cache',
+    'events',
+    'translator',
+    'text!./editor/templates/layout/row.html',
+    'text!./editor/templates/layout/column.html'
+],
+function ($, _, Cache, eventScope, t, row_template, column_template) {
     "use strict";
     var Column,
         Row,
         LayoutBuilder,
         columnTemplate = _.template(column_template),
         rowTemplate = _.template(row_template),
+        imageCache = new Cache('athene2-editor-image'),
         emptyColumnHtml = '<p>' + t('Click to edit') + '</p>';
 
     Column = function (width, data) {
@@ -114,6 +124,14 @@ define(['jquery', 'underscore', 'events', 'translator', 'text!./editor/templates
         self.$add = $('<a href="#" class="plus">+</a>');
         self.$layoutList = $('<div class="layout-list">');
 
+        self.$layoutList.on('click', 'a', function () {
+            var row = self.addRow($(this).data('columns'));
+            self.hideLayouts(this);
+
+            // Select first created column
+            row.columns[0].focus();
+        });
+
         this.layoutListVisible = false;
         self.layouts = configuration.layouts;
         self.rows = [];
@@ -121,15 +139,7 @@ define(['jquery', 'underscore', 'events', 'translator', 'text!./editor/templates
         _.each(self.layouts, function (columns) {
             var $add = $('<a href="#">' + createIconTag(columns) + '</a>');
 
-            $add.click(function (e) {
-                e.preventDefault();
-                var row = self.addRow(columns);
-                self.hideLayouts();
-
-                // Select first created column
-                row.columns[0].focus();
-                return;
-            });
+            $add.data('columns', columns);
 
             self.$layoutList.append($add);
         });
@@ -138,12 +148,12 @@ define(['jquery', 'underscore', 'events', 'translator', 'text!./editor/templates
 
         self.$add.click(function (e) {
             e.preventDefault();
-            self.showOrHideLayouts();
+            self.showOrHideLayouts(this);
             return;
         });
     };
 
-    LayoutBuilder.prototype.showOrHideLayouts = function (forceClose) {
+    LayoutBuilder.prototype.showOrHideLayouts = function (element, forceClose) {
         if (forceClose || this.layoutListVisible) {
             this.$layoutList.detach();
             this.layoutListVisible = false;
@@ -153,8 +163,8 @@ define(['jquery', 'underscore', 'events', 'translator', 'text!./editor/templates
         }
     };
 
-    LayoutBuilder.prototype.hideLayouts = function () {
-        this.showOrHideLayouts(true);
+    LayoutBuilder.prototype.hideLayouts = function (element) {
+        this.showOrHideLayouts(element, true);
     };
 
     LayoutBuilder.prototype.addRow = function (requestedLayout, data) {
@@ -203,7 +213,10 @@ define(['jquery', 'underscore', 'events', 'translator', 'text!./editor/templates
             width = 90,
             height = 60,
             gutter = 5,
-            iterateX = 5;
+            iterateX = 5,
+            iconName = columns.toString(),
+            cached = imageCache.remember() || {};
+
 
         function drawColumn(column) {
             var x = iterateX + gutter,
@@ -215,6 +228,16 @@ define(['jquery', 'underscore', 'events', 'translator', 'text!./editor/templates
             context.fillStyle = '#C5C5C5';
             context.rect(x, 10, w, height - 20);
             context.fill();
+        }
+
+
+        function buildImageTag(dataURL, iconName) {
+            return '<img src="' + dataURL + '" alt="' + iconName + '" />';
+        }
+
+        if (cached[iconName]) {
+            console.log('is cached');
+            return buildImageTag(cached[iconName], iconName);
         }
 
         canvas.width = width;
@@ -231,7 +254,10 @@ define(['jquery', 'underscore', 'events', 'translator', 'text!./editor/templates
             drawColumn(column, index);
         });
 
-        return '<img src="' + canvas.toDataURL("image/png") + '" alt="' + columns.toString() + '"/>';
+        cached[iconName] = canvas.toDataURL("image/png");
+        imageCache.memorize(cached);
+
+        return buildImageTag(cached[iconName], iconName);
     }
 
     return LayoutBuilder;
