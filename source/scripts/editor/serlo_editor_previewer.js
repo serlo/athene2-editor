@@ -7,7 +7,18 @@ define(['formfield', 'events', 'jquery'], function (Field, eventScope, $) {
     Preview = function (options) {
         this.$el = options.$el;
         this.formFields = [];
+
         eventScope(this);
+
+        this.init();
+    };
+
+    Preview.prototype.init = function () {
+        var that = this;
+
+        that.$el.click(function () {
+            that.trigger('blur');
+        });
     };
 
     Preview.prototype.setLayoutBuilderConfiguration = function (layoutBuilderConfiguration) {
@@ -42,7 +53,8 @@ define(['formfield', 'events', 'jquery'], function (Field, eventScope, $) {
                         self.trigger.apply(self, ['column-add'].concat(slice.call(arguments)));
                     });
 
-                    field.addEventListener('select', function () {
+                    field.addEventListener('select', function (field) {
+                        self.activeField = field;
                         self.trigger.apply(self, ['field-select'].concat(slice.call(arguments)));
                     });
 
@@ -65,6 +77,30 @@ define(['formfield', 'events', 'jquery'], function (Field, eventScope, $) {
                     self.$el.append(field.$el);
                 }
             });
+        }
+    };
+
+    Preview.prototype.focusNextColumn = function () {
+        if (this.activeField) {
+            this.activeField.trigger('focus-next-column');
+        }
+    };
+
+    Preview.prototype.focusPreviousColumn = function () {
+        if (this.activeField) {
+            this.activeField.trigger('focus-previous-column');
+        }
+    };
+
+    Preview.prototype.focusNextRow = function () {
+        if (this.activeField) {
+            this.activeField.trigger('focus-next-row');
+        }
+    };
+
+    Preview.prototype.focusPreviousRow = function () {
+        if (this.activeField) {
+            this.activeField.trigger('focus-previous-row');
         }
     };
 

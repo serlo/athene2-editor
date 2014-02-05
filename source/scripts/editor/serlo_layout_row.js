@@ -65,6 +65,7 @@ define([
                 var column = new Column(width, that.data[index]);
 
                 column.addEventListener('select', function (column) {
+                    that.activeColumn = index;
                     that.trigger('select', column);
                 });
 
@@ -75,6 +76,8 @@ define([
                 that.$el.append(column.$el);
                 that.columns.push(column);
             });
+
+            that.activeColumn = 0;
 
             that.layoutAdd = new LayoutAdd(layouts);
 

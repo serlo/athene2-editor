@@ -30,8 +30,11 @@ define([
                 return;
             });
 
-            that.$el.click(function () {
+            that.$el.click(function (e) {
+                e.preventDefault();
+                e.stopPropagation();
                 that.trigger('select', that);
+                return;
             });
         };
 

@@ -9,8 +9,8 @@
  * @copyright Copyright (c) 2013 Gesellschaft für freie Bildung e.V. (http://www.open-education.eu/)
  */
 /*global define, require, MathJax*/
-define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events', 'content', 'spoiler'],
-    function ($, _, eventScope, Content) {
+define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events', 'content', 'shortcuts', 'spoiler'],
+    function ($, _, eventScope, Content, Shortcuts) {
         "use strict";
         var $body = $('body'),
             $window = $(window),
@@ -83,18 +83,20 @@ define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events', 'content', 'spoiler'
         };
 
         Editor.prototype.initialize = function () {
-            var self = this;
+            var that = this;
 
             $window.resize(function () {
-                self.resize();
+                that.resize();
             }).resize();
 
-            self.$pluginWrapper = $('<div class="editor-plugin-wrapper">');
+            that.$pluginWrapper = $('<div class="editor-plugin-wrapper">');
 
-            self.textEditor.on('change', _.throttle(function () {
-                if (self.editable) {
-                    var value = self.textEditor.getValue(),
-                        patch = self.editable.update(value, self.parser.parse(value));
+            that.initKeyshortCuts(new Shortcuts());
+
+            that.textEditor.on('change', _.throttle(function () {
+                if (that.editable) {
+                    var value = that.textEditor.getValue(),
+                        patch = that.editable.update(value, that.parser.parse(value));
 
                     if (patch.type !== "identical" && patch.replace.length > 0) {
                         _.each(patch.replace, function (el) {
@@ -106,135 +108,175 @@ define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events', 'content', 'spoiler'
                 }
             }, 150));
 
-            self.textEditor.on('cursorActivity', _.throttle(function () {
-                var cursor = self.textEditor.getCursor();
+            that.textEditor.on('cursorActivity', _.throttle(function () {
+                var cursor = that.textEditor.getCursor();
 
-                self.textEditor.operation(function () {
-                    var token = self.textEditor.getTokenAt(cursor);
+                that.textEditor.operation(function () {
+                    var token = that.textEditor.getTokenAt(cursor);
 
-                    if (!self.currentToken || !_.isEqual(self.currentToken, token)) {
+                    if (!that.currentToken || !_.isEqual(that.currentToken, token)) {
                         token.line = cursor.line;
-                        self.currentToken = token;
-                        self.trigger('tokenChange', token);
+                        that.currentToken = token;
+                        that.trigger('tokenChange', token);
                     }
                 });
 
             }, 400));
 
-            self.textEditor.on('cursorActivity', _.throttle(function () {
-                if (self.editable) {
-                    self.preview.scrollSync(self.editable.$el, self.textEditor.getCursor().line / self.textEditor.lastLine());
+            that.textEditor.on('cursorActivity', _.throttle(function () {
+                if (that.editable) {
+                    that.preview.scrollSync(that.editable.$el, that.textEditor.getCursor().line / that.textEditor.lastLine());
                 }
             }, 1500));
 
-            self.addEventListener('tokenChange', function (token) {
+            that.addEventListener('tokenChange', function (token) {
                 var state = token.type,
                     plugin;
 
-                self.pluginManager.deactivate();
+                that.pluginManager.deactivate();
 
-                if (self.$widget) {
-                    self.$widget.remove();
+                if (that.$widget) {
+                    that.$widget.remove();
                 }
 
-                if (!self.textEditor.hidePlugins && state) {
+                if (!that.textEditor.hidePlugins && state) {
                     state = _.first(token.type.split(' '));
-                    plugin = self.pluginManager.matchState(state);
+                    plugin = that.pluginManager.matchState(state);
                     if (plugin) {
-                        self.$widget = plugin.getActivateLink();
-                        self.$widget.click(function () {
-                            var maxLines = self.textEditor.doc.size;
+                        that.$widget = plugin.getActivateLink();
+                        that.$widget.click(function () {
+                            var maxLines = that.textEditor.doc.size;
 
-                            self.$widget.remove();
-                            self.$widget = null;
+                            that.$widget.remove();
+                            that.$widget = null;
 
-                            self.currentToken = getCompleteToken(self.textEditor, self.textEditor.getCursor(), maxLines, {}, true);
+                            that.currentToken = getCompleteToken(that.textEditor, that.textEditor.getCursor(), maxLines, {}, true);
 
-                            self.currentToken.state.string = self.textEditor.doc.getRange(self.currentToken.state.startPos, self.currentToken.state.endPos);
+                            that.currentToken.state.string = that.textEditor.doc.getRange(that.currentToken.state.startPos, that.currentToken.state.endPos);
 
-                            self.pluginManager.activate(plugin, self.currentToken);
-                            self.activePlugin = plugin;
+                            that.pluginManager.activate(plugin, that.currentToken);
+                            that.activePlugin = plugin;
 
-                            self.showPlugin(plugin);
+                            that.showPlugin(plugin);
                         });
 
-                        self.textEditor.addWidget(self.textEditor.getCursor(), self.$widget[0]);
+                        that.textEditor.addWidget(that.textEditor.getCursor(), that.$widget[0]);
                     }
                 }
             });
 
-            self.pluginManager.addEventListener('close', function () {
-                self.$pluginWrapper.detach();
+            that.pluginManager.addEventListener('close', function () {
+                that.$pluginWrapper.detach();
             });
 
-            self.pluginManager.addEventListener('save', function (plugin) {
+            that.pluginManager.addEventListener('save', function (plugin) {
                 // plugin.data.content is the updated value
                 //
-                self.textEditor.replaceRange(
+                that.textEditor.replaceRange(
                     plugin.data.content,
-                    self.currentToken.state.startPos,
-                    self.currentToken.state.endPos
+                    that.currentToken.state.startPos,
+                    that.currentToken.state.endPos
                 );
             });
 
-            self.pluginManager.addEventListener('toggle-plugin', function (plugin) {
-                self.activePlugin = plugin;
-                self.showPlugin(plugin);
+            that.pluginManager.addEventListener('toggle-plugin', function (plugin) {
+                that.activePlugin = plugin;
+                that.showPlugin(plugin);
             });
 
-            self.preview.addEventListener('field-select', function (field, column) {
-                if (self.editable) {
-                    if (self.editable === column) {
+            that.preview.addEventListener('field-select', function (field, column) {
+                if (that.editable) {
+                    if (that.editable === column) {
                         return;
                     }
 
-                    self.editable.$el.removeClass('active');
-                    self.editable.history = self.textEditor.getHistory();
-                    self.editable = null;
+                    that.editable.$el.removeClass('active');
+                    that.editable.history = that.textEditor.getHistory();
+                    that.editable = null;
                 }
 
                 if (field.type === 'textarea' && column) {
-                    self.editable = column;
+                    that.editable = column;
                     column.$el.addClass('active');
 
-                    self.preview.scrollSync(self.editable.$el, 1);
+                    that.preview.scrollSync(that.editable.$el, 1);
 
-                    self.textEditor.operation(function () {
-                        self.textEditor.setValue(column.data);
-                        self.textEditor.clearHistory();
+                    that.textEditor.operation(function () {
+                        var classList = that.textEditor.getWrapperElement().classList;
 
-                        if (self.editable.history) {
-                            self.textEditor.setHistory(self.editable.history);
+                        that.textEditor.setValue(column.data);
+                        that.textEditor.clearHistory();
+
+                        if (that.editable.history) {
+                            that.textEditor.setHistory(that.editable.history);
                         }
 
-                        self.textEditor.setOption('readOnly', false);
-                        self.textEditor.execCommand('selectAll');
-                        self.textEditor.focus();
+                        that.textEditor.setOption('readOnly', false);
+                        that.textEditor.execCommand('selectAll');
+                        that.textEditor.focus();
+
+                        // add and remove class 'activated'
+                        // to trigger css animation keyframes.
+                        classList.add('activated');
+                        setTimeout(function () {
+                            classList.remove('activated');
+                        }, 2000);
 
                         return;
                     });
                 } else {
-                    self.emptyTextEditor();
+                    that.emptyTextEditor();
                 }
             });
 
-            self.preview.addEventListener('column-add', function (column) {
-                column.set(self.parser.parse(column.data));
+            that.preview.addEventListener('blur', function () {
+                if (that.editable) {
+                    that.editable.$el.removeClass('active');
+                    that.editable = null;
+                }
+                that.emptyTextEditor();
             });
 
-            self.preview.addEventListener('removed-row', function (row) {
-                if (self.editable && _.contains(row.columns, self.editable)) {
-                    self.emptyTextEditor();
+            that.preview.addEventListener('column-add', function (column) {
+                column.set(that.parser.parse(column.data));
+            });
+
+            that.preview.addEventListener('removed-row', function (row) {
+                if (that.editable && _.contains(row.columns, that.editable)) {
+                    that.emptyTextEditor();
                 }
             });
 
-            self.preview.setLayoutBuilderConfiguration(self.layoutBuilderConfiguration);
-            self.preview.createFromForm(self.$form);
+            that.preview.setLayoutBuilderConfiguration(that.layoutBuilderConfiguration);
+            that.preview.createFromForm(that.$form);
 
-            self.$submit.click(function () {
-                if (self.preview.submit) {
-                    $(self.preview.submit).click();
+            that.$submit.click(function () {
+                if (that.preview.submit) {
+                    $(that.preview.submit).click();
                 }
+            });
+        };
+
+        Editor.prototype.initKeyshortCuts = function (shortcuts) {
+            var that = this;
+            shortcuts.addEventListener('cmd+shift+right', function (e) {
+                e.stopPropagation();
+                that.preview.focusNextColumn();
+            });
+
+            shortcuts.addEventListener('cmd+shift+left', function (e) {
+                e.stopPropagation();
+                that.preview.focusPreviousColumn();
+            });
+
+            shortcuts.addEventListener('cmd+shift+up', function (e) {
+                e.stopPropagation();
+                that.preview.focusPreviousRow();
+            });
+
+            shortcuts.addEventListener('cmd+shift+down', function (e) {
+                e.stopPropagation();
+                that.preview.focusNextRow();
             });
         };
 
@@ -262,11 +304,11 @@ define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events', 'content', 'spoiler'
         };
 
         Editor.prototype.emptyTextEditor = function () {
-            var self = this;
+            var that = this;
 
-            self.textEditor.operation(function () {
-                self.textEditor.setValue('');
-                self.textEditor.setOption('readOnly', true);
+            that.textEditor.operation(function () {
+                that.textEditor.setValue('');
+                that.textEditor.setOption('readOnly', true);
             });
         };
 

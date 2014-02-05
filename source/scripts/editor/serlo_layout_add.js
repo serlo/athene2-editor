@@ -74,7 +74,8 @@ define([
             _.each(layouts, function (columns) {
                 var $addLayout = $('<a href="#">' + createIconTag(columns) + '</a>');
 
-                $addLayout.click(function () {
+                $addLayout.click(function (e) {
+                    e.stopPropagation();
                     that.trigger('add-layout', columns);
                     that.toggleLayouts(true);
                 });
@@ -85,6 +86,7 @@ define([
             that.$el.append(that.$plus);
             that.$plus.click(function (e) {
                 e.preventDefault();
+                e.stopPropagation();
                 that.toggleLayouts();
                 return;
             });

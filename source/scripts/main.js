@@ -35,6 +35,8 @@ require.config({
         "support" : "modules/serlo_supporter",
         "modals" : "modules/serlo_modals",
         "system_notification" : "modules/serlo_system_notification",
+        "shortcuts" : "modules/serlo_shortcuts",
+
         "codemirror" : "codemirror/codemirror",
         "markdownmode" : "codemirror/mode/sfm/sfm",
         "searchcursor" : "codemirror/addon/search/searchcursor",

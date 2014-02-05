@@ -309,6 +309,24 @@ header {
     }
 }
 
+@keyframes codemirrorActivation {
+    0% {
+        background-color: #FDF8D5;
+    }
+    35% {
+        backround-color: #FDF8D5;
+    }
+    100% {
+        background-color: #FFFFFF;
+    }
+}
+
+.CodeMirror.activated {
+    animation: codemirrorActivation;
+    animation-duration: 1.4s;
+
+}
+
 /* Wiris plugin specific */
 .wrs_editor img {
     max-width: initial;

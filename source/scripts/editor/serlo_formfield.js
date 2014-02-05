@@ -81,6 +81,42 @@ define(['jquery', 'underscore', 'layout_builder', 'system_notification', 'events
                 self.$field.val('');
             }
         }, 2000);
+
+        function focusJump(iterate, onlyRows) {
+            var next,
+                columnIndex;
+
+            if (self.activeRow) {
+                if (!onlyRows) {
+                    next = self.activeRow.columns[self.activeRow.activeColumn + iterate];
+                }
+
+                if (!next && self.layoutBuilder.rows[self.activeRow.index + iterate]) {
+                    columnIndex = (onlyRows || iterate > 0) ? 0 : self.layoutBuilder.rows[self.activeRow.index - 1].columns.length - 1;
+                    next = self.layoutBuilder.rows[self.activeRow.index + iterate].columns[columnIndex];
+                }
+
+                if (next) {
+                    next.focus();
+                }
+            }
+        }
+
+        self.addEventListener('focus-next-column', function () {
+            focusJump(1);
+        });
+
+        self.addEventListener('focus-previous-column', function () {
+            focusJump(-1);
+        });
+
+        self.addEventListener('focus-next-row', function () {
+            focusJump(1, true);
+        });
+
+        self.addEventListener('focus-previous-row', function () {
+            focusJump(-1, true);
+        });
     };
 
     Field.Textarea.prototype.addLayoutBuilder = function (layoutBuilderConfiguration) {
@@ -99,7 +135,10 @@ define(['jquery', 'underscore', 'layout_builder', 'system_notification', 'events
         self.layoutBuilder.addEventListener('add', function (row) {
             putRowInPlace(row);
 
+            self.activeRow = row;
+
             row.addEventListener('select', function (column) {
+                self.activeRow = row;
                 self.trigger('select', self, column);
             });
 
@@ -155,6 +194,7 @@ define(['jquery', 'underscore', 'layout_builder', 'system_notification', 'events
             layout = self.layoutBuilder.addRow(row, data);
         });
     };
+
 
     Field.PlainText = function (field, label) {
         var self = this;
