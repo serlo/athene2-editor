@@ -43,6 +43,9 @@ define(['jquery', 'common', 'events'], function ($, Common, eventScope) {
         if (e.ctrlKey) {
             commands.push('ctrl');
         }
+        if (e.altKey) {
+            commands.push('alt');
+        }
         if (e.shiftKey) {
             commands.push('shift');
         }
