@@ -1,5 +1,5 @@
 /*global define*/
-define(['jquery', 'translator'], function ($, t) {
+define(['jquery', 'common', 'events', 'translator'], function ($, Common, eventScope, t) {
     var TextEditorHelper;
 
     TextEditorHelper = function (textEditor, settings) {
@@ -9,6 +9,8 @@ define(['jquery', 'translator'], function ($, t) {
             cursorDelta: 0,
             icon: undefined
         }, settings);
+
+        eventScope(that);
 
         that.textEditor = textEditor;
 
@@ -30,6 +32,14 @@ define(['jquery', 'translator'], function ($, t) {
             that.action();
             return;
         });
+
+        if (that.settings.shortcut) {
+            that.addEventListener(that.settings.shortcut, function (e) {
+                e.stopPropagation();
+                e.preventDefault();
+                that.action();
+            });
+        }
     };
 
     TextEditorHelper.prototype.action = function () {
@@ -39,7 +49,7 @@ define(['jquery', 'translator'], function ($, t) {
             }
 
             var cursor = this.textEditor.getCursor(false),
-                selection = this.textEditor.getSelection(),
+                selection = Common.trim(this.textEditor.getSelection()),
                 anchor = {line: cursor.line, ch: cursor.ch},
                 head = null;
 
@@ -75,7 +85,8 @@ define(['jquery', 'translator'], function ($, t) {
             replaceBefore: '**',
             replaceAfter: '**',
             cursorDelta: 2,
-            selectionDelta: 'selection'
+            selectionDelta: 'selection',
+            shortcut: 'cmd+66'
         });
     };
 
@@ -86,7 +97,8 @@ define(['jquery', 'translator'], function ($, t) {
             replaceBefore: '*',
             replaceAfter: '*',
             cursorDelta: 1,
-            selectionDelta: 'selection'
+            selectionDelta: 'selection',
+            shortcut: 'cmd+73'
         });
     };
 

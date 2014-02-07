@@ -278,6 +278,20 @@ define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events', 'content', 'shortcut
                 e.stopPropagation();
                 that.preview.focusNextRow();
             });
+
+            // send all shortcuts
+            // to texteditor helpers,
+            // if there is an active editable
+            shortcuts.addEventListener('always', function (shortcut, e) {
+                if (that.editable) {
+                    e.stopPropagation();
+                    _.each(that.helpers, function (helper) {
+                        if (helper.trigger) {
+                            helper.trigger(shortcut, e);
+                        }
+                    });
+                }
+            });
         };
 
         Editor.prototype.addHelper = function (helper) {

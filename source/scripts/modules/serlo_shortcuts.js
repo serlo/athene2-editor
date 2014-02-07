@@ -1,5 +1,5 @@
 /*global define*/
-define(['jquery', 'common', 'events'], function ($, Common, eventScope) {
+define(['jquery', 'underscore', 'common', 'events'], function ($, _, Common, eventScope) {
     "use strict";
     var Shortcuts,
         checkWrapper,
@@ -51,8 +51,9 @@ define(['jquery', 'common', 'events'], function ($, Common, eventScope) {
         }
 
         if (e.keyCode !== Common.KeyCode.cmd &&
-            e.keyCode !== Common.KeyCode.shift &&
-            e.keyCode !== Common.KeyCode.ctrl) {
+            e.keyCode !== Common.KeyCode.ctrl &&
+            e.keyCode !== Common.KeyCode.alt &&
+            e.keyCode !== Common.KeyCode.shift) {
             commands.push(checkWrapper(e.keyCode));
         }
 
@@ -67,9 +68,9 @@ define(['jquery', 'common', 'events'], function ($, Common, eventScope) {
 
         eventScope(that);
 
-        $(window).keydown(function (e) {
+        $(window).keydown(_.throttle(function (e) {
             triggerShortcut.call(that, e);
-        });
+        }, 150));
     };
 
     return Shortcuts;
