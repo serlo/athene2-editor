@@ -11,7 +11,8 @@ var dnode = require('dnode'),
     Showdown = require('showdown'),
     converter,
     server,
-    port = 7070;
+    port = 7070,
+    host = '127.0.0.1';
 
 // Load custom extensions
 Showdown.extensions.injections = require('../source/scripts/editor/showdown/extensions/injections');
@@ -88,4 +89,4 @@ server = dnode(function (remote, connection) {
     this.render = render;
 });
 
-server.listen(port);
+server.listen(port, host);

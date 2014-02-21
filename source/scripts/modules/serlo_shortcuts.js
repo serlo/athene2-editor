@@ -50,11 +50,11 @@ define(['jquery', 'underscore', 'common', 'events'], function ($, _, Common, eve
             commands.push('shift');
         }
 
-        if (e.keyCode !== Common.KeyCode.cmd &&
-            e.keyCode !== Common.KeyCode.ctrl &&
-            e.keyCode !== Common.KeyCode.alt &&
-            e.keyCode !== Common.KeyCode.shift) {
-            commands.push(checkWrapper(e.keyCode));
+        if (e.which !== Common.KeyCode.cmd &&
+            e.which !== Common.KeyCode.ctrl &&
+            e.which !== Common.KeyCode.alt &&
+            e.which !== Common.KeyCode.shift) {
+            commands.push(checkWrapper(e.which));
         }
 
         commands = commands.join('+');
