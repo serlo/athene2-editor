@@ -229,7 +229,7 @@ define(['jquery', 'underscore', 'layout_builder', 'system_notification', 'events
 
         if ($.fn.datepicker && self.$field.hasClass('datepicker')) {
             self.$input.datepicker({
-                format: 'yyy-mm-dd'
+                format: 'yy-mm-dd'
             }).on('changeDate', function () {
                 self.$input.trigger('keyup');
             });
