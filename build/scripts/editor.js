@@ -28973,7 +28973,16 @@ require(['jquery',
                     inlineMath: [["%%", "%%"]]
                 },
                 "HTML-CSS": {
-                    scale: 100
+                    scale: 100,
+                    linebreaks: {
+                        automatic: true
+                    }
+                },
+
+                SVG: {
+                    linebreaks: {
+                        automatic: true
+                    }
                 }
             });
         }
@@ -29033,6 +29042,7 @@ require(['jquery',
                     .addLayout([8, 8, 8])
                     .addLayout([8, 16])
                     .addLayout([16, 8])
+                    .addLayout([9, 15])
                     .addLayout([6, 6, 12])
                     .addLayout([12, 6, 6]);
 
