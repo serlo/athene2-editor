@@ -254,7 +254,7 @@ define([
             });
 
             formdata = new FormData();
-            formdata.append("file", file, filename);
+            formdata.append("attachment[file]", file, filename);
             formdata.append("type", "geogebra");
             return formdata;
         };

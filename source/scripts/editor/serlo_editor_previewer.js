@@ -62,10 +62,6 @@ define(['formfield', 'events', 'jquery'], function (Field, eventScope, $) {
                         self.trigger.apply(self, ['update'].concat(slice.call(arguments)));
                     });
 
-                    field.addEventListener('removed-row', function () {
-                        self.trigger.apply(self, ['removed-row'].concat(slice.call(arguments)));
-                    });
-
                     if (type === 'Textarea') {
                         if (!self.layoutBuilderConfiguration) {
                             throw new Error('No Layout Builder Configuration set');

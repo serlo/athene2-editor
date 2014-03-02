@@ -241,12 +241,6 @@ define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events', 'content', 'shortcut
                 column.set(that.parser.parse(column.data));
             });
 
-            that.preview.addEventListener('removed-row', function (row) {
-                if (that.editable && _.contains(row.columns, that.editable)) {
-                    that.emptyTextEditor();
-                }
-            });
-
             that.preview.setLayoutBuilderConfiguration(that.layoutBuilderConfiguration);
             that.preview.createFromForm(that.$form);
 
@@ -447,6 +441,7 @@ require(['jquery',
                         dataType: 'json',
                         type: 'post',
                         url: '/attachment/upload',
+                        paramName: 'attachment[file]',
                         loadImageMaxFileSize: 8000000,
                         maxNumberOfFiles: 1
                     }))

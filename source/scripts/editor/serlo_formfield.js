@@ -147,10 +147,6 @@ define(['jquery', 'underscore', 'layout_builder', 'system_notification', 'events
                 self.trigger('update', column);
             });
 
-            row.addEventListener('remove', function (row) {
-                self.trigger('removed-row', row);
-            });
-
             row.addEventListener('reorder', function () {
                 row.$el.detach();
                 putRowInPlace(row);

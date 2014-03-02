@@ -6,9 +6,11 @@ define([
     'row',
     'column',
     'layout_add',
-    'events'
+    'events',
+    'modals',
+    'translator'
 ],
-    function ($, _, Cache, Row, Column, LayoutAdd, eventScope) {
+    function ($, _, Cache, Row, Column, LayoutAdd, eventScope, Modal, t) {
         "use strict";
         var LayoutBuilder;
 
@@ -42,7 +44,17 @@ define([
             newRow = new Row(requestedLayout, that.rows.length, data, that.layouts);
 
             newRow.addEventListener('remove', function (row) {
-                that.removeRow(row);
+                Modal.show({
+                    type: 'danger',
+                    title: t('Remove row'),
+                    content: t('Are you sure you want to delete this row?'),
+                    cancel: true,
+                    okayLabel: 'Yes'
+                },
+                    'delete-row',
+                    function () {
+                        that.removeRow(row);
+                    });
             });
 
             newRow.addEventListener('add-layout', function (layout) {

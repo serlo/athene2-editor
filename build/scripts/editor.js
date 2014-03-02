@@ -24308,6 +24308,137 @@ define('row',[
     }
 );
 
+/*global define, window*/
+define('router',[],function () {
+    
+    var Router;
+
+    function navigate(url) {
+        window.location.href = url;
+    }
+
+    function reload() {
+        if (typeof window.location.reload === "function") {
+            window.location.reload();
+            return;
+        }
+        var href = window.location.href;
+        window.location.href = href;
+    }
+
+    Router = {
+        navigate: function (url) {
+            navigate(url);
+        },
+        reload: function () {
+            reload();
+        }
+    };
+
+    return Router;
+});
+/*global define*/
+define('modals',['jquery', 'router'], function ($, Router) {
+    
+    var SerloModals,
+        Modal,
+        modals = {},
+        modalTemplate = '#modalTemplate';
+
+    Modal = function (options, successCallback) {
+        this.$el = $(modalTemplate).clone();
+
+        this.type = options.type || false;
+        this.title = options.title || false;
+        this.content = options.content;
+        this.href = options.href || false;
+        this.cancel = options.cancel === undefined ? true : options.cancel;
+        this.okayLabel = options.okayLabel || false;
+
+        this.render().show(successCallback);
+    };
+
+    Modal.prototype.render = function () {
+        var self = this,
+            $btn = $('.btn-primary', self.$el);
+
+        $('.modal-body', self.$el).text(self.content);
+        $('body').append(self.$el);
+
+        $btn.click(function () {
+            if (self.successCallback) {
+                self.successCallback();
+                self.successCallback = null;
+
+                self.hide();
+            } else if (self.href) {
+                Router.navigate(self.href);
+            } else {
+                self.hide();
+            }
+        });
+
+        if (!self.cancel) {
+            $('.btn-default, .close', self.$el).remove();
+        }
+
+        if (self.type) {
+            $btn.removeClass('btn-primary').addClass('btn-' + this.type);
+        }
+
+        if (self.title) {
+            $('.modal-title', self.$el).text(self.title);
+        }
+
+        if (self.label) {
+            $btn.text(self.label);
+        }
+
+        return self;
+    };
+
+    Modal.prototype.show = function (cb) {
+        this.successCallback = cb;
+        this.$el.modal('show');
+        return this;
+    };
+
+    Modal.prototype.hide = function () {
+        this.$el.modal('hide');
+        return this;
+    };
+
+    SerloModals = function () {
+        return $(this).each(function () {
+            var $self = $(this),
+                options = {
+                    type: $self.attr('data-type'),
+                    title: $self.attr('data-title'),
+                    content: $self.attr('data-content'),
+                    href: $self.attr('href'),
+                    cancel: $self.attr('data-cancel') === "false" ? false : true,
+                    label: $self.attr('data-label')
+                };
+
+            $self.click(function (e) {
+                e.preventDefault();
+                new Modal(options);
+                return;
+            });
+        });
+    };
+
+    $.fn.SerloModals = SerloModals;
+
+    return {
+        show: function (options, uid, cb) {
+            if (uid) {
+                return modals[uid] ? modals[uid].show(cb) : (modals[uid] = new Modal(options, cb));
+            }
+            return new Modal(options, cb);
+        }
+    };
+});
 /*global define*/
 define('layout_builder',[
     'jquery',
@@ -24316,9 +24447,11 @@ define('layout_builder',[
     'row',
     'column',
     'layout_add',
-    'events'
+    'events',
+    'modals',
+    'translator'
 ],
-    function ($, _, Cache, Row, Column, LayoutAdd, eventScope) {
+    function ($, _, Cache, Row, Column, LayoutAdd, eventScope, Modal, t) {
         
         var LayoutBuilder;
 
@@ -24352,7 +24485,17 @@ define('layout_builder',[
             newRow = new Row(requestedLayout, that.rows.length, data, that.layouts);
 
             newRow.addEventListener('remove', function (row) {
-                that.removeRow(row);
+                Modal.show({
+                    type: 'danger',
+                    title: t('Remove row'),
+                    content: t('Are you sure you want to delete this row?'),
+                    cancel: true,
+                    okayLabel: 'Yes'
+                },
+                    'delete-row',
+                    function () {
+                        that.removeRow(row);
+                    });
             });
 
             newRow.addEventListener('add-layout', function (layout) {
@@ -24634,10 +24777,6 @@ define('formfield',['jquery', 'underscore', 'layout_builder', 'system_notificati
                 self.trigger('update', column);
             });
 
-            row.addEventListener('remove', function (row) {
-                self.trigger('removed-row', row);
-            });
-
             row.addEventListener('reorder', function () {
                 row.$el.detach();
                 putRowInPlace(row);
@@ -24864,10 +25003,6 @@ define('preview',['formfield', 'events', 'jquery'], function (Field, eventScope,
 
                     field.addEventListener('update', function () {
                         self.trigger.apply(self, ['update'].concat(slice.call(arguments)));
-                    });
-
-                    field.addEventListener('removed-row', function () {
-                        self.trigger.apply(self, ['removed-row'].concat(slice.call(arguments)));
                     });
 
                     if (type === 'Textarea') {
@@ -28456,7 +28591,7 @@ define('texteditor_plugin_geogebra_injection',[
             });
 
             formdata = new FormData();
-            formdata.append("file", file, filename);
+            formdata.append("attachment[file]", file, filename);
             formdata.append("type", "geogebra");
             return formdata;
         };
@@ -28707,12 +28842,6 @@ define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events', 'content', 'shortcut
                 column.set(that.parser.parse(column.data));
             });
 
-            that.preview.addEventListener('removed-row', function (row) {
-                if (that.editable && _.contains(row.columns, that.editable)) {
-                    that.emptyTextEditor();
-                }
-            });
-
             that.preview.setLayoutBuilderConfiguration(that.layoutBuilderConfiguration);
             that.preview.createFromForm(that.$form);
 
@@ -28913,6 +29042,7 @@ require(['jquery',
                         dataType: 'json',
                         type: 'post',
                         url: '/attachment/upload',
+                        paramName: 'attachment[file]',
                         loadImageMaxFileSize: 8000000,
                         maxNumberOfFiles: 1
                     }))

@@ -34,6 +34,7 @@ require.config({
         "i18n" : "modules/serlo_i18n",
         "support" : "modules/serlo_supporter",
         "modals" : "modules/serlo_modals",
+        "router" : "modules/serlo_router",
         "system_notification" : "modules/serlo_system_notification",
         "shortcuts" : "modules/serlo_shortcuts",
 
