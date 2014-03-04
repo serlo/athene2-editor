@@ -438,10 +438,11 @@ require(['jquery',
                 layoutBuilderConfiguration
                     .addLayout([24])
                     .addLayout([12, 12])
-                    .addLayout([8, 8, 8])
                     .addLayout([8, 16])
                     .addLayout([16, 8])
                     .addLayout([9, 15])
+                    .addLayout([8, 8, 8])
+                    .addLayout([8, 4, 12])
                     .addLayout([6, 6, 12])
                     .addLayout([12, 6, 6])
                     .addLayout([6, 12, 6])

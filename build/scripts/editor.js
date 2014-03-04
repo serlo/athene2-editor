@@ -27044,7 +27044,7 @@ define('texteditor_plugin',['jquery', 'events', 'translator', 'text!./editor/tem
                 // looks like a table heading
                 if (line.trim().match(/^[|]{1}.*[|]{1}$/)) {
                     line = line.trim();
-                    tbl.push('<table>');
+                    tbl.push('<table class="table table-striped">');
                     hs = line.substring(1, line.length - 1).split('|');
                     tbl.push(tables.thead.apply(this, hs));
                     line = lines[++i];
@@ -29039,12 +29039,15 @@ require(['jquery',
                 layoutBuilderConfiguration
                     .addLayout([24])
                     .addLayout([12, 12])
-                    .addLayout([8, 8, 8])
                     .addLayout([8, 16])
                     .addLayout([16, 8])
                     .addLayout([9, 15])
+                    .addLayout([8, 8, 8])
+                    .addLayout([8, 4, 12])
                     .addLayout([6, 6, 12])
-                    .addLayout([12, 6, 6]);
+                    .addLayout([12, 6, 6])
+                    .addLayout([6, 12, 6])
+                    .addLayout([6, 6, 6, 6]);
 
                 // new EditorPlugin();
                 pluginManager
