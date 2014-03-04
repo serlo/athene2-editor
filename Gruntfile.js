@@ -126,7 +126,7 @@ module.exports = function (grunt) {
                 options: {
                     banner: '/**\n' +
                             ' * \n' +
-                            ' * Athene2 Editor - v0.1.9 \n' +
+                            ' * Athene2 Editor - v0.1.10 \n' +
                             ' *\n' +
                             ' * @license LGPL-3.0\n' +
                             ' * @license http://opensource.org/licenses/LGPL-3.0 The GNU Lesser General Public License, version 3.0\n' +
@@ -335,8 +335,8 @@ module.exports = function (grunt) {
         'cssmin',
         'imagemin',
         'requirejs:production',
-        'modernizr',
-        'uglify'
+        'uglify:dist',
+        'modernizr'
     ]);
 
     grunt.registerTask('default', [
