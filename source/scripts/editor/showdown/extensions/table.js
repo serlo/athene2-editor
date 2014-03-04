@@ -75,7 +75,7 @@
                 // looks like a table heading
                 if (line.trim().match(/^[|]{1}.*[|]{1}$/)) {
                     line = line.trim();
-                    tbl.push('<table>');
+                    tbl.push('<table class="table table-striped">');
                     hs = line.substring(1, line.length - 1).split('|');
                     tbl.push(tables.thead.apply(this, hs));
                     line = lines[++i];
