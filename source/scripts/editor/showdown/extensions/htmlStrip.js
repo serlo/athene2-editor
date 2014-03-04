@@ -7,6 +7,7 @@
             'a': 'href',
             '*': 'title',
             'span': 'class',
+            'table': 'class',
             'tr': 'rowspan',
             'td': 'colspan|align',
             'th': 'rowspan|align',
