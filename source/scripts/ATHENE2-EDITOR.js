@@ -443,7 +443,9 @@ require(['jquery',
                     .addLayout([16, 8])
                     .addLayout([9, 15])
                     .addLayout([6, 6, 12])
-                    .addLayout([12, 6, 6]);
+                    .addLayout([12, 6, 6])
+                    .addLayout([6, 12, 6])
+                    .addLayout([6, 6, 6, 6]);
 
                 // new EditorPlugin();
                 pluginManager
