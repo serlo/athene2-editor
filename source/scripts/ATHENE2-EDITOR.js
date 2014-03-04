@@ -150,9 +150,9 @@ define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events', 'content', 'shortcut
                             that.$widget = null;
 
                             that.currentToken = getCompleteToken(that.textEditor, that.textEditor.getCursor(), maxLines, {}, true);
-                            
+
                             that.currentToken.state.string = that.textEditor.doc.getRange(that.currentToken.state.startPos, that.currentToken.state.endPos);
-                            console.log(that.currentToken.state);
+
                             that.pluginManager.activate(plugin, that.currentToken);
                             that.activePlugin = plugin;
 
