@@ -19,7 +19,6 @@ define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events', 'content', 'shortcut
         function getCompleteToken(editor, pos, maxLines, currentToken, firstRun) {
             var prevStartPos = {};
 
-
             function loop(pos, maxLines, currentToken, firstRun) {
                 // Get the token at current position
                 var token = editor.getTokenAt(pos),
@@ -151,9 +150,9 @@ define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events', 'content', 'shortcut
                             that.$widget = null;
 
                             that.currentToken = getCompleteToken(that.textEditor, that.textEditor.getCursor(), maxLines, {}, true);
-
+                            
                             that.currentToken.state.string = that.textEditor.doc.getRange(that.currentToken.state.startPos, that.currentToken.state.endPos);
-
+                            console.log(that.currentToken.state);
                             that.pluginManager.activate(plugin, that.currentToken);
                             that.activePlugin = plugin;
 
@@ -425,9 +424,7 @@ require(['jquery',
                     layoutBuilderConfiguration = new LayoutBuilderConfiguration(),
                     parser = new Parser(),
                     converter = new Showdown.converter({ extensions: ['injections', 'table', 'spoiler', 'htmlstrip', 'latex'] }),
-                    // converter = new Showdown.converter(),
                     pluginManager = new PluginManager();
-
 
                 // converter.config.math = true;
                 // converter.config.stripHTML = true;
@@ -438,17 +435,20 @@ require(['jquery',
                 layoutBuilderConfiguration
                     .addLayout([24])
                     .addLayout([12, 12])
-                    .addLayout([8, 16])
-                    .addLayout([16, 8])
                     .addLayout([9, 15])
+                    .addLayout([6, 18])
+
+                    .addLayout([6, 4, 14])
+                    .addLayout([9, 4, 11])
+                    .addLayout([12, 4, 8])
+
+                    .addLayout([16, 8])
                     .addLayout([8, 8, 8])
-                    .addLayout([8, 4, 12])
                     .addLayout([6, 6, 12])
                     .addLayout([12, 6, 6])
                     .addLayout([6, 12, 6])
                     .addLayout([6, 6, 6, 6]);
 
-                // new EditorPlugin();
                 pluginManager
                     .addPlugin(new EditorPlugin.Image({
                         dataType: 'json',

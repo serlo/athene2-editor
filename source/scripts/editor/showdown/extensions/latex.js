@@ -7,12 +7,16 @@
             findLatex = new RegExp(/\/\/\/ (.*)\n([\s\S]*?)\/\/\//g);
 
         filter = function (text) {
-            text = text.replace(/(^|[^\\])(%%)([^\r]*?[^%])\2(?!%)/gm,
+            // text = text.replace(/(^|[^\\])(%%)([^\r]*?[^%])\2(?!%)/gm,
+            text = text.replace(/(^|[^\\])(%%)([^\r]*?[^%])(%%?%)/gm,
                 function (wholeMatch, m1, m2, m3, m4) {
                     var c = m3;
                     c = c.replace(/^([ \t]*)/g, ""); // leading whitespace
                     c = c.replace(/[ \t]*$/g, ""); // trailing whitespace
                     c = _EncodeCode(c);
+                    if (m4 === '%%%') {
+                        c += '%';
+                    }
                     return m1 + '<span class="mathInline">%%' + c + "%%</span>";
                 });
 

@@ -2,17 +2,17 @@ CodeMirror.defineMode("sfm", function(cmCfg, modeCfg) {
 
 
     var defStartPos = function(stream, state) {
-        state.startPos = {
-            line: stream.lineNo,
-            ch: stream.start
-        }
-        state.endPos = undefined;
-    },
+            state.startPos = {
+                line: stream.lineNo,
+                ch: stream.start
+            };
+            state.endPos = undefined;
+        },
         defEndPos = function(stream, state) {
             state.endPos = {
                 line: stream.lineNo,
                 ch: stream.pos
-            }
+            };
         };
 
     return {
@@ -49,12 +49,16 @@ CodeMirror.defineMode("sfm", function(cmCfg, modeCfg) {
                 defStartPos(stream, state);
             }
             if (state.inMath) {
-                if (stream.skipTo('$') && stream.next() == '$') {
+                if (stream.skipTo('$') && stream.next() === '$') {
                     stream.next();
+                    if (stream.peek() === '$') {
+                        stream.next();
+                    }
+
                     state.inMath = false;
                     defEndPos(stream, state);
                 } else {
-                    stream.skipToEnd();
+                    stream.next();
                 }
                 return "math";
             }
@@ -68,6 +72,9 @@ CodeMirror.defineMode("sfm", function(cmCfg, modeCfg) {
             if (state.inInlineMath) {
                 if (stream.skipTo('%') && stream.next() === '%') {
                     stream.next();
+                    if (stream.peek() === '%') {
+                        stream.next();
+                    }
                     state.inInlineMath = false;
                     defEndPos(stream, state);
                 } else {
@@ -93,7 +100,7 @@ CodeMirror.defineMode("sfm", function(cmCfg, modeCfg) {
                 if (stream.skipTo('*')) {
                     stream.next();
                     var anotherPeek = stream.peek();
-                    if (stream.peek() === '*') {
+                    if (anotherPeek === '*') {
                         state.inStrong = false;
                         stream.next();
                     } else {

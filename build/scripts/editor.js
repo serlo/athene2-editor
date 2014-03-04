@@ -21263,17 +21263,17 @@ CodeMirror.defineMode("sfm", function(cmCfg, modeCfg) {
 
 
     var defStartPos = function(stream, state) {
-        state.startPos = {
-            line: stream.lineNo,
-            ch: stream.start
-        }
-        state.endPos = undefined;
-    },
+            state.startPos = {
+                line: stream.lineNo,
+                ch: stream.start
+            };
+            state.endPos = undefined;
+        },
         defEndPos = function(stream, state) {
             state.endPos = {
                 line: stream.lineNo,
                 ch: stream.pos
-            }
+            };
         };
 
     return {
@@ -21310,12 +21310,16 @@ CodeMirror.defineMode("sfm", function(cmCfg, modeCfg) {
                 defStartPos(stream, state);
             }
             if (state.inMath) {
-                if (stream.skipTo('$') && stream.next() == '$') {
+                if (stream.skipTo('$') && stream.next() === '$') {
                     stream.next();
+                    if (stream.peek() === '$') {
+                        stream.next();
+                    }
+
                     state.inMath = false;
                     defEndPos(stream, state);
                 } else {
-                    stream.skipToEnd();
+                    stream.next();
                 }
                 return "math";
             }
@@ -21329,6 +21333,9 @@ CodeMirror.defineMode("sfm", function(cmCfg, modeCfg) {
             if (state.inInlineMath) {
                 if (stream.skipTo('%') && stream.next() === '%') {
                     stream.next();
+                    if (stream.peek() === '%') {
+                        stream.next();
+                    }
                     state.inInlineMath = false;
                     defEndPos(stream, state);
                 } else {
@@ -21354,7 +21361,7 @@ CodeMirror.defineMode("sfm", function(cmCfg, modeCfg) {
                 if (stream.skipTo('*')) {
                     stream.next();
                     var anotherPeek = stream.peek();
-                    if (stream.peek() === '*') {
+                    if (anotherPeek === '*') {
                         state.inStrong = false;
                         stream.next();
                     } else {
@@ -27134,6 +27141,7 @@ define('texteditor_plugin',['jquery', 'events', 'translator', 'text!./editor/tem
             'a': 'href',
             '*': 'title',
             'span': 'class',
+            'table': 'class',
             'tr': 'rowspan',
             'td': 'colspan|align',
             'th': 'rowspan|align',
@@ -27255,12 +27263,16 @@ define('texteditor_plugin',['jquery', 'events', 'translator', 'text!./editor/tem
             findLatex = new RegExp(/\/\/\/ (.*)\n([\s\S]*?)\/\/\//g);
 
         filter = function (text) {
-            text = text.replace(/(^|[^\\])(%%)([^\r]*?[^%])\2(?!%)/gm,
+            // text = text.replace(/(^|[^\\])(%%)([^\r]*?[^%])\2(?!%)/gm,
+            text = text.replace(/(^|[^\\])(%%)([^\r]*?[^%])(%%?%)/gm,
                 function (wholeMatch, m1, m2, m3, m4) {
                     var c = m3;
                     c = c.replace(/^([ \t]*)/g, ""); // leading whitespace
                     c = c.replace(/[ \t]*$/g, ""); // trailing whitespace
                     c = _EncodeCode(c);
+                    if (m4 === '%%%') {
+                        c += '%';
+                    }
                     return m1 + '<span class="mathInline">%%' + c + "%%</span>";
                 });
 
@@ -28620,7 +28632,6 @@ define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events', 'content', 'shortcut
         function getCompleteToken(editor, pos, maxLines, currentToken, firstRun) {
             var prevStartPos = {};
 
-
             function loop(pos, maxLines, currentToken, firstRun) {
                 // Get the token at current position
                 var token = editor.getTokenAt(pos),
@@ -28752,9 +28763,9 @@ define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events', 'content', 'shortcut
                             that.$widget = null;
 
                             that.currentToken = getCompleteToken(that.textEditor, that.textEditor.getCursor(), maxLines, {}, true);
-
+                            
                             that.currentToken.state.string = that.textEditor.doc.getRange(that.currentToken.state.startPos, that.currentToken.state.endPos);
-
+                            console.log(that.currentToken.state);
                             that.pluginManager.activate(plugin, that.currentToken);
                             that.activePlugin = plugin;
 
@@ -29026,9 +29037,7 @@ require(['jquery',
                     layoutBuilderConfiguration = new LayoutBuilderConfiguration(),
                     parser = new Parser(),
                     converter = new Showdown.converter({ extensions: ['injections', 'table', 'spoiler', 'htmlstrip', 'latex'] }),
-                    // converter = new Showdown.converter(),
                     pluginManager = new PluginManager();
-
 
                 // converter.config.math = true;
                 // converter.config.stripHTML = true;
@@ -29039,17 +29048,20 @@ require(['jquery',
                 layoutBuilderConfiguration
                     .addLayout([24])
                     .addLayout([12, 12])
-                    .addLayout([8, 16])
-                    .addLayout([16, 8])
                     .addLayout([9, 15])
+                    .addLayout([6, 18])
+
+                    .addLayout([6, 4, 14])
+                    .addLayout([9, 4, 11])
+                    .addLayout([12, 4, 8])
+
+                    .addLayout([16, 8])
                     .addLayout([8, 8, 8])
-                    .addLayout([8, 4, 12])
                     .addLayout([6, 6, 12])
                     .addLayout([12, 6, 6])
                     .addLayout([6, 12, 6])
                     .addLayout([6, 6, 6, 6]);
 
-                // new EditorPlugin();
                 pluginManager
                     .addPlugin(new EditorPlugin.Image({
                         dataType: 'json',
