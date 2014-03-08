@@ -118,7 +118,7 @@ define([
                         length = that.data.info.files.length;
 
                     while (i < length) {
-                        if (that.data.info.files[i].types.indexOf("/xml") != -1) {
+                        if (that.data.info.files[i].type.indexOf("/xml") != -1) {
                             xmlUrl = that.data.info.files[i].location;
                             i = length;
                         }
