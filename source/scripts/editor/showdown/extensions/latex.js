@@ -47,13 +47,18 @@
         //
         // Encode all ampersands; HTML entities are not
         // entities within a Markdown code span.
+        //text = text.replace(/&/g, "&amp;");
+
+        // Do the angle bracket song and dance:
+        //text = text.replace(/</g, "&lt;");
+        //text = text.replace(/>/g, "&gt;");
 
         // Pipes are escaped early, unescape them into escaped pipes.
         // Need to find better solution.
-        text = text.replace(/~E124E/g, "\\|");
+        //text = text.replace(/~E124E/g, "\\|");
 
         // Now, escape characters that are magic in Markdown:
-        text = escapeCharacters(text, "\*`_{}[]%$\\", false);
+        text = escapeCharacters(text, "\*`_{}[]\\", false);
 
         return text;
     };
