@@ -62,8 +62,6 @@
             return out;
         };
         filter = function (text) {
-            console.log(text);
-
             var i = 0,
                 lines = text.split('\n'),
                 tbl = [],
