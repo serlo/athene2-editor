@@ -3,8 +3,7 @@
         escapeCharacters_callback,
         _EncodeCode,
         latex = function (converter) {
-        var filter,
-            findLatex = new RegExp(/\/\/\/ (.*)\n([\s\S]*?)\/\/\//g);
+        var filter;
 
         filter = function (text) {
             // text = text.replace(/(^|[^\\])(%%)([^\r]*?[^%])\2(?!%)/gm,
