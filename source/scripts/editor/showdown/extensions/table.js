@@ -20,14 +20,10 @@
         var tables = {}, style = 'text-align:left;',
             filter;
         tables.th = function (header) {
-            if (header.trim() === "") {
-                return "";
-            }
-            var id = header.trim().replace(/ /g, '_').toLowerCase();
-            return '<th id="' + id + '" style="' + style + '">' + header + '</th>';
+            return '<th style="' + style + '">' + header + '</th>';
         };
         tables.td = function (cell) {
-            return '<td style="' + style + '">' + converter.makeHtml(cell) + '</td>';
+            return '<td style="' + style + '">' + cell + '</td>';
         };
         tables.ths = function () {
             var out = "",
@@ -66,6 +62,8 @@
             return out;
         };
         filter = function (text) {
+            console.log(text);
+
             var i = 0,
                 lines = text.split('\n'),
                 tbl = [],
@@ -96,6 +94,7 @@
                         tbl.push('</div>');
                         // we are done with this table and we move along
                         out.push(tbl.join('\n'));
+                        tbl = [];
                         continue;
                     }
                 }
