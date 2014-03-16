@@ -6,7 +6,7 @@
 (function () {
     var spoiler = function (converter) {
         var filter,
-            findSpoilers = new RegExp(/\/\/\/ (.*)\n([\s\S]*?)\/\/\//g);
+            findSpoilers = new RegExp(/^\/\/\/ (.*)\n([\s\S]*?)(\n|\r)+\/\/\//gm);
 
         filter = function (text) {
             return text.replace(findSpoilers, function (original, title, content) {
