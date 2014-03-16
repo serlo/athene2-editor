@@ -46,9 +46,11 @@ require.config({
         "showdown": "../bower_components/showdown/src/showdown",
         "showdown_table" : "editor/showdown/extensions/table",
         "showdown_spoiler" : "editor/showdown/extensions/spoiler",
-        "showdown_htmlstrip" : "editor/showdown/extensions/htmlstrip",
+        "showdown_htmlstrip" : "editor/showdown/extensions/htmlStrip",
         "showdown_latex" : "editor/showdown/extensions/latex",
         "showdown_injections" : "editor/showdown/extensions/injections",
+        "showdown_strikethrough" : "editor/showdown/extensions/strikeThrough",
+        "showdown_atusername" : "editor/showdown/extensions/atUsername",
 
         "content" : "modules/serlo_content",
         "spoiler" : "modules/serlo_spoiler",

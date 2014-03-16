@@ -9,7 +9,7 @@
  * @copyright Copyright (c) 2013 Gesellschaft für freie Bildung e.V. (http://www.open-education.eu/)
  */
 /*global define, require, MathJax*/
-define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events', 'content', 'shortcuts', 'spoiler'],
+define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events', 'content', 'shortcuts'],
     function ($, _, eventScope, Content, Shortcuts) {
         "use strict";
         var $body = $('body'),
@@ -341,6 +341,9 @@ require(['jquery',
     'showdown_htmlstrip',
     'showdown_latex',
     'showdown_injections',
+    'showdown_spoiler',
+    'showdown_atusername',
+    'showdown_strikethrough',
     'texteditor_plugin_image',
     'texteditor_plugin_wiris',
     'texteditor_plugin_injection',
@@ -423,7 +426,7 @@ require(['jquery',
                     textEditor,
                     layoutBuilderConfiguration = new LayoutBuilderConfiguration(),
                     parser = new Parser(),
-                    converter = new Showdown.converter({ extensions: ['injections', 'table', 'spoiler', 'htmlstrip', 'latex'] }),
+                    converter = new Showdown.converter({ extensions: ['injections', 'table', 'spoiler', 'htmlstrip', 'latex', 'atusername', 'strikethrough'] }),
                     pluginManager = new PluginManager();
 
                 // converter.config.math = true;
