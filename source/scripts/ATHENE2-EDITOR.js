@@ -426,7 +426,7 @@ require(['jquery',
                     textEditor,
                     layoutBuilderConfiguration = new LayoutBuilderConfiguration(),
                     parser = new Parser(),
-                    converter = new Showdown.converter({ extensions: ['injections', 'table', 'spoiler', 'htmlstrip', 'latex', 'atusername', 'strikethrough'] }),
+                    converter = new Showdown.converter({ extensions: ['injections', 'table', 'htmlstrip', 'latex', 'atusername', 'strikethrough', 'spoiler'] }),
                     pluginManager = new PluginManager();
 
                 // converter.config.math = true;
