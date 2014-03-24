@@ -20,10 +20,16 @@ Showdown.extensions.table = require('../source/scripts/editor/showdown/extension
 Showdown.extensions.spoiler = require('../source/scripts/editor/showdown/extensions/spoiler');
 Showdown.extensions.latex = require('../source/scripts/editor/showdown/extensions/latex');
 Showdown.extensions.htmlstrip = require('../source/scripts/editor/showdown/extensions/htmlstrip');
+Showdown.extensions.atusername = require('../source/scripts/editor/showdown/extensions/atusername');
+Showdown.extensions.newline = require('../source/scripts/editor/showdown/extensions/newline');
+Showdown.extensions.strikethrough = require('../source/scripts/editor/showdown/extensions/strikethrough');
 
 converter = new Showdown.converter({
     extensions: [
         'injections',
+        'atusername',
+        'strikethrough',
+        'newline',
         'table',
         'spoiler',
         'htmlstrip',
