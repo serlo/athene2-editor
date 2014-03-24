@@ -1,10 +1,10 @@
 (function(){
     var newline = function(converter) {
         var filter,
-            findSpoilers = new RegExp(/^--$/gm);
+            findNewlines = new RegExp(/^\n--$/gm);
 
         filter = function (text) {
-            return text.replace(findSpoilers, function (original, title, content) {
+            return text.replace(findNewlines, function () {
                 return '<br>';
             });
         };
