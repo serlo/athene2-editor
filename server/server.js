@@ -19,10 +19,10 @@ Showdown.extensions.serloinjections = require('../source/scripts/editor/showdown
 Showdown.extensions.serlotable = require('../source/scripts/editor/showdown/extensions/table');
 Showdown.extensions.serlospoiler = require('../source/scripts/editor/showdown/extensions/spoiler');
 Showdown.extensions.serlolatex = require('../source/scripts/editor/showdown/extensions/latex');
-Showdown.extensions.serlohtmlstrip = require('../source/scripts/editor/showdown/extensions/htmlstrip');
-Showdown.extensions.serloatusername = require('../source/scripts/editor/showdown/extensions/atusername');
+Showdown.extensions.serlohtmlstrip = require('../source/scripts/editor/showdown/extensions/htmlStrip');
+Showdown.extensions.serloatusername = require('../source/scripts/editor/showdown/extensions/atUsername');
 Showdown.extensions.serlonewline = require('../source/scripts/editor/showdown/extensions/newline');
-Showdown.extensions.serlostrikethrough = require('../source/scripts/editor/showdown/extensions/strikethrough');
+Showdown.extensions.serlostrikethrough = require('../source/scripts/editor/showdown/extensions/strikeThrough');
 
 converter = new Showdown.converter({
     extensions: [
