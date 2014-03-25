@@ -20,10 +20,10 @@
         var tables = {}, style = 'text-align:left;',
             filter;
         tables.th = function (header) {
-            return '<th style="' + style + '">' + header + '</th>';
+            return '<th style="' + style + '">' + converter.makeHtml(header) + '</th>';
         };
         tables.td = function (cell) {
-            return '<td style="' + style + '">' + cell + '</td>';
+            return '<td style="' + style + '">' + converter.makeHtml(cell) + '</td>';
         };
         tables.ths = function () {
             var out = "",
