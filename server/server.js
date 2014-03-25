@@ -15,25 +15,25 @@ var dnode = require('dnode'),
     host = '127.0.0.1';
 
 // Load custom extensions
-Showdown.extensions.injections = require('../source/scripts/editor/showdown/extensions/injections');
-Showdown.extensions.table = require('../source/scripts/editor/showdown/extensions/table');
-Showdown.extensions.spoiler = require('../source/scripts/editor/showdown/extensions/spoiler');
-Showdown.extensions.latex = require('../source/scripts/editor/showdown/extensions/latex');
-Showdown.extensions.htmlstrip = require('../source/scripts/editor/showdown/extensions/htmlstrip');
-Showdown.extensions.atusername = require('../source/scripts/editor/showdown/extensions/atusername');
-Showdown.extensions.newline = require('../source/scripts/editor/showdown/extensions/newline');
-Showdown.extensions.strikethrough = require('../source/scripts/editor/showdown/extensions/strikethrough');
+Showdown.extensions.serloinjections = require('../source/scripts/editor/showdown/extensions/injections');
+Showdown.extensions.serlotable = require('../source/scripts/editor/showdown/extensions/table');
+Showdown.extensions.serlospoiler = require('../source/scripts/editor/showdown/extensions/spoiler');
+Showdown.extensions.serlolatex = require('../source/scripts/editor/showdown/extensions/latex');
+Showdown.extensions.serlohtmlstrip = require('../source/scripts/editor/showdown/extensions/htmlstrip');
+Showdown.extensions.serloatusername = require('../source/scripts/editor/showdown/extensions/atusername');
+Showdown.extensions.serlonewline = require('../source/scripts/editor/showdown/extensions/newline');
+Showdown.extensions.serlostrikethrough = require('../source/scripts/editor/showdown/extensions/strikethrough');
 
 converter = new Showdown.converter({
     extensions: [
-        'injections',
-        'atusername',
-        'strikethrough',
-        'newline',
-        'table',
-        'spoiler',
-        'htmlstrip',
-        'latex'
+        'serloinjections',
+        'serloatusername',
+        'serlostrikethrough',
+        'serlonewline',
+        'serlotable',
+        'serlospoiler',
+        'serlohtmlstrip',
+        'serlolatex'
     ]
 });
 
