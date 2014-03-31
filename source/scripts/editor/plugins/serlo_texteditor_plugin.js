@@ -36,6 +36,10 @@ define(['jquery', 'events', 'translator', 'text!./editor/templates/plugins/defau
         this.trigger('close');
     };
 
+    EditorPlugin.prototype.render = function () {
+        // should be called, after a Plugins $el has been added to the dom
+    };
+
     EditorPlugin.prototype.activate = function () {
         this.$el = $(this.template(this.data));
         return this.$el;

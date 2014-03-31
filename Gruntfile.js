@@ -125,14 +125,14 @@ module.exports = function (grunt) {
             dist: {
                 options: {
                     banner: '/**\n' +
-                            ' * \n' +
-                            ' * Athene2 Editor - v0.1.14 \n' +
-                            ' *\n' +
-                            ' * @license LGPL-3.0\n' +
-                            ' * @license http://opensource.org/licenses/LGPL-3.0 The GNU Lesser General Public License, version 3.0\n' +
-                            ' * @link https://github.com/serlo-org/athene2 for the canonical source repository\n' +
-                            ' * @copyright Copyright (c) 2013 Gesellschaft für freie Bildung e.V. (http://www.open-education.eu/)\n' +
-                            ' */\n',
+                        ' * \n' +
+                        ' * Athene2 Editor - v0.1.20 \n' +
+                        ' *\n' +
+                        ' * @license LGPL-3.0\n' +
+                        ' * @license http://opensource.org/licenses/LGPL-3.0 The GNU Lesser General Public License, version 3.0\n' +
+                        ' * @link https://github.com/serlo-org/athene2 for the canonical source repository\n' +
+                        ' * @copyright Copyright (c) 2013 Gesellschaft für freie Bildung e.V. (http://www.open-education.eu/)\n' +
+                        ' */\n',
                     output: {
                         beautify: false
                     },
@@ -149,7 +149,7 @@ module.exports = function (grunt) {
                 //     '<%= serlo.dist %>/scripts/main.js': '<%= serlo.dist %>/scripts/main.js'
                 // }
                 files: [{
-                    '<%= serlo.dist %>/scripts/editor.js' : '<%= serlo.dist %>/scripts/editor.js',
+                    '<%= serlo.dist %>/scripts/editor.js': '<%= serlo.dist %>/scripts/editor.js',
                     '<%= serlo.dist %>/bower_components/requirejs/require.js': '<%= serlo.dist %>/bower_components/requirejs/require.js'
                 }]
             }
@@ -348,13 +348,13 @@ module.exports = function (grunt) {
         var data = grunt.config('i18n'),
             files = grunt.file.expand(data.src),
             output = '/**\n * Dont edit this file!\n' +
-                    ' * This module generates itself from lang.js files!\n' +
-                    ' * Instead edit the language files in /lang/\n' +
-                    ' **/\n\n' +
-                    '/*global define*/\n' +
-                    'define(function () {\n' +
-                    '"use strict";\n' +
-                    'var i18n = {};\n';
+                ' * This module generates itself from lang.js files!\n' +
+                ' * Instead edit the language files in /lang/\n' +
+                ' **/\n\n' +
+                '/*global define*/\n' +
+                'define(function () {\n' +
+                '"use strict";\n' +
+                'var i18n = {};\n';
 
         files.forEach(function (f) {
             var contents = grunt.file.read(f),
@@ -364,7 +364,7 @@ module.exports = function (grunt) {
         });
 
         output += '\nreturn i18n;\n' +
-                '});';
+            '});';
 
         grunt.file.write(data.dest, output);
     });
@@ -415,5 +415,5 @@ module.exports = function (grunt) {
 
             grunt.file.write(lang, contents);
         });
-  });
+    });
 };

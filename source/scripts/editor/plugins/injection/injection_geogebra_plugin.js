@@ -6,13 +6,13 @@
 
 /*global define,ggbApplet*/
 define([
-    'jquery',
-    'underscore',
-    'common',
-    'system_notification',
-    'texteditor_plugin',
-    'translator',
-    'text!./editor/templates/plugins/injection/injection_plugin_geogebra.html'
+        'jquery',
+        'underscore',
+        'common',
+        'system_notification',
+        'texteditor_plugin',
+        'translator',
+        'text!./editor/templates/plugins/injection/injection_plugin_geogebra.html'
     ],
     function ($, _, Common, SystemNotification, EditorPlugin, t, plugin_template) {
         "use strict";
@@ -22,22 +22,20 @@ define([
             geogebraScriptSource;
 
         titleRegexp = new RegExp(/\[[^\]]*\]\(/);
-        hrefRegexp =  new RegExp(/\([^\)]*\)/);
-
-        geogebraScriptSource = 'http://www.geogebra.org/web/4.4/web/web.nocache.js';
+        hrefRegexp = new RegExp(/\([^\)]*\)/);
 
         // cruel helper function that
         // checks for 20seconds if the
         // global ggbApplet variable
         // is available. geogebra does not
         // seem to have a 'ready' event..
-        function waitForGgbApplet(fn) {
+        function waitForGgbApplet(context, fn) {
             var threshold = 0,
                 timeout = setInterval(function () {
                     threshold += 100;
-                    if (typeof ggbApplet !== 'undefined') {
+                    if ( !! context.ggbApplet) {
                         clearTimeout(timeout);
-                        fn();
+                        fn(null, context.ggbApplet);
                     }
                     if (threshold >= 20000) {
                         clearTimeout(timeout);
@@ -50,7 +48,7 @@ define([
         // some technologies that
         // may not be available:
         function browserSupported() {
-            return !!window.Blob && !!window.FormData && !!window.Uint8Array;
+            return !!window.Blob && !! window.FormData && !! window.Uint8Array;
         }
 
         GeogebraInjectionPlugin = function () {
@@ -72,7 +70,7 @@ define([
             if (!browserSupported()) {
                 this.activate = function () {
                     SystemNotification.notify(t('You need to update your browser to use the Geogebra plugin.'), 'error');
-                }
+                };
             }
         };
 
@@ -104,83 +102,76 @@ define([
                 return;
             });
 
-            $('.editor-plugin-wrapper').bind('scroll', that.onScroll);
+        };
 
-            require([geogebraScriptSource], function () {
-                // geogebra related stuff.
-                if (typeof web !== 'function') {
+        GeogebraInjectionPlugin.prototype.render = function () {
+            var that = this;
+
+            that.ggbApplet = null;
+
+            function loadOriginalXML() {
+                var xmlUrl,
+                    i = 0,
+                    length = that.data.info.files.length;
+
+                while (i < length) {
+                    if (that.data.info.files[i].type.indexOf("/xml") != -1) {
+                        xmlUrl = that.data.info.files[i].location;
+                        i = length;
+                    }
+                    i += 1;
+                }
+
+                $.ajax({
+                    url: xmlUrl
+                }).success(function (xml) {
+                    that.ggbApplet.setXML(xml.documentElement.outerHTML);
+                    that.ggbApplet.startEditing();
+                }).error(Common.genericError);
+            }
+
+            that.$iframe = $('.geogebraweb-app-iframe', that.$el);
+
+            that.$iframe.css({
+                height: 720,
+                width: '100%',
+                borderWidth: 0
+            });
+
+            waitForGgbApplet(that.$iframe[0].contentWindow, function (err, applet) {
+                if (err) {
                     SystemNotification.notify(t('Geogebra plugin could not be loaded, please try again.'));
-                }
-
-                function loadOriginalXML() {
-                    var xmlUrl,
-                        i = 0,
-                        length = that.data.info.files.length;
-
-                    while (i < length) {
-                        if (that.data.info.files[i].type.indexOf("/xml") != -1) {
-                            xmlUrl = that.data.info.files[i].location;
-                            i = length;
-                        }
-                        i += 1;
-                    }
-
-                    $.ajax({
-                        url: xmlUrl
-                    }).success(function (xml) {
-                        ggbApplet.setXML(xml.documentElement.outerHTML);
-                        ggbApplet.startEditing();
-                    }).error(Common.genericError);
-                }
-
-                function doneWaitingForGgbApplet(error) {
-                    if (error) {
-                        SystemNotification.notify(t('Geogebra plugin could not be loaded, please try again.'));
-                    } else {
-                        if (!that.isActive) {
-                            return;
-                        }
-                        if (that.data.info && that.data.info.files) {
-                            loadOriginalXML();
-                        } else {
-                            /// VERY BAD!!
-                            /// Have to wait for Geogebra to initialize
-                            /// and I couldnt find a callback or event
-                            /// for that...... sorry!
-                            setTimeout(function () {
-                                ggbApplet.startEditing();
-                            }, 2000);
-                        }
-                    }
-                }
-
-                if (typeof ggbApplet === 'object') {
-                    web();
-                    doneWaitingForGgbApplet();
                 } else {
-                    waitForGgbApplet(doneWaitingForGgbApplet);
+                    if (!that.isActive) {
+                        return;
+                    }
+
+                    $('.gwt-MenuItem.signIn', that.$iframe[0].contentDocument).hide();
+
+                    that.ggbApplet = applet;
+
+                    if (that.data.info && that.data.info.files) {
+                        loadOriginalXML();
+                    }
                 }
             });
         };
 
         GeogebraInjectionPlugin.prototype.deactivate = function () {
             this.isActive = false;
-            $('.editor-plugin-wrapper').unbind('scroll', this.onScroll);
             this.$el.detach();
         };
 
-        GeogebraInjectionPlugin.prototype.onScroll = _.debounce(function () {
-            if (typeof ggbApplet === 'object' && ggbApplet.startEditing) {
-                ggbApplet.startEditing();
-            }
-        }, 500);
-
         GeogebraInjectionPlugin.prototype.save = function (asImage) {
+            if (!this.ggbApplet) {
+                return;
+            }
+
             var that = this,
                 context,
                 imageData,
                 formData,
-                xml = ggbApplet.getXML();
+                xml = that.ggbApplet.getXML();
 
 
             function uploadFile(formData, url) {
@@ -193,7 +184,7 @@ define([
                 }).error(Common.genericError);
             }
 
-            function proceedSave (attachment) {
+            function proceedSave(attachment) {
                 var href = (asImage ? _.last(attachment.files) : _.first(attachment.files)).location;
                 $('.href', that.$el).val(href);
 
@@ -208,7 +199,7 @@ define([
                 .success(function (attachment) {
                     if (asImage) {
                         // Prepare Image File Upload
-                        context = ggbApplet.getContext2D();
+                        context = that.ggbApplet.getContext2D();
                         imageData = context.canvas.toDataURL('image/jpeg');
                         imageData = atob(imageData.split(',')[1]);
                         formData = that.createUploadFormData(imageData, 'image/jpeg', 'geogebra.jpg');
@@ -231,7 +222,7 @@ define([
             //     this.showImagePreview(imageData);
 
             // } else {
-                
+
             // }
 
             // console.log(xml);

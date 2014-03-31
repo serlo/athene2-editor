@@ -301,6 +301,8 @@ define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events', 'content', 'shortcut
             this.$pluginWrapper
                 .append(plugin.$el)
                 .appendTo($body);
+
+            plugin.render();
         };
 
         Editor.prototype.resize = function () {
