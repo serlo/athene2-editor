@@ -2,9 +2,9 @@
  * Serverside Markdown Parser
  *
  * Uses a slightly modified version of showdown.
- * 
+ *
  * Offers a `render` method via dNode.
- * 
+ *
  */
 
 var dnode = require('dnode'),
@@ -19,7 +19,7 @@ Showdown.extensions.serloinjections = require('../source/scripts/editor/showdown
 Showdown.extensions.serlotable = require('../source/scripts/editor/showdown/extensions/table');
 Showdown.extensions.serlospoiler = require('../source/scripts/editor/showdown/extensions/spoiler');
 Showdown.extensions.serlolatex = require('../source/scripts/editor/showdown/extensions/latex');
-Showdown.extensions.serlohtmlstrip = require('../source/scripts/editor/showdown/extensions/htmlStrip');
+Showdown.extensions.serlohtmlstrip = require('../source/scripts/editor/showdown/extensions/htmlstrip');
 Showdown.extensions.serloatusername = require('../source/scripts/editor/showdown/extensions/atUsername');
 Showdown.extensions.serlonewline = require('../source/scripts/editor/showdown/extensions/newline');
 Showdown.extensions.serlostrikethrough = require('../source/scripts/editor/showdown/extensions/strikeThrough');
@@ -58,7 +58,7 @@ function render(input, callback) {
         return;
     }
 
-    if(input === "") {
+    if (input === "") {
         callback("");
     } else {
 
@@ -66,7 +66,7 @@ function render(input, callback) {
         try {
             input = input.trim().replace(/&quot;/g, '"');
             data = JSON.parse(input);
-        } catch(e) {
+        } catch (e) {
             callback('', 'InvalidArgumentException', 'No valid json string given: ' + input);
             return;
         }
