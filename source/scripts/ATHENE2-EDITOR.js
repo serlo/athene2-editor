@@ -64,8 +64,13 @@ define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events', 'content', 'shortcut
             eventScope(this);
 
             Content.add(function (context) {
-                var $context = $(context);
-                MathJax.Hub.Typeset(context);
+                var $context = $(context),
+                    elements = $('.math, .mathInline', $context).toArray();
+
+                if (elements.length) {
+                    // Only run typeset when elements are not empty or everything will get typesetted
+                    MathJax.Hub.Queue(["Typeset", MathJax.Hub, elements]);
+                }
 
                 if ($context.parents('.spoiler').length) {
                     $context.parents('.spoiler').Spoiler();
@@ -373,6 +378,7 @@ require(['jquery',
                 displayAlign: 'left',
                 extensions: ["tex2jax.js"],
                 jax: ["input/TeX", "output/HTML-CSS"],
+                skipStartupTypeset: 'true',
                 tex2jax: {
                     inlineMath: [["%%", "%%"]]
                 },
@@ -382,7 +388,6 @@ require(['jquery',
                         automatic: true
                     }
                 },
-
                 SVG: {
                     linebreaks: {
                         automatic: true
