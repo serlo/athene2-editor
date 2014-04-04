@@ -10,7 +10,8 @@
 
         filter = function (text) {
             return text.replace(findSpoilers, function (original, title, content) {
-                content = content.replace(/\//g, "&#47;");
+                // Not sure what this does, but it breaks formulas in spoilers
+                //content = content.replace(/\//g, "&#47;");
                 return '<div class="spoiler"><a href="#" class="spoiler-teaser">' + title + '</a><div class="spoiler-content">' + converter.makeHtml(content) + '</div></div>';
             });
         };
