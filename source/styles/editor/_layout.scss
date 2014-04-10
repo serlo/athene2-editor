@@ -279,10 +279,36 @@ header {
     margin-top: 50px;
     display: inline-block;
     text-align: left;
+    width: auto;
 }
 
-.editor-plugin-geogebra {
-    width: 90%;
+.editor-geogebra-plugin {
+    .panel-body {
+        width: 80%;
+    }
+}
+
+/* jquery.ui resizable */
+.ui-resizable {
+    position: relative;
+
+    & + {
+        .panel-footer {
+            padding-right: 35px;
+        }
+    }
+}
+
+.ui-resizable-handle {
+    position: absolute;
+    top: auto;
+    bottom: -29px;
+    right: 10px;
+    width: 16px;
+    height: 16px;
+
+    color: black;
+    font-size: 16px;
 }
 
 /* SPOILERS */

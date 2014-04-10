@@ -64,13 +64,9 @@ define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events', 'content', 'shortcut
             eventScope(this);
 
             Content.add(function (context) {
-                var $context = $(context),
-                    elements = $('.math, .mathInline', $context).toArray();
+                var $context = $(context);
 
-                if (elements.length) {
-                    // Only run typeset when elements are not empty or everything will get typesetted
-                    MathJax.Hub.Queue(["Typeset", MathJax.Hub, elements]);
-                }
+                MathJax.Hub.Queue(["Typeset", MathJax.Hub, context]);
 
                 if ($context.parents('.spoiler').length) {
                     $context.parents('.spoiler').Spoiler();
@@ -345,10 +341,10 @@ require(['jquery',
     'system_notification',
     'showdown_table',
     'showdown_spoiler',
+    'showdown_spoiler_prepare',
     'showdown_htmlstrip',
     'showdown_latex',
     'showdown_injections',
-    'showdown_spoiler',
     'showdown_atusername',
     'showdown_strikethrough',
     'showdown_newline',
@@ -434,7 +430,7 @@ require(['jquery',
                     textEditor,
                     layoutBuilderConfiguration = new LayoutBuilderConfiguration(),
                     parser = new Parser(),
-                    converter = new Showdown.converter({ extensions: ['injections', 'table', 'htmlstrip', 'latex', 'atusername', 'strikethrough', 'spoiler', 'newline'] }),
+                    converter = new Showdown.converter({ extensions: ['injections', 'table', 'htmlstrip', 'latex', 'atusername', 'strikethrough', 'spoiler', 'spoilerprepare', 'newline'] }),
                     pluginManager = new PluginManager();
 
                 // converter.config.math = true;

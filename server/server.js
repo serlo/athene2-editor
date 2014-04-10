@@ -17,6 +17,7 @@ var dnode = require('dnode'),
 // Load custom extensions
 Showdown.extensions.serloinjections = require('../source/scripts/editor/showdown/extensions/injections');
 Showdown.extensions.serlotable = require('../source/scripts/editor/showdown/extensions/table');
+Showdown.extensions.serlospoilerprepare = require('../source/scripts/editor/showdown/extensions/spoilerprepare');
 Showdown.extensions.serlospoiler = require('../source/scripts/editor/showdown/extensions/spoiler');
 Showdown.extensions.serlolatex = require('../source/scripts/editor/showdown/extensions/latex');
 Showdown.extensions.serlohtmlstrip = require('../source/scripts/editor/showdown/extensions/htmlstrip');
@@ -31,6 +32,7 @@ converter = new Showdown.converter({
         'serlostrikethrough',
         'serlonewline',
         'serlotable',
+        'serlospoilerprepare',
         'serlospoiler',
         'serlohtmlstrip',
         'serlolatex'

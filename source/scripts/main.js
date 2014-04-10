@@ -14,7 +14,10 @@ require.config({
     baseUrl: "/build/scripts",
     paths: {
         "jquery": "../bower_components/jquery/jquery",
+        "jquery.ui": "../bower_components/jquery-ui/ui/jquery-ui",
         "jquery.ui.widget": "../bower_components/jquery-ui/ui/jquery.ui.widget",
+        "jquery.ui.mouse" : "../bower_components/jquery-ui/ui/jquery.ui.mouse",
+        "jquery.ui.resizable" : "../bower_components/jquery-ui/ui/jquery.ui.resizable",
         "quickdiff": "libs/quickdiff",
 
         "loadimage": "../bower_components/blueimp-load-image/js/load-image",
@@ -46,6 +49,7 @@ require.config({
         "showdown": "../bower_components/showdown/src/showdown",
         "showdown_table" : "editor/showdown/extensions/table",
         "showdown_spoiler" : "editor/showdown/extensions/spoiler",
+        "showdown_spoiler_prepare" : "editor/showdown/extensions/spoilerprepare",
         "showdown_htmlstrip" : "editor/showdown/extensions/htmlstrip",
         "showdown_latex" : "editor/showdown/extensions/latex",
         "showdown_injections" : "editor/showdown/extensions/injections",
@@ -104,6 +108,17 @@ require.config({
         },
         codemirror: {
             exports: "CodeMirror"
+        },
+        "jquery.ui.widget": {
+            deps: ['jquery.ui']
+        },
+        "jquery.ui.mouse": {
+            deps: [
+                'jquery.ui.widget'
+            ]
+        },
+        "jquery.ui.resizable": {
+            deps: ['jquery.ui.mouse']
         },
         "ATHENE2-EDITOR": {
             deps: [

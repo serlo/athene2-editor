@@ -1,5 +1,5 @@
 /*global define*/
-define(['jquery', 'events', 'translator', 'text!./editor/templates/plugins/default.html'], function ($, eventScope, t, plugin_template) {
+define(['jquery', 'events', 'translator', 'text!./editor/templates/plugins/default.html', 'jquery.ui.resizable'], function ($, eventScope, t, plugin_template) {
     var EditorPlugin,
         defaults = {};
 
@@ -41,9 +41,44 @@ define(['jquery', 'events', 'translator', 'text!./editor/templates/plugins/defau
     };
 
     EditorPlugin.prototype.activate = function () {
+
         this.$el = $(this.template(this.data));
+
+        this.makeRezisable();
+
         return this.$el;
     };
+
+    EditorPlugin.prototype.makeRezisable = function () {
+        var that = this,
+            $iframe = $('iframe', that.$el);
+
+        if (!$('.ui-resizable-se', that.$el).length) {
+            $('<div class="ui-resizable-handle ui-resizable-se glyphicon glyphicon-move">').appendTo($('.panel-body', that.$el));
+        }
+
+        $('.panel-body', that.$el).resizable({
+            handles: {
+                'se': $('.ui-resizable-se', that.$el)
+            },
+            resize: function (event, ui) {
+                var newWidth = ui.originalSize.width+((ui.size.width - ui.originalSize.width)*2);
+
+                // ui.size.height -= 40;
+
+                $(this).width(newWidth).position({
+                    of: that.$el,
+                    my: "center center",
+                    at: "center center"
+                });
+
+                if ($iframe.length) {
+                    $iframe.width(newWidth).height(ui.size.height - 140);
+                }
+            }
+        });
+
+    }
 
     EditorPlugin.prototype.deactivate = function () {
         this.$el.detach();
