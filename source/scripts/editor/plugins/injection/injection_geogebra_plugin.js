@@ -175,11 +175,9 @@ define([
                 context,
                 imageData,
                 formData,
-                xml = that.ggbApplet.getXML();
+                xml = unescape(encodeURIComponent(that.ggbApplet.getXML()));
 
             function uploadFile(formData, url) {
-                console.log("form data");
-                console.log(formData);
                 return $.ajax({
                     url: url || "/attachment/upload",
                     type: "POST",
@@ -241,21 +239,16 @@ define([
                 file,
                 formdata;
 
-            console.log(data);
-            console.log(data.length);
-
             for (var i = 0; i < data.length; i++) {
                 array.push(data.charCodeAt(i));
             }
-
-            console.log(array.length);
 
             file = new Blob([new Uint8Array(array)], {
                 type: type
             });
 
             formdata = new FormData();
-            formdata.append("attachment[file]", data, filename);
+            formdata.append("attachment[file]", file, filename);
             formdata.append("type", "geogebra");
             return formdata;
         };
