@@ -17,13 +17,13 @@ var dnode = require('dnode'),
 // Load custom extensions
 Showdown.extensions.serloinjections = require('../source/scripts/editor/showdown/extensions/injections');
 Showdown.extensions.serlotable = require('../source/scripts/editor/showdown/extensions/table');
-Showdown.extensions.serlospoilerprepare = require('../source/scripts/editor/showdown/extensions/spoilerprepare');
+Showdown.extensions.serlospoilerprepare = require('../source/scripts/editor/showdown/extensions/spoiler_prepare');
 Showdown.extensions.serlospoiler = require('../source/scripts/editor/showdown/extensions/spoiler');
 Showdown.extensions.serlolatex = require('../source/scripts/editor/showdown/extensions/latex');
-Showdown.extensions.serlohtmlstrip = require('../source/scripts/editor/showdown/extensions/htmlstrip');
-Showdown.extensions.serloatusername = require('../source/scripts/editor/showdown/extensions/atUsername');
+Showdown.extensions.serlohtmlstrip = require('../source/scripts/editor/showdown/extensions/html_strip');
+Showdown.extensions.serloatusername = require('../source/scripts/editor/showdown/extensions/at_username');
 Showdown.extensions.serlonewline = require('../source/scripts/editor/showdown/extensions/newline');
-Showdown.extensions.serlostrikethrough = require('../source/scripts/editor/showdown/extensions/strikeThrough');
+Showdown.extensions.serlostrikethrough = require('../source/scripts/editor/showdown/extensions/strike_through');
 
 converter = new Showdown.converter({
     extensions: [
