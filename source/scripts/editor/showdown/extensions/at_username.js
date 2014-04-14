@@ -12,7 +12,8 @@
                 }
             }},
 
-            // Escaped @'s
+            // Escaped @'s so we don't get into trouble
+            //
             { type: 'lang', regex: '\\\\@', replace: '@' }
         ];
     };
