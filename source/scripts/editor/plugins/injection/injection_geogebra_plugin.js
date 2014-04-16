@@ -175,7 +175,11 @@ define([
                 context,
                 imageData,
                 formData,
-                xml = unescape(encodeURIComponent(that.ggbApplet.getXML()));
+                xml = that.ggbApplet.getXML();
+
+            function toUtf8(string){
+                return unescape(encodeURIComponent(string));
+            }
 
             function uploadFile(formData, url) {
                 return $.ajax({
@@ -196,7 +200,10 @@ define([
             }
 
             // Prepare XML File Upload
-            formData = that.createUploadFormData(xml, 'application/xml', 'geogebra.xml');
+            // Geogebra XMLs are always utf8 encoded (as a matter of fact, almost every xml is encoded in uft8)
+            // We enforce this, so there are no encoding issues
+            var utf8xml = toUtf8(xml);
+            formData = that.createUploadFormData(utf8xml, 'application/xml', 'geogebra.xml');
 
             uploadFile(formData)
                 .success(function (attachment) {
