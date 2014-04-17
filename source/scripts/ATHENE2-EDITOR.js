@@ -154,10 +154,10 @@ define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events', 'content', 'shortcut
 
                             that.currentToken.state.string = that.textEditor.doc.getRange(that.currentToken.state.startPos, that.currentToken.state.endPos);
 
-                            that.pluginManager.activate(plugin, that.currentToken);
                             that.activePlugin = plugin;
+                            that.pluginManager.activate(plugin, that.currentToken);
 
-                            that.showPlugin(plugin);
+                            that.showPlugin();
                         });
 
                         that.textEditor.addWidget(that.textEditor.getCursor(), that.$widget[0]);
@@ -181,7 +181,7 @@ define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events', 'content', 'shortcut
 
             that.pluginManager.addEventListener('toggle-plugin', function (plugin) {
                 that.activePlugin = plugin;
-                that.showPlugin(plugin);
+                that.showPlugin();
             });
 
             that.preview.addEventListener('field-select', function (field, column) {
@@ -298,12 +298,14 @@ define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events', 'content', 'shortcut
             return this;
         };
 
-        Editor.prototype.showPlugin = function (plugin) {
-            this.$pluginWrapper
-                .append(plugin.$el)
-                .appendTo($body);
+        Editor.prototype.showPlugin = function () {
+            if (this.activePlugin) {
+                this.$pluginWrapper
+                    .append(this.activePlugin.$el)
+                    .appendTo($body);
 
-            plugin.render();
+                this.activePlugin.render();
+            }
         };
 
         Editor.prototype.resize = function () {
