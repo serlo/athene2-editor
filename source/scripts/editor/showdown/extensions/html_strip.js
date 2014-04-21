@@ -11,7 +11,8 @@
             'tr': 'rowspan',
             'td': 'colspan|align',
             'th': 'rowspan|align',
-            'div': 'class'
+            'div': 'class',
+            'b' : 'class'
         },
         forceProtocol = false,
         testAllowed = new RegExp('^(' + allowedTags.toLowerCase() + ')$'),

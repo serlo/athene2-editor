@@ -1,4 +1,4 @@
-@import "compass/utilities/general/clearfix";
+@import "compass";
 
 @mixin contentColumnWidth($num, $grid, $gutter) {
     width: (100 / $grid) * $num * 1%;
@@ -69,13 +69,19 @@
 
 // Spoilers
 .spoiler {
-    > a {
-        display: block;
+    margin-top: 12px;
 
-        margin: 0 0 10px 0;
+    > a {
+        @include inline-block;
+
+        margin: 0 0 12px 0;
         padding: 4px 5px;
 
         background: #EEE;
+
+        .caret {
+            margin: 0 9px 0 7px;
+        }
     }
 }
 
