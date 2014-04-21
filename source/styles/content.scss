@@ -34,6 +34,7 @@
         margin-left: $gutter / -2;
         margin-right: $gutter / -2;
         // padding-bottom: 18px;
+        @include clearfix();
 
         .content-editor & {
             position: relative;
@@ -58,22 +59,54 @@
         max-width: 100%;
     }
 
-    .spoiler-content {
-        background: #eee;
-        padding: 19px 9px 9px;
+    .content-editor & {
+        .spoiler-content {
+            background: #eee;
+            padding: 19px 9px 9px;
+        }
     }
 }
 
-// Content aware
-// (also frontend)
-
+// Spoilers
 .spoiler {
     > a {
-        background: #eee;
+        display: block;
+
+        margin: 0 0 10px 0;
         padding: 4px 5px;
+
+        background: #EEE;
     }
 }
 
 .spoiler-content {
     display: none;
+}
+
+// Typography
+
+.r {
+
+    h2,
+    h3,
+    h4 {
+        font-weight: 600;
+
+        strong {
+            font-weight: 600;
+        }
+    }
+
+    h4 {
+        font-size: 18px;
+        margin-top: 20px;
+    }
+
+    h3 {
+        font-size: 22px;
+    }
+
+    h2 {
+        font-size: 26px;
+    }
 }
