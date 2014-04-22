@@ -82,7 +82,6 @@ define([
             that.trigger('add', newRow);
 
             if (!doNotTriggerSelect) {
-                console.log('SELECT');
                 newRow.trigger('select', newRow.columns[0]);
             }
 
