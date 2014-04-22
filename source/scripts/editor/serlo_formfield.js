@@ -80,7 +80,7 @@ define(['jquery', 'underscore', 'layout_builder', 'system_notification', 'events
                 // Truly empty the field when there is no content.
                 self.$field.val('');
             }
-        }, 2000);
+        }, 300);
 
         function focusJump(iterate, onlyRows) {
             var next,
