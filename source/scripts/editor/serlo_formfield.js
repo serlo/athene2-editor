@@ -177,7 +177,7 @@ define(['jquery', 'underscore', 'layout_builder', 'system_notification', 'events
             }]];
         }
 
-        _.each(data, function (columns) {
+        _.each(data, function (columns, key) {
             var row = [],
                 data = [],
                 layout;
@@ -187,7 +187,11 @@ define(['jquery', 'underscore', 'layout_builder', 'system_notification', 'events
                 data.push(column.content);
             });
 
-            layout = self.layoutBuilder.addRow(row, data);
+            layout = self.layoutBuilder.addRow(row, data, undefined, true);
+
+            if (key === 0) {
+                layout.trigger('select', layout.columns[0]);
+            }
         });
     };
 

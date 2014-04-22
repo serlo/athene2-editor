@@ -36,7 +36,7 @@ define([
             that.$el = layoutAdd.$el;
         };
 
-        LayoutBuilder.prototype.addRow = function (requestedLayout, data, atIndex) {
+        LayoutBuilder.prototype.addRow = function (requestedLayout, data, atIndex, doNotTriggerSelect) {
             var newRow,
                 before,
                 that = this;
@@ -81,7 +81,10 @@ define([
 
             that.trigger('add', newRow);
 
-            newRow.trigger('select', newRow.columns[0]);
+            if (!doNotTriggerSelect) {
+                console.log('SELECT');
+                newRow.trigger('select', newRow.columns[0]);
+            }
 
             return newRow;
         };
