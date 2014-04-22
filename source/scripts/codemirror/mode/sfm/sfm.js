@@ -90,10 +90,11 @@ CodeMirror.defineMode("sfm", function(cmCfg, modeCfg) {
                 if (anotherPeek === '*') {
                     state.inStrong = true;
                     stream.next();
-                } else {
+                    defStartPos(stream, state);
+                } else if (anotherPeek !== ' ') {
                     state.inEm = true;
+                    defStartPos(stream, state);
                 }
-                defStartPos(stream, state);
             }
 
             if (state.inStrong || state.inEm) {
