@@ -350,6 +350,7 @@ require(['jquery',
     'showdown_spoiler_prepare',
     'showdown_htmlstrip',
     'showdown_latex',
+    'showdown_latex_output',
     'showdown_injections',
     'showdown_atusername',
     'showdown_strikethrough',
@@ -436,7 +437,7 @@ require(['jquery',
                     textEditor,
                     layoutBuilderConfiguration = new LayoutBuilderConfiguration(),
                     parser = new Parser(),
-                    converter = new Showdown.converter({ extensions: ['injections', 'table', 'htmlstrip', 'latex', 'atusername', 'strikethrough', 'spoiler', 'spoilerprepare', 'newline'] }),
+                    converter = new Showdown.converter({ extensions: ['injections', 'table', 'htmlstrip', 'latex', 'latexoutput', 'atusername', 'strikethrough', 'spoiler', 'spoilerprepare', 'newline'] }),
                     pluginManager = new PluginManager();
 
                 // converter.config.math = true;

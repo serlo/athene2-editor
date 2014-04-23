@@ -52,6 +52,7 @@ require.config({
         "showdown_spoiler_prepare" : "editor/showdown/extensions/spoiler_prepare",
         "showdown_htmlstrip" : "editor/showdown/extensions/html_strip",
         "showdown_latex" : "editor/showdown/extensions/latex",
+        "showdown_latex_output" : "editor/showdown/extensions/latex_output",
         "showdown_injections" : "editor/showdown/extensions/injections",
         "showdown_strikethrough" : "editor/showdown/extensions/strike_through",
         "showdown_atusername" : "editor/showdown/extensions/at_username",

@@ -2,6 +2,7 @@
     var escapeCharacters,
         escapeCharacters_callback,
         _EncodeCode,
+        serloSpecificCharsToEscape,
         latex = function (converter) {
         var filter;
 
@@ -20,6 +21,8 @@
                     // Escape latex environment thingies
                     text = text.replace(/\$/g, "\\$");
                     text = text.replace(/%/g, "\\%");
+
+                    c = _EncodeCode(c);
 
                     return m1 + '<span class="mathInline">%%' + c + "%%</span>";
                 });
@@ -57,13 +60,44 @@
         //text = text.replace(/&/g, "&amp;");
 
         // Do the angle bracket song and dance:
-        text = text.replace(/</g, "&lt;");
+        // text = text.replace(/</g, "&lt;");
+
+        text = escapeSerloSpecificCharacters(text);
 
         // Now, escape characters that are magic in Markdown:
-        text = escapeCharacters(text, "\*`_{}[]\\", false);
+        // text = escapeCharacters(text, "\*`_{}[]\\", false);
+
 
         return text;
     };
+
+    serloSpecificCharsToEscape = (function () {
+        var regexp = '',
+            chars = ['\*', '`', '_', '\{', '\}', '\[', '\]', '<'],
+            replacements = {},
+            l = chars.length,
+            i = 0;
+
+        for (; i < l; i++) {
+            regexp += '\\' + chars[i];
+            replacements[chars[i]] = '§LT' + i;
+        }
+
+        regexp = new RegExp('([' + regexp + '])', 'gm');
+
+        function replace(match) {
+            return replacements[match] || match;
+        }
+
+        return {
+            regexp: regexp,
+            replace: replace
+        };
+    }());
+
+    function escapeSerloSpecificCharacters(text) {
+        return text.replace(serloSpecificCharsToEscape.regexp, serloSpecificCharsToEscape.replace);
+    }
 
     escapeCharacters = function (text, charsToEscape, afterBackslash) {
         // First we have to escape the escape characters so that
