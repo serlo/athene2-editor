@@ -91,6 +91,8 @@ define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events', 'content', 'shortcut
 
             that.$pluginWrapper = $('<div class="editor-plugin-wrapper">');
 
+            Content.init(that.preview.$el[0]);
+
             that.initKeyshortCuts(new Shortcuts());
 
             that.textEditor.on('change', _.throttle(function () {
@@ -376,7 +378,7 @@ require(['jquery',
                 displayAlign: 'left',
                 extensions: ["tex2jax.js"],
                 jax: ["input/TeX", "output/HTML-CSS"],
-                skipStartupTypeset: 'true',
+                skipStartupTypeset: true,
                 tex2jax: {
                     inlineMath: [["%%", "%%"]]
                 },
