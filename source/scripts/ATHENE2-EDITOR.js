@@ -72,6 +72,8 @@ define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events', 'content', 'shortcut
                     $context.parents('.spoiler').Spoiler();
                 } else if ($context.hasClass('spoiler')) {
                     $context.Spoiler();
+                } else {
+                    $('.spoiler', $context).Spoiler();
                 }
             });
 
