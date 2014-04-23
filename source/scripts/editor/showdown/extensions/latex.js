@@ -57,7 +57,7 @@
         //text = text.replace(/&/g, "&amp;");
 
         // Do the angle bracket song and dance:
-        text = text.replace(/</g, "&gt;");
+        text = text.replace(/</g, "&lt;");
 
         // Now, escape characters that are magic in Markdown:
         text = escapeCharacters(text, "\*`_{}[]\\", false);
