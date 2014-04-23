@@ -12,11 +12,15 @@
                     var c = m3;
                     c = c.replace(/^([ \t]*)/g, ""); // leading whitespace
                     c = c.replace(/[ \t]*$/g, ""); // trailing whitespace
-                    c = _EncodeCode(c);
-                    // Hack that fixes an issue, where %% 1%%% would be printed as <math>1</math>
-                    if (m4 === '%%%') {
-                        c += '%';
+                    // Solves an issue where the formula would end with %%% and therefore the last %
+                    // isn't added to c. However, this is a regex issue and should be solved there instead of here
+                    if(m4 == '%%%') {
+                        c += '% ';
                     }
+                    // Escape latex environment thingies
+                    text = text.replace(/\$/g, "\\$");
+                    text = text.replace(/%/g, "\\%");
+
                     return m1 + '<span class="mathInline">%%' + c + "%%</span>";
                 });
 
@@ -26,6 +30,9 @@
                     c = c.replace(/^([ \t]*)/g, ""); // leading whitespace
                     c = c.replace(/[ \t]*$/g, ""); // trailing whitespace
                     c = _EncodeCode(c);
+                    // Escape already transliterated $
+                    // However, do not escape already escaped $s
+                    text = text.replace(/[^\\]~D/g, "\\~D");
                     return m1 + '<span class="math">~D~D' + c + "~D~D</span>";
                 });
 
@@ -50,12 +57,7 @@
         //text = text.replace(/&/g, "&amp;");
 
         // Do the angle bracket song and dance:
-        //text = text.replace(/</g, "&lt;");
-        //text = text.replace(/>/g, "&gt;");
-
-        // Pipes are escaped early, unescape them into escaped pipes.
-        // Need to find better solution.
-        //text = text.replace(/~E124E/g, "\\|");
+        text = text.replace(/</g, "&gt;");
 
         // Now, escape characters that are magic in Markdown:
         text = escapeCharacters(text, "\*`_{}[]\\", false);
