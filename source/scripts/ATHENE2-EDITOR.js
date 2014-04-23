@@ -93,8 +93,6 @@ define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events', 'content', 'shortcut
 
             that.$pluginWrapper = $('<div class="editor-plugin-wrapper">');
 
-            Content.init(that.preview.$el[0]);
-
             that.initKeyshortCuts(new Shortcuts());
 
             that.textEditor.on('change', _.throttle(function () {
@@ -247,6 +245,8 @@ define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events', 'content', 'shortcut
 
             that.preview.setLayoutBuilderConfiguration(that.layoutBuilderConfiguration);
             that.preview.createFromForm(that.$form);
+
+            Content.init(that.preview.$el[0]);
 
             that.$submit.click(function () {
                 if (that.preview.submit) {
