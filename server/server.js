@@ -20,6 +20,7 @@ Showdown.extensions.serlotable = require('../source/scripts/editor/showdown/exte
 Showdown.extensions.serlospoilerprepare = require('../source/scripts/editor/showdown/extensions/spoiler_prepare');
 Showdown.extensions.serlospoiler = require('../source/scripts/editor/showdown/extensions/spoiler');
 Showdown.extensions.serlolatex = require('../source/scripts/editor/showdown/extensions/latex');
+Showdown.extensions.serlolatexoutput = require('../source/scripts/editor/showdown/extensions/latex_output');
 Showdown.extensions.serlohtmlstrip = require('../source/scripts/editor/showdown/extensions/html_strip');
 Showdown.extensions.serloatusername = require('../source/scripts/editor/showdown/extensions/at_username');
 Showdown.extensions.serlonewline = require('../source/scripts/editor/showdown/extensions/newline');
@@ -35,7 +36,8 @@ converter = new Showdown.converter({
         'serlospoilerprepare',
         'serlospoiler',
         'serlohtmlstrip',
-        'serlolatex'
+        'serlolatex',
+        'serlolatexoutput'
     ]
 });
 
