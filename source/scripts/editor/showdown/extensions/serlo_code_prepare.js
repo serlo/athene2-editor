@@ -24,9 +24,7 @@
 
                 function replace(whole, language, code) {
                     // escape all chars in code
-                    console.log(code);
                     code = code.replace(replacementRegexp, function (match) {
-                        console.log(match);
                         return replacements[match] || match;
                     });
 
