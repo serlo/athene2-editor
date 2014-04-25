@@ -5,7 +5,7 @@
         return [{
             type: 'lang',
             filter: (function () {
-                var charsToEncode = ['~D', '%', '\\\|', '/'],
+                var charsToEncode = ['~D', '%', '|', '/'],
                     replacements = {},
                     regexp,
                     i, l;
