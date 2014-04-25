@@ -57,6 +57,8 @@ require.config({
         "showdown_strikethrough" : "editor/showdown/extensions/strike_through",
         "showdown_atusername" : "editor/showdown/extensions/at_username",
         "showdown_newline" : "editor/showdown/extensions/newline",
+        "showdown_code_prepare" : "editor/showdown/extensions/serlo_code_prepare",
+        "showdown_code_output" : "editor/showdown/extensions/serlo_code_output",
 
         "content" : "modules/serlo_content",
         "spoiler" : "modules/serlo_spoiler",
