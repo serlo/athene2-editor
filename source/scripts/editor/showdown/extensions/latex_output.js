@@ -1,9 +1,7 @@
+/*global define, module, window*/
 (function () {
-    var escapeCharacters,
-        escapeCharacters_callback,
-        _EncodeCode,
-        serloSpecificCharsToEncode,
-        latexoutput = function (converter) {
+    var serloSpecificCharsToEncode,
+        latexoutput = function () {
             return [{
                 type: 'output',
                 filter: function (text) {
@@ -15,7 +13,7 @@
 
     serloSpecificCharsToEncode = (function () {
         var regexp,
-            chars = ['\*', '`', '_', '\{', '\}', '\[', '\]', '&lt;'],
+            chars = ['\*', '`', '_', '\{', '\}', '\[', '\]', '&lt;', '\\'],
             replacements = {},
             l = chars.length,
             i = 0;
@@ -38,7 +36,7 @@
 
     function encodeSerloSpecificChars(text) {
         return text.replace(serloSpecificCharsToEncode.regexp, serloSpecificCharsToEncode.replace);
-    };
+    }
 
 
     // Client-side export

@@ -332,36 +332,37 @@ define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events', 'content', 'shortcut
     });
 
 require(['jquery',
-    'underscore',
-    'common',
-    'translator',
-    'ATHENE2-EDITOR',
-    'codemirror',
-    'parser',
-    'preview',
-    'showdown',
-    'layout_builder_configuration',
-    'texteditor_helper',
-    'texteditor_plugin_manager',
-    'texteditor_plugin',
-    'system_notification',
-    'showdown_table',
-    'showdown_spoiler',
-    'showdown_spoiler_prepare',
-    'showdown_htmlstrip',
-    'showdown_latex',
-    'showdown_latex_output',
-    'showdown_injections',
-    'showdown_atusername',
-    'showdown_strikethrough',
-    'showdown_newline',
-    'showdown_code_prepare',
-    'showdown_code_output',
-    'texteditor_plugin_image',
-    'texteditor_plugin_wiris',
-    'texteditor_plugin_injection',
-    'texteditor_plugin_default_injection',
-    'texteditor_plugin_geogebra_injection'],
+        'underscore',
+        'common',
+        'translator',
+        'ATHENE2-EDITOR',
+        'codemirror',
+        'parser',
+        'preview',
+        'showdown',
+        'layout_builder_configuration',
+        'texteditor_helper',
+        'texteditor_plugin_manager',
+        'texteditor_plugin',
+        'system_notification',
+        'showdown_table',
+        'showdown_spoiler',
+        'showdown_spoiler_prepare',
+        'showdown_htmlstrip',
+        'showdown_latex',
+        'showdown_latex_output',
+        'showdown_injections',
+        'showdown_atusername',
+        'showdown_strikethrough',
+        'showdown_newline',
+        'showdown_code_prepare',
+        'showdown_code_output',
+        'texteditor_plugin_image',
+        'texteditor_plugin_wiris',
+        'texteditor_plugin_injection',
+        'texteditor_plugin_default_injection',
+        'texteditor_plugin_geogebra_injection'
+    ],
     function ($,
         _,
         Common,
@@ -385,7 +386,9 @@ require(['jquery',
                 jax: ["input/TeX", "output/HTML-CSS"],
                 skipStartupTypeset: true,
                 tex2jax: {
-                    inlineMath: [["%%", "%%"]]
+                    inlineMath: [
+                        ["%%", "%%"]
+                    ]
                 },
                 "HTML-CSS": {
                     scale: 100,
@@ -413,7 +416,8 @@ require(['jquery',
                     return (node.nodeName === "SPAN" && $(node).hasClass("mathInline"));
                 },
                 function (a, b) {
-                    var aHTML = $.trim($("script", a).text()), bHTML = $.trim($(b).text());
+                    var aHTML = $.trim($("script", a).text()),
+                        bHTML = $.trim($(b).text());
                     return ("%%" + aHTML + "%%") !== bHTML;
                 });
 
@@ -423,15 +427,16 @@ require(['jquery',
                     return (node.nodeName === "SPAN" && $(node).hasClass("math"));
                 },
                 function (a, b) {
-                    var aHTML = $.trim($("script", a).text()), bHTML = $.trim($(b).text());
+                    var aHTML = $.trim($("script", a).text()),
+                        bHTML = $.trim($(b).text());
                     return ("$$" + aHTML + "$$") !== bHTML;
                 });
 
             $.fn.quickdiff("attributes", {
-                "td" : ["align"],
-                "th" : ["align"],
-                "img" : ["src", "alt", "title"],
-                "a" : ["href", "title"]
+                "td": ["align"],
+                "th": ["align"],
+                "img": ["src", "alt", "title"],
+                "a": ["href", "title"]
             });
 
             function init() {
@@ -469,11 +474,11 @@ require(['jquery',
                     .addLayout([9, 15])
                     .addLayout([6, 18])
 
-                    .addLayout([6, 4, 14])
+                .addLayout([6, 4, 14])
                     .addLayout([9, 4, 11])
                     .addLayout([12, 4, 8])
 
-                    .addLayout([16, 8])
+                .addLayout([16, 8])
                     .addLayout([8, 8, 8])
                     .addLayout([6, 6, 12])
                     .addLayout([12, 6, 6])
@@ -517,8 +522,8 @@ require(['jquery',
 
                 editor = editor || new Editor({
                     $form: $('form').first(),
-                    $helpers : $('#editor-helpers'),
-                    $submit : $('#editor-actions .btn-success'),
+                    $helpers: $('#editor-helpers'),
+                    $submit: $('#editor-actions .btn-success'),
                     parser: parser,
                     layoutBuilderConfiguration: layoutBuilderConfiguration,
                     textEditor: textEditor,
