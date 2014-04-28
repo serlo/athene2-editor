@@ -1,6 +1,6 @@
 /**
  * 
- * Athene2 Editor - v0.1.35 
+ * Athene2 Editor - v0.1.36 
  *
  * @license LGPL-3.0
  * @license http://opensource.org/licenses/LGPL-3.0 The GNU Lesser General Public License, version 3.0
