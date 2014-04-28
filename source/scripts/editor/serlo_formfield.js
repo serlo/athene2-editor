@@ -156,6 +156,8 @@ define(['jquery', 'underscore', 'layout_builder', 'system_notification', 'events
             _.each(row.columns, function (column) {
                 self.trigger('column-add', column);
             });
+
+            self.updateField();
         });
 
         self.$el.append(self.layoutBuilder.$el);
