@@ -1,12 +1,12 @@
 /*global define*/
 define([
-    'jquery',
-    'underscore',
-    'common',
-    'system_notification',
-    'texteditor_plugin',
-    'translator',
-    'text!./editor/templates/plugins/injection/injection_plugin_default.html'
+        'jquery',
+        'underscore',
+        'common',
+        'system_notification',
+        'texteditor_plugin',
+        'translator',
+        'text!./editor/templates/plugins/injection/injection_plugin_default.html'
     ],
     function ($, _, Common, SystemNotification, EditorPlugin, t, plugin_template) {
         "use strict";
@@ -15,7 +15,7 @@ define([
             hrefRegexp;
 
         titleRegexp = new RegExp(/\[[^\]]*\]\(/);
-        hrefRegexp =  new RegExp(/\([^\)]*\)/);
+        hrefRegexp = new RegExp(/\([^\)]*\)/);
 
         DefaultInjectionPlugin = function (data) {
             this.state = 'default-injection';
@@ -60,8 +60,18 @@ define([
         };
 
         DefaultInjectionPlugin.prototype.save = function () {
-            this.data.content = '>[' + $('.title', this.$el).val() + '](' + $('.href', this.$el).val() + ')';
+            this.setAndValidateContent();
             this.trigger('save', this);
+        };
+
+        DefaultInjectionPlugin.prototype.setAndValidateContent = function () {
+            var href = $('.href', this.$el).val();
+
+            if (href.substr(0, 1) !== '/') {
+                href = '/' + href;
+            }
+
+            this.data.content = '>[' + $('.title', this.$el).val() + '](' + href + ')';
         };
 
         EditorPlugin.DefaultInjection = DefaultInjectionPlugin;
