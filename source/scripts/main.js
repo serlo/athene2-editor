@@ -127,11 +127,11 @@ require.config({
             deps: [
                 'bootstrap',
                 'polyfills',
-                'datepicker',
                 'fileupload',
                 'quickdiff',
                 'markdownmode',
-                'searchcursor'
+                'searchcursor',
+                'datepicker'
             ]
         }
     },
