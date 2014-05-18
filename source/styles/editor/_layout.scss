@@ -16,6 +16,7 @@ header {
 #serlo-menu {
     margin-bottom: 0;
     border-bottom: 0 none;
+    line-height: 28px;
 
     .navbar-nav a {
         padding: 6px 12px;
@@ -127,7 +128,6 @@ header {
     .helper {
         display: inline-block;
         padding: 3px 12px 0 12px;
-        line-height: 28px;
         border-left: 1px solid #C5C5C5;
         border-right: 1px solid #C5C5C5;
         text-align: center;
