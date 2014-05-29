@@ -14,7 +14,7 @@ require.config({
     baseUrl: "/build/scripts",
     paths: {
         "jquery": "../bower_components/jquery/jquery",
-        "jquery.ui": "../bower_components/jquery-ui/ui/jquery-ui",
+        "jquery.ui.core": "../bower_components/jquery-ui/ui/jquery.ui.core",
         "jquery.ui.widget": "../bower_components/jquery-ui/ui/jquery.ui.widget",
         "jquery.ui.mouse" : "../bower_components/jquery-ui/ui/jquery.ui.mouse",
         "jquery.ui.resizable" : "../bower_components/jquery-ui/ui/jquery.ui.resizable",
@@ -112,8 +112,9 @@ require.config({
         codemirror: {
             exports: "CodeMirror"
         },
+
         "jquery.ui.widget": {
-            deps: ['jquery.ui']
+            deps: ['jquery.ui.core']
         },
         "jquery.ui.mouse": {
             deps: [

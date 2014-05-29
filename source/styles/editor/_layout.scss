@@ -23,8 +23,10 @@ header {
     }
 }
 
-#content {
+#content-layout {
     min-height: 0;
+    padding: 0;
+    width: 100%;
 }
 
 #editor-wrap {
@@ -128,7 +130,7 @@ header {
     .helper {
         display: inline-block;
         padding: 3px 12px 0 12px;
-        border-left: 1px solid #C5C5C5;
+        border-left: none;
         border-right: 1px solid #C5C5C5;
         text-align: center;
         background: rgba(255, 255, 255, 0.5);
@@ -141,10 +143,6 @@ header {
             background: rgba(255, 255, 255, 0.75);
             box-shadow: 0 0 10px #CECECE inset;
             text-shadow: 0px 0px 5px #D8D8D8;
-        }
-
-        + .helper {
-            border-left: none;
         }
 
         &.active {

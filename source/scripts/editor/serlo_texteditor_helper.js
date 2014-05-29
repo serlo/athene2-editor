@@ -18,8 +18,16 @@ define(['jquery', 'common', 'events', 'translator'], function ($, Common, eventS
             .addClass('helper')
             .attr({
                 href: '#',
-                title: settings.title
+                title: that.settings.title
             });
+
+        if (that.settings.description) {
+            that.$el.attr({
+                'data-toggle': 'tooltip',
+                'data-placement' : 'bottom',
+                'title': that.settings.description
+            });
+        }
 
         if (that.settings.icon) {
             that.$el.html('<i class="glyphicon glyphicon-' + that.settings.icon + '"></i>');
@@ -86,7 +94,8 @@ define(['jquery', 'common', 'events', 'translator'], function ($, Common, eventS
             replaceAfter: '**',
             cursorDelta: 2,
             selectionDelta: 'selection',
-            shortcut: 'cmd+66'
+            shortcut: 'cmd+66',
+            description: t('Make selected text bold')
         });
     };
 
@@ -98,7 +107,8 @@ define(['jquery', 'common', 'events', 'translator'], function ($, Common, eventS
             replaceAfter: '*',
             cursorDelta: 1,
             selectionDelta: 'selection',
-            shortcut: 'cmd+73'
+            shortcut: 'cmd+73',
+            description: t('Make selected text italic')
         });
     };
 
@@ -109,7 +119,8 @@ define(['jquery', 'common', 'events', 'translator'], function ($, Common, eventS
             replaceBefore: '* ',
             replaceAfter: '\n* ',
             cursorDelta: 2,
-            selectionDelta: 'selection'
+            selectionDelta: 'selection',
+            description: t('Insert a list')
         });
     };
 
@@ -120,7 +131,8 @@ define(['jquery', 'common', 'events', 'translator'], function ($, Common, eventS
             replaceBefore: '[Link Title](',
             replaceAfter: ')',
             cursorDelta: 1,
-            selectionDelta: 10
+            selectionDelta: 10,
+            description: t('Insert a link')
         });
     };
 
@@ -131,7 +143,8 @@ define(['jquery', 'common', 'events', 'translator'], function ($, Common, eventS
             replaceBefore: '>[Injection Title](',
             replaceAfter: ')',
             cursorDelta: 2,
-            selectionDelta: 15
+            selectionDelta: 15,
+            description: t('Insert an injection or geogebra')
         });
     };
 
@@ -142,7 +155,8 @@ define(['jquery', 'common', 'events', 'translator'], function ($, Common, eventS
             replaceBefore: '![Image Title](',
             replaceAfter: ')',
             cursorDelta: 2,
-            selectionDelta: 11
+            selectionDelta: 11,
+            description: t('Insert an image')
         });
     };
 
@@ -152,7 +166,8 @@ define(['jquery', 'common', 'events', 'translator'], function ($, Common, eventS
             replaceBefore: '$$',
             replaceAfter: '$$',
             cursorDelta: 2,
-            selectionDelta: 'selection'
+            selectionDelta: 'selection',
+            description: t('Insert a LaTex formula')
         });
     };
 
@@ -232,7 +247,8 @@ define(['jquery', 'common', 'events', 'translator'], function ($, Common, eventS
             replaceBefore: "/// " + titleText + "\n",
             replaceAfter: "\n///",
             cursorDelta: 4,
-            selectionDelta: titleText.length
+            selectionDelta: titleText.length,
+            description: t('Insert a spoiler')
         });
     };
 

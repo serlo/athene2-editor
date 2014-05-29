@@ -1,7 +1,7 @@
 /*global define*/
 define(['jquery', 'translator'], function ($, t) {
     "use strict";
-    var rootSelector = '#content',
+    var rootSelector = '#content-layout',
         $wrapper,
         uniqueNotifications = {},
         SystemNotification,
