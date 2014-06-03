@@ -6,6 +6,9 @@
     padding: 0 ($gutter/2);
     float: left;
 
+    hyphens: auto;
+    word-wrap: break-word;
+
     .content-editor & {
         min-height: 20px;
         cursor: pointer;
