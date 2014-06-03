@@ -248,6 +248,15 @@ define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events', 'content', 'shortcut
 
             Content.init(that.preview.$el[0]);
 
+            (function () {
+                var $possibleErrors = that.preview.$el.find('.has-error');
+                if ($possibleErrors.length) {
+                    that.preview.$el.parent().animate({
+                        scrollTop: $possibleErrors.first().position().top
+                    });
+                }
+            }());
+
             that.$submit.click(function () {
                 if (that.preview.submit) {
                     $(that.preview.submit).click();
@@ -547,6 +556,8 @@ require(['jquery',
                 editor.addHelper(new TextEditorHelper.Fullscreen());
 
                 editor.initialize();
+
+                $('.helper').tooltip();
 
                 window.editor = editor;
                 Common.addEventListener('generic error', function () {

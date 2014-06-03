@@ -17,7 +17,7 @@ define(['jquery', 'underscore', 'layout_builder', 'system_notification', 'events
         this.hasError = !!this.$field.parents('.has-error').length;
 
         if (this.hasError) {
-            $errorList = this.$field.siblings().filter('.help-block');
+            $errorList = this.$field.parents('.form-group').find('.help-block');
             $('li', $errorList).each(function () {
                 SystemNotification.notify(this.innerHTML, 'danger', true);
             });
