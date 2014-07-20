@@ -301,8 +301,14 @@ define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events', 'content', 'shortcut
             });
         };
 
-        Editor.prototype.addHelper = function (helper) {
-            this.$helpers.append(helper.$el);
+        Editor.prototype.addHelper = function (helper, id) {
+            var $group = $('#editor-plugin-group-' + id);
+            if (!$group.length) {
+                $group = $('<div>')
+                    .addClass('btn-group').attr({id: 'editor-plugin-group-' + id});
+                this.$helpers.append($group);
+            }
+            $group.append(helper.$el);
             this.helpers.push(helper);
         };
 
@@ -323,7 +329,7 @@ define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events', 'content', 'shortcut
 
         Editor.prototype.resize = function () {
             if (this.textEditor) {
-                this.textEditor.setSize($window.width() / 2, $window.height() - 81);
+                this.textEditor.setSize($window.width() / 2, $window.height() - 58);
             }
             return this;
         };
@@ -363,7 +369,6 @@ require(['jquery',
         'showdown_injections',
         'showdown_atusername',
         'showdown_strikethrough',
-        'showdown_newline',
         'showdown_code_prepare',
         'showdown_code_output',
         'texteditor_plugin_image',
@@ -464,7 +469,6 @@ require(['jquery',
                             'strikethrough',
                             'spoiler',
                             'spoilerprepare',
-                            'newline',
                             'latexoutput',
                             'codeoutput'
                         ]
@@ -542,22 +546,30 @@ require(['jquery',
                     pluginManager: pluginManager
                 });
 
-                editor.addHelper(new TextEditorHelper.Bold(textEditor));
-                editor.addHelper(new TextEditorHelper.Italic(textEditor));
-                editor.addHelper(new TextEditorHelper.List(textEditor));
-                editor.addHelper(new TextEditorHelper.Link(textEditor));
-                editor.addHelper(new TextEditorHelper.Injection(textEditor));
-                editor.addHelper(new TextEditorHelper.Image(textEditor));
-                editor.addHelper(new TextEditorHelper.Undo(textEditor));
-                editor.addHelper(new TextEditorHelper.Redo(textEditor));
-                editor.addHelper(new TextEditorHelper.Formula(textEditor));
-                editor.addHelper(new TextEditorHelper.Spoiler(textEditor));
-                editor.addHelper(new TextEditorHelper.HidePlugins(textEditor));
+
+                editor.addHelper(new TextEditorHelper.Undo(textEditor), '3');
+                editor.addHelper(new TextEditorHelper.Redo(textEditor), '3');
+
+                editor.addHelper(new TextEditorHelper.Bold(textEditor), '1');
+                editor.addHelper(new TextEditorHelper.Italic(textEditor), '1');
+                editor.addHelper(new TextEditorHelper.Strike(textEditor), '1');
+                editor.addHelper(new TextEditorHelper.List(textEditor), '1');
+
+                editor.addHelper(new TextEditorHelper.Link(textEditor), '2');
+                editor.addHelper(new TextEditorHelper.Injection(textEditor), '2');
+                editor.addHelper(new TextEditorHelper.Image(textEditor), '2');
+                editor.addHelper(new TextEditorHelper.Formula(textEditor), '2');
+                editor.addHelper(new TextEditorHelper.Spoiler(textEditor), '2');
+
+                editor.addHelper(new TextEditorHelper.HidePlugins(textEditor), '4');
+
                 editor.addHelper(new TextEditorHelper.Fullscreen());
 
                 editor.initialize();
 
-                $('.helper').tooltip();
+                $('.helper').tooltip({
+                    container: 'body'
+                });
 
                 window.editor = editor;
                 Common.addEventListener('generic error', function () {

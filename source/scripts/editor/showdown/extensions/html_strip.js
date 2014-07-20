@@ -4,7 +4,7 @@
             'table|th|tr|td|tbody|thead|tfoot|div',
         allowedAttributes = {
             'img': 'src|width|height|alt',
-            'a': 'href',
+            'a': 'href|name',
             '*': 'title',
             'span': 'class',
             'table': 'class',
@@ -12,7 +12,13 @@
             'td': 'colspan|align',
             'th': 'rowspan|align',
             'div': 'class',
-            'b' : 'class'
+            'b': 'class',
+            'h1': 'id',
+            'h2': 'id',
+            'h3': 'id',
+            'h4': 'id',
+            'h5': 'id',
+            'h6': 'id'
         },
         forceProtocol = false,
         testAllowed = new RegExp('^(' + allowedTags.toLowerCase() + ')$'),

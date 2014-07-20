@@ -63,11 +63,42 @@
         max-width: 100%;
     }
 
-    .content-editor & {
-        .spoiler-content {
-            background: #eee;
-            padding: 19px 9px 9px;
-        }
+    h1 {
+        font-size: 2.3em;
+    }
+
+    h2 {
+        font-size: 2em;
+    }
+
+    h3 {
+        font-size: 1.5em;
+    }
+
+    h4 {
+        font-size: 1.2em;
+    }
+
+    h5 {
+      font-size: 1em;
+    }
+
+    h6 {
+      font-size: 1em;
+      color: #888;
+    }
+
+    h1, h2 {
+        border-bottom: 1px solid #EEE;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        margin: 1em 0px 15px;
+        padding: 0px;
+        font-weight: bold;
+        line-height: 1.7;
+        cursor: text;
+        position: relative;
     }
 }
 
@@ -75,17 +106,8 @@
 .spoiler {
     margin-top: 12px;
 
-    > a {
-        @include inline-block;
-
-        margin: 0 0 12px 0;
-        padding: 4px 5px;
-
-        background: #EEE;
-
-        .caret {
-            margin: 0 9px 0 7px;
-        }
+    .spoiler-teaser {
+        cursor: pointer;
     }
 }
 

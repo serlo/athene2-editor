@@ -10,7 +10,7 @@
 
         filter = function (text) {
             return text.replace(findSpoilers, function (original, title, content) {
-                return '<div class="spoiler"><a href="#" class="spoiler-teaser">' + title + '&nbsp;<b class="caret"></b></a><div class="spoiler-content">' + content + '</div></div>';
+                return '<div class="spoiler panel panel-default"><div class="spoiler-teaser panel-heading">' + title + '<span class="glyphicon-regular glyphicon-expand pull-right">&nbsp;</span></div><div class="spoiler-content panel-body">' + content + '</div></div>';
             });
         };
 
