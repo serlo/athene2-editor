@@ -1,144 +1,120 @@
 @import "compass";
 
 @mixin contentColumnWidth($num, $grid, $gutter) {
-    width: (100 / $grid) * $num * 1%;
-    box-sizing: border-box;
-    padding: 0 ($gutter/2);
-    float: left;
-    min-height: 1px;
+  width: (100 / $grid) * $num * 1%;
+  box-sizing: border-box;
+  padding: 0 ($gutter/2);
+  float: left;
+  min-height: 1px;
 
-    hyphens: auto;
-    word-wrap: break-word;
+  hyphens: auto;
+  word-wrap: break-word;
 
-    .content-editor & {
-        min-height: 20px;
-        cursor: pointer;
-        
-        outline: 1px solid rgba(135, 206, 250, 0);
-        transition: 0.2s background 0s, 0.4s outline 0s;
+  .content-editor & {
+    min-height: 20px;
+    cursor: pointer;
 
-        &:hover {
-            outline: 1px solid rgba(135, 206, 250, 0.6);
-            background: rgba(135, 206, 250, 0.1);
-        }
+    outline: 1px solid rgba(135, 206, 250, 0);
+    transition: 0.2s background 0s, 0.4s outline 0s;
 
-        &.active {
-            outline: 2px solid lightskyblue;
-            background: rgba(135, 206, 250, 0.2);
-        }
-
+    &:hover {
+      outline: 1px solid rgba(135, 206, 250, 0.6);
+      background: rgba(135, 206, 250, 0.1);
     }
+
+    &.active {
+      outline: 2px solid lightskyblue;
+      background: rgba(135, 206, 250, 0.2);
+    }
+
+  }
 }
 
 .content {
-    $gutter: 30px;
-    $grid: 24;
+  $gutter: 30px;
+  $grid: 24;
 
-    .r {
-        margin-left: $gutter / -2;
-        margin-right: $gutter / -2;
-        // padding-bottom: 18px;
-        @include pie-clearfix();
+  .r {
+    margin-left: $gutter / -2;
+    margin-right: $gutter / -2;
+    // padding-bottom: 18px;
+    @include pie-clearfix();
 
-        .content-editor & {
-            position: relative;
-            // brower paint optimization hack            
-            transform: translateZ(0);
+    .content-editor & {
+      position: relative;
+      // brower paint optimization hack
+      transform: translateZ(0);
 
-            .row-actions {
-                position: absolute;
-                top: 38px;
-                right: 0;
-            }
-        }
+      .row-actions {
+        position: absolute;
+        top: 38px;
+        right: 0;
+      }
     }
+  }
 
-    @for $i from 1 through $grid {
-        .c#{$i} {
-            @include contentColumnWidth($i, $grid, $gutter);
-        }
+  @for $i from 1 through $grid {
+    .c#{$i} {
+      @include contentColumnWidth($i, $grid, $gutter);
     }
+  }
 
-    img {
-        max-width: 100%;
-    }
-
-    h1 {
-        font-size: 2.3em;
-    }
-
-    h2 {
-        font-size: 2em;
-    }
-
-    h3 {
-        font-size: 1.5em;
-    }
-
-    h4 {
-        font-size: 1.2em;
-    }
-
-    h5 {
-      font-size: 1em;
-    }
-
-    h6 {
-      font-size: 1em;
-      color: #888;
-    }
-
-    h1, h2 {
-        border-bottom: 1px solid #EEE;
-    }
-
-    h1, h2, h3, h4, h5, h6 {
-        margin: 1em 0px 15px;
-        padding: 0px;
-        font-weight: bold;
-        line-height: 1.7;
-        cursor: text;
-        position: relative;
-    }
+  img {
+    max-width: 100%;
+  }
 }
 
 // Spoilers
 .spoiler {
-    margin-top: 12px;
+  margin-top: 12px;
 
-    .spoiler-teaser {
-        cursor: pointer;
-    }
+  .spoiler-teaser {
+    cursor: pointer;
+  }
 }
 
 .spoiler-content {
-    display: none;
+  display: none;
 }
 
 // Typography
 
 .r {
+  h1 {
+    font-size: 2.3em;
+  }
 
-    h2,
-    h3,
-    h4 {
-        font-weight: 600;
+  h2 {
+    font-size: 2em;
+  }
 
-        strong {
-            font-weight: 600;
-        }
-    }
+  h3 {
+    font-size: 1.5em;
+  }
 
-    h4 {
-        font-size: 18px;
-        margin-top: 20px;
-    }
+  h4 {
+    font-size: 1.2em;
+  }
 
-    h3 {
-        font-size: 21px;
-    }
+  h5 {
+    font-size: 1em;
+  }
 
-    h2 {
-        font-size: 27px;
-    }
+  h6 {
+    font-size: 1em;
+    color: #888;
+  }
+
+  h1, h2 {
+    border-bottom: 1px solid #EEE;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    margin: 1em 0px 15px;
+    padding: 0px;
+    font-weight: bold;
+    line-height: 1.7;
+    cursor: text;
+    position: relative;
+  }
 }

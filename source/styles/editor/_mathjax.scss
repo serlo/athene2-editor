@@ -1,4 +1,4 @@
-strong>.mathInline {
+strong > .mathInline {
   display: inline;
   border: 1px solid #dddddd;
   padding: 8px;
@@ -6,7 +6,7 @@ strong>.mathInline {
   background-color: #F8F8F8;
 }
 
-em>.mathInline {
+em > .mathInline {
   display: inline;
   border: 1px solid #f3f3f3;
   padding: 4px;
@@ -14,7 +14,7 @@ em>.mathInline {
   background-color: #F8F8F8;
 }
 
-strong>.math {
+strong > .math {
   display: block;
   border: 1px solid #dddddd;
   padding: 8px;
@@ -24,7 +24,7 @@ strong>.math {
 
 }
 
-em>.math {
+em > .math {
   display: block;
   border: 1px solid #f3f3f3;
   padding: 4px;
