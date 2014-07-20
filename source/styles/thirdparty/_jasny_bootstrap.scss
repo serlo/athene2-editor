@@ -24,7 +24,6 @@
   left: -12px;
   display: inline-block;
   padding: 6px 12px;
-  background: transparent;
   background: rgba(0, 0, 0, .15);
   border-radius: 3px 0 0 3px;
 }
@@ -727,3 +726,8 @@
 }
 
 /*# sourceMappingURL=jasny-bootstrap.css.map */
+
+.btn-group > .btn:last-child:not(:first-child) .btn-label, .btn-group > .dropdown-toggle:not(:first-child) .btn-label {
+  border-bottom-left-radius: 0px;
+  border-top-left-radius: 0px;
+}

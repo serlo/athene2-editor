@@ -575,6 +575,10 @@ require(['jquery',
                 Common.addEventListener('generic error', function () {
                     SystemNotification.error();
                 });
+
+                $(window).bind('beforeunload', function(){
+                    return t('Are you sure you want to leave this page? All of your unsaved changes will be lost!');
+                });
             }
 
             init($('body'));
