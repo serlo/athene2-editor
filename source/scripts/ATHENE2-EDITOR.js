@@ -259,6 +259,8 @@ define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events', 'content', 'shortcut
 
             that.$submit.click(function () {
                 if (that.preview.submit) {
+
+                    $(window).unbind('beforeunload');
                     $(that.preview.submit).click();
                 }
             });
