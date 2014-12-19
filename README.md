@@ -1,6 +1,12 @@
 Athene2 Editor
 ==============
 
-*Work in progress*
+Install:
 
-No further information for now.
+```
+npm install
+bower install
+grunt dev
+```
+
+Open the `index.html` in your browser (served by a webserver like apache2)
