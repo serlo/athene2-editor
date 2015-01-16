@@ -7,8 +7,8 @@ You'll need [NodeJS](http://nodejs.org) and Ruby installed. Also make sure that 
 npm install bower -g
 npm install grunt-cli -g
 gem update --system
-gem install compass
-gem install sass
+gem install compass --version 0.12.2
+gem install sass --version 3.2.10
 ```
 
 Now, install the packages needed by the Editor:
