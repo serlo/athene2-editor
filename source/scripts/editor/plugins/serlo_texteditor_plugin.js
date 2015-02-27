@@ -54,7 +54,7 @@ define(['jquery', 'events', 'translator', 'text!./editor/templates/plugins/defau
             $iframe = $('iframe', that.$el);
 
         if (!$('.ui-resizable-se', that.$el).length) {
-            $('<div class="ui-resizable-handle ui-resizable-se glyphicon glyphicon-move">').appendTo($('.panel-body', that.$el));
+            $('<div class="ui-resizable-handle ui-resizable-se fa fa-arrows">').appendTo($('.panel-body', that.$el));
         }
 
         $('.panel-body', that.$el).resizable({

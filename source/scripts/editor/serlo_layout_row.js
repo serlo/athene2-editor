@@ -40,7 +40,7 @@ define([
                 .click(function () {
                     that.trigger('move-up');
                 })
-                .html('<i class="glyphicon glyphicon-chevron-up"/>');
+                .html('<i class="fa fa-chevron-up"/>');
 
             that.$down = $('<a href="#" class="btn btn-xs btn-default">')
                 .attr({
@@ -49,7 +49,7 @@ define([
                 .click(function () {
                     that.trigger('move-down');
                 })
-                .html('<i class="glyphicon glyphicon-chevron-down"/>');
+                .html('<i class="fa fa-chevron-down"/>');
 
             that.$remove.click(function (e) {
                 e.preventDefault();

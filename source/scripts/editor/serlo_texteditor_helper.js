@@ -30,7 +30,7 @@ define(['jquery', 'common', 'events', 'translator'], function ($, Common, eventS
         }
 
         if (that.settings.icon) {
-            that.$el.html('<i class="glyphicon-regular glyphicon-' + that.settings.icon + '"></i>');
+            that.$el.html('<i class="fa fa-' + that.settings.icon + '"></i>');
         } else {
             that.$el.html(settings.title);
         }
@@ -139,7 +139,7 @@ define(['jquery', 'common', 'events', 'translator'], function ($, Common, eventS
     TextEditorHelper.Injection = function (textEditor) {
         return new TextEditorHelper(textEditor, {
             title: 'Injection',
-            icon: 'embed',
+            icon: 'code',
             replaceBefore: '>[',
             replaceAfter: ']()',
             cursorDelta: 2,
@@ -151,7 +151,7 @@ define(['jquery', 'common', 'events', 'translator'], function ($, Common, eventS
     TextEditorHelper.Strike = function (textEditor) {
         return new TextEditorHelper(textEditor, {
             title: 'Strike',
-            icon: 'text-strike',
+            icon: 'strikethrough',
             replaceBefore: '~~',
             replaceAfter: '~~',
             cursorDelta: 2,
@@ -163,7 +163,7 @@ define(['jquery', 'common', 'events', 'translator'], function ($, Common, eventS
     TextEditorHelper.Image = function (textEditor) {
         return new TextEditorHelper(textEditor, {
             title: 'Image',
-            icon: 'picture',
+            icon: 'picture-o',
             replaceBefore: '![',
             replaceAfter: ']()',
             cursorDelta: 2,
@@ -186,7 +186,7 @@ define(['jquery', 'common', 'events', 'translator'], function ($, Common, eventS
     TextEditorHelper.Undo = function (textEditor) {
         var that = this;
         that.title = 'Undo';
-        that.$el = $('<a class="btn btn-default helper" data-toggle="tooltip" data-placement="bottom" href="#" title="' + that.title + '">').html('<i class="glyphicon-regular glyphicon-undo"></i>');
+        that.$el = $('<a class="btn btn-default helper" data-toggle="tooltip" data-placement="bottom" href="#" title="' + that.title + '">').html('<i class="fa fa-undo"></i>');
         that.$el.click(function (e) {
             e.preventDefault();
             textEditor.undo();
@@ -197,7 +197,7 @@ define(['jquery', 'common', 'events', 'translator'], function ($, Common, eventS
     TextEditorHelper.Redo = function (textEditor) {
         var that = this;
         that.title = 'Redo';
-        that.$el = $('<a class="btn btn-default helper" data-toggle="tooltip" data-placement="bottom" href="#" title="' + that.title + '">').html('<i class="glyphicon-regular glyphicon-redo"></i>');
+        that.$el = $('<a class="btn btn-default helper" data-toggle="tooltip" data-placement="bottom" href="#" title="' + that.title + '">').html('<i class="fa fa-redo"></i>');
         that.$el.click(function (e) {
             e.preventDefault();
             textEditor.redo();
@@ -215,7 +215,7 @@ define(['jquery', 'common', 'events', 'translator'], function ($, Common, eventS
             typeof Element !== 'undefined' &&
             Element.ALLOW_KEYBOARD_INPUT) {
             that.title = 'Fullscreen';
-            that.$el = $('<a class="btn btn-default helper" data-toggle="tooltip" data-placement="bottom" href="#" title="' + that.title + '">').html('<i class="glyphicon-regular glyphicon-fullscreen"></i>');
+            that.$el = $('<a class="btn btn-default helper" data-toggle="tooltip" data-placement="bottom" href="#" title="' + that.title + '">').html('<i class="fa fa-expand"></i>');
 
 
             that.$el.click(function (e) {
@@ -239,7 +239,7 @@ define(['jquery', 'common', 'events', 'translator'], function ($, Common, eventS
         that.editor = textEditor;
         that.hide = that.editor.hidePlugins = false;
         that.$el = $('<div class="btn btn-default helper btn-labeled">')
-            .html('<span class="btn-label"><span class="glyphicon-regular glyphicon-eye-close"></span></span>' + that.title);
+            .html('<span class="btn-label"><span class="fa fa-eye-slash"></span></span>' + that.title);
         that.$el.click(function (e) {
             e.preventDefault();
             that.action();
@@ -251,9 +251,9 @@ define(['jquery', 'common', 'events', 'translator'], function ($, Common, eventS
         this.active = this.editor.hidePlugins = !this.active;
         // this.$el.toggleClass('active', this.active);
         if (this.active) {
-            this.$el.html('<span class="btn-label"><span class="glyphicon-regular glyphicon-eye-open"></span></span>' + t('Show plugins'));
+            this.$el.html('<span class="btn-label"><span class="fa fa-eye"></span></span>' + t('Show plugins'));
         } else {
-            this.$el.html('<span class="btn-label"><span class="glyphicon-regular glyphicon-eye-close"></span></span>' + t('Hide plugins'));
+            this.$el.html('<span class="btn-label"><span class="fa fa-eye-slash"></span></span>' + t('Hide plugins'));
         }
     };
 
@@ -264,7 +264,7 @@ define(['jquery', 'common', 'events', 'translator'], function ($, Common, eventS
             replaceBefore: "/// " + titleText + "\n",
             replaceAfter: "\n///",
             cursorDelta: 4,
-            icon: 'expand',
+            icon: 'caret-square-o-down',
             selectionDelta: titleText.length,
             description: t('Insert a spoiler')
         });
