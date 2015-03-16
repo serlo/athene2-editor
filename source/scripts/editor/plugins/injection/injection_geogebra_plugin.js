@@ -103,9 +103,8 @@ define([
             });
 
             // set default width
-            $('.panel-body', this.$el).width(600);
-
-            that.makeRezisable();
+            $('.panel-body', this.$el).width(800);
+            //that.makeRezisable();
         };
 
         GeogebraInjectionPlugin.prototype.render = function () {
