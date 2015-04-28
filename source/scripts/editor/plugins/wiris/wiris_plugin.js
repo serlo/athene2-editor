@@ -10,8 +10,8 @@ define(
         "use strict";
         var FormulaPlugin,
             wiris,
-            latex2mml = 'http://www.wiris.net/demo/editor/latex2mathml',
-            mml2latex = 'http://www.wiris.net/demo/editor/mathml2latex';
+            latex2mml = 'https://www.wiris.net/demo/editor/latex2mathml',
+            mml2latex = 'https://www.wiris.net/demo/editor/mathml2latex';
 
         function ajax (url, data, method) {
             return $.ajax({
@@ -76,7 +76,7 @@ define(
             if (wiris) {
                 asyncActivate();
             } else {
-                require(['http://www.wiris.net/demo/editor/editor'], function () {
+                require(['https://www.wiris.net/demo/editor/editor'], function () {
                     wiris = com.wiris.jsEditor.JsEditor.newInstance({
                         'language': 'en'
                     });

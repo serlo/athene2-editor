@@ -136,7 +136,8 @@ define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events', 'content', 'shortcut
 
             that.textEditor.on('cursorActivity', _.throttle(function () {
                 if (that.editable) {
-                    that.preview.scrollSync(that.editable.$el, that.textEditor.getCursor().line / that.textEditor.lastLine());
+                    that.preview.scrollSync(that.editable.$el,
+                        that.textEditor.getCursor().line / that.textEditor.lastLine());
                 }
             }, 1500));
 
@@ -161,9 +162,12 @@ define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events', 'content', 'shortcut
                             that.$widget.remove();
                             that.$widget = null;
 
-                            that.currentToken = getCompleteToken(that.textEditor, that.textEditor.getCursor(), maxLines, {}, true);
+                            that.currentToken =
+                                getCompleteToken(that.textEditor, that.textEditor.getCursor(), maxLines, {}, true);
 
-                            that.currentToken.state.string = that.textEditor.doc.getRange(that.currentToken.state.startPos, that.currentToken.state.endPos);
+                            that.currentToken.state.string =
+                                that.textEditor.doc.getRange(that.currentToken.state.startPos,
+                                    that.currentToken.state.endPos);
 
                             that.activePlugin = plugin;
                             that.pluginManager.activate(plugin, that.currentToken);
@@ -357,52 +361,43 @@ define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events', 'content', 'shortcut
         return Editor;
     });
 
-require(['jquery',
-        'underscore',
-        'common',
-        'translator',
-        'ATHENE2-EDITOR',
-        'codemirror',
-        'parser',
-        'preview',
-        'showdown',
-        'layout_builder_configuration',
-        'texteditor_helper',
-        'texteditor_plugin_manager',
-        'texteditor_plugin',
-        'system_notification',
-        'showdown_table',
-        'showdown_spoiler',
-        'showdown_spoiler_prepare',
-        'showdown_htmlstrip',
-        'showdown_latex',
-        'showdown_latex_output',
-        'showdown_injections',
-        'showdown_atusername',
-        'showdown_strikethrough',
-        'showdown_code_prepare',
-        'showdown_code_output',
-        'texteditor_plugin_image',
-        'texteditor_plugin_wiris',
-        'texteditor_plugin_injection',
-        'texteditor_plugin_default_injection',
-        'texteditor_plugin_geogebra_injection',
-        'texteditor_plugin_geogebratube_injection'
-    ],
-    function ($,
-        _,
-        Common,
-        t,
-        Editor,
-        CodeMirror,
-        Parser,
-        Preview,
-        Showdown,
-        LayoutBuilderConfiguration,
-        TextEditorHelper,
-        PluginManager,
-        EditorPlugin,
-        SystemNotification) {
+require([
+    'jquery',
+    'underscore',
+    'common',
+    'translator',
+    'ATHENE2-EDITOR',
+    'codemirror',
+    'parser',
+    'preview',
+    'showdown',
+    'layout_builder_configuration',
+    'texteditor_helper',
+    'texteditor_plugin_manager',
+    'texteditor_plugin',
+    'system_notification',
+    'showdown_table',
+    'showdown_spoiler',
+    'showdown_spoiler_prepare',
+    'showdown_htmlstrip',
+    'showdown_latex',
+    'showdown_latex_output',
+    'showdown_injections',
+    'showdown_atusername',
+    'showdown_strikethrough',
+    'showdown_code_prepare',
+    'showdown_code_output',
+    'texteditor_plugin_image',
+    'texteditor_plugin_wiris',
+    'texteditor_plugin_injection',
+    'texteditor_plugin_default_injection',
+    'texteditor_plugin_geogebra_injection'
+    'texteditor_plugin_geogebratube_injection'
+],
+    function (
+        $, _, Common, t, Editor, CodeMirror, Parser, Preview, Showdown, LayoutBuilderConfiguration, TextEditorHelper,
+        PluginManager, EditorPlugin, SystemNotification
+        ) {
         "use strict";
 
         if (typeof MathJax !== 'undefined') {
@@ -499,11 +494,11 @@ require(['jquery',
                     .addLayout([9, 15])
                     .addLayout([6, 18])
 
-                .addLayout([6, 4, 14])
+                    .addLayout([6, 4, 14])
                     .addLayout([9, 4, 11])
                     .addLayout([12, 4, 8])
 
-                .addLayout([16, 8])
+                    .addLayout([16, 8])
                     .addLayout([8, 8, 8])
                     .addLayout([6, 6, 12])
                     .addLayout([12, 6, 6])
@@ -559,9 +554,8 @@ require(['jquery',
                     pluginManager: pluginManager
                 });
 
-
-                editor.addHelper(new TextEditorHelper.Undo(textEditor), '3');
-                editor.addHelper(new TextEditorHelper.Redo(textEditor), '3');
+                //editor.addHelper(new TextEditorHelper.Undo(textEditor), '3');
+                //editor.addHelper(new TextEditorHelper.Redo(textEditor), '3');
 
                 editor.addHelper(new TextEditorHelper.Bold(textEditor), '1');
                 editor.addHelper(new TextEditorHelper.Italic(textEditor), '1');
@@ -574,7 +568,7 @@ require(['jquery',
                 editor.addHelper(new TextEditorHelper.Formula(textEditor), '2');
                 editor.addHelper(new TextEditorHelper.Spoiler(textEditor), '2');
 
-                editor.addHelper(new TextEditorHelper.HidePlugins(textEditor), '4');
+                editor.addHelper(new TextEditorHelper.HidePlugins(textEditor), '3');
 
                 editor.addHelper(new TextEditorHelper.Fullscreen());
 

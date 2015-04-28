@@ -93,7 +93,7 @@ define([
                     that.$uploadStatus.text(t('Uploading.'));
 
                     var uploadErrors = [],
-                        acceptFileTypes = that.fileuploadOptions.acceptFileTypes || /^image\/(gif|jpe?g|png)$/i;
+                        acceptFileTypes = that.fileuploadOptions.acceptFileTypes || /^image\/(gif|jpe?g|png|svg)$/i;
 
                     if (data.originalFiles.length > that.fileuploadOptions.maxNumberOfFiles) {
                         uploadErrors.push(t('You only can upload one file'));
