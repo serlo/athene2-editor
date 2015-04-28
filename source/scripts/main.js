@@ -45,6 +45,8 @@ require.config({
         "markdownmode" : "codemirror/mode/sfm/sfm",
         "searchcursor" : "codemirror/addon/search/searchcursor",
 
+        "injections": "modules/serlo_injections",
+
         // "showdown": "libs/showdown",
         "showdown": "../bower_components/showdown/src/showdown",
         "showdown_table" : "editor/showdown/extensions/table",
@@ -78,7 +80,8 @@ require.config({
         "texteditor_plugin_wiris" : "editor/plugins/wiris/wiris_plugin",
         "texteditor_plugin_injection" : "editor/plugins/injection/injection_plugin",
         "texteditor_plugin_default_injection" : "editor/plugins/injection/injection_default_plugin",
-        "texteditor_plugin_geogebra_injection" : "editor/plugins/injection/injection_geogebra_plugin"
+        "texteditor_plugin_geogebra_injection" : "editor/plugins/injection/injection_geogebra_plugin",
+        "texteditor_plugin_geogebratube_injection" : "editor/plugins/injection/injection_geogebratube_plugin"
     },
     shim: {
         underscore: {

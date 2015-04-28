@@ -1,0 +1,18 @@
+1. beim editor package.json und bower.json version ++
+2. npm publish
+3. in athene2/src/assets/package.json version wie oben
+-  (serlo_injections.js oder ähnliche in athene2/src/assets/... kopieren)
+4. starte vagrant und ssh rein
+5. /vagrant/bin:  sudo ./clean-ui.sh
+
+Neuinstallation:
+1. Folge getting started
+2. (vagrant neu aufsetzen)
+3.
+4. (/var/www/src/assets:  bower update)
+5. sudo grunt build
+6. /var/www/:  sudo php composer.phar install
+
+Anmeldung:
+admin@localhost
+123456
