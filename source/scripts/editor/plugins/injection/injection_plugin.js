@@ -77,6 +77,8 @@ define([
                             if (data && data.success) {
                                 if (data.type === 'geogebra' || data.files.length === 2) {
                                     that.trigger('toggle-plugin', 'geogebra-injection', token, data);
+                                } else if (data.type === 'geogebratube' || data.files.length === 2) {
+                                    that.trigger('toggle-plugin', 'geogebratube-injection', token, data);
                                 } else {
                                     that.trigger('toggle-plugin', 'default-injection', token);
                                 }
@@ -88,7 +90,11 @@ define([
                         .error(function () {
                             Common.genericError();
                             that.trigger('close');
-                        });
+                        });//   http://tube.geogebra.org/student/m117646
+                } else if (href[0] === 'http:' && href[2] === 'tube.geogebra.org' && href[3] === 'student' && href[4]) {
+
+                    that.trigger('toggle-plugin', 'geogebratube-injection', token, href.join('/'));
+                    
                 } else {
                     // normal injections get treated as
                     // default injections
@@ -104,6 +110,9 @@ define([
                 }, {
                     name: t('Geogebra'),
                     key: 'geogebra-injection'
+                }, {
+                    name: t('GeogebraTube'),
+                    key: 'geogebratube-injection'
                 }];
 
                 $body.empty();

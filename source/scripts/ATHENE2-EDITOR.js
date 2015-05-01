@@ -9,7 +9,7 @@
  * @copyright Copyright (c) 2013 Gesellschaft für freie Bildung e.V. (http://www.open-education.eu/)
  */
 /*global define, require, MathJax*/
-define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events', 'content', 'shortcuts', 'spoiler'],
+define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events', 'content', 'shortcuts', 'spoiler', 'injections'],
     function ($, _, eventScope, Content, Shortcuts) {
         "use strict";
         var $body = $('body'),
@@ -74,6 +74,15 @@ define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events', 'content', 'shortcut
                     $context.Spoiler();
                 } else {
                     $('.spoiler', $context).Spoiler();
+                }
+
+                // init injections
+                if ($context.parents('.injection').length) {
+                    $context.parents('.injection').Injections();
+                } else if ($context.hasClass('injection')) {
+                    $context.Injections();
+                } else {
+                    $('.injection', $context).Injections();
                 }
             });
 
@@ -383,6 +392,7 @@ require([
     'texteditor_plugin_injection',
     'texteditor_plugin_default_injection',
     'texteditor_plugin_geogebra_injection'
+    'texteditor_plugin_geogebratube_injection'
 ],
     function (
         $, _, Common, t, Editor, CodeMirror, Parser, Preview, Showdown, LayoutBuilderConfiguration, TextEditorHelper,
@@ -520,6 +530,7 @@ require([
                         loadImageMaxFileSize: 8000000,
                         maxNumberOfFiles: 1
                     }))
+                    .addPlugin(new EditorPlugin.GeogebraTubeInjection())
                     .addPlugin(new EditorPlugin.Injection());
 
                 textEditor = new CodeMirror($('#main .editor-main-inner')[0], {
