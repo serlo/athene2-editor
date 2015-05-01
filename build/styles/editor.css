@@ -1,1 +1,1013 @@
-.CodeMirror{font-family:monospace;height:300px}.CodeMirror-scroll{overflow:auto}.CodeMirror-lines{padding:4px 0}.CodeMirror pre{padding:0 4px}.CodeMirror-scrollbar-filler,.CodeMirror-gutter-filler{background-color:#fff}.CodeMirror-gutters{border-right:1px solid #ddd;background-color:#f7f7f7;white-space:nowrap}.CodeMirror-linenumber{padding:0 3px 0 5px;min-width:20px;text-align:right;color:#999}.CodeMirror div.CodeMirror-cursor{border-left:1px solid #000;z-index:3}.CodeMirror div.CodeMirror-secondarycursor{border-left:1px solid silver}.CodeMirror.cm-keymap-fat-cursor div.CodeMirror-cursor{width:auto;border:0;background:#7e7;z-index:1}.cm-tab{display:inline-block}.cm-s-default .cm-keyword{color:#708}.cm-s-default .cm-atom{color:#219}.cm-s-default .cm-number{color:#164}.cm-s-default .cm-def{color:#00f}.cm-s-default .cm-variable{color:#000}.cm-s-default .cm-variable-2{color:#05a}.cm-s-default .cm-variable-3{color:#085}.cm-s-default .cm-property{color:#000}.cm-s-default .cm-operator{color:#000}.cm-s-default .cm-comment{color:#a50}.cm-s-default .cm-string{color:#a11}.cm-s-default .cm-string-2{color:#f50}.cm-s-default .cm-meta{color:#555}.cm-s-default .cm-qualifier{color:#555}.cm-s-default .cm-builtin{color:#30a}.cm-s-default .cm-bracket{color:#997}.cm-s-default .cm-tag{color:#170}.cm-s-default .cm-attribute{color:#00c}.cm-s-default .cm-header{color:#00f}.cm-s-default .cm-quote{color:#090}.cm-s-default .cm-hr{color:#999}.cm-s-default .cm-link{color:#00c}.cm-negative{color:#d44}.cm-positive{color:#292}.cm-header,.cm-strong{font-weight:700}.cm-em{font-style:italic}.cm-link{text-decoration:underline}.cm-s-default .cm-error{color:red}.cm-invalidchar{color:red}div.CodeMirror span.CodeMirror-matchingbracket{color:#0f0}div.CodeMirror span.CodeMirror-nonmatchingbracket{color:#f22}.CodeMirror-activeline-background{background:#e8f2ff}.CodeMirror{line-height:1;position:relative;overflow:hidden;background:#fff;color:#000}.CodeMirror-scroll{margin-bottom:-30px;margin-right:-30px;padding-bottom:30px;padding-right:30px;height:100%;outline:0;position:relative;-moz-box-sizing:content-box;box-sizing:content-box}.CodeMirror-sizer{position:relative}.CodeMirror-vscrollbar,.CodeMirror-hscrollbar,.CodeMirror-scrollbar-filler,.CodeMirror-gutter-filler{position:absolute;z-index:6;display:none}.CodeMirror-vscrollbar{right:0;top:0;overflow-x:hidden;overflow-y:scroll}.CodeMirror-hscrollbar{bottom:0;left:0;overflow-y:hidden;overflow-x:scroll}.CodeMirror-scrollbar-filler{right:0;bottom:0}.CodeMirror-gutter-filler{left:0;bottom:0}.CodeMirror-gutters{position:absolute;left:0;top:0;padding-bottom:30px;z-index:3}.CodeMirror-gutter{white-space:normal;height:100%;-moz-box-sizing:content-box;box-sizing:content-box;padding-bottom:30px;margin-bottom:-32px;display:inline-block;*zoom:1;*display:inline}.CodeMirror-gutter-elt{position:absolute;cursor:default;z-index:4}.CodeMirror-lines{cursor:text}.CodeMirror pre{border-radius:0;border-width:0;background:transparent;font-family:inherit;font-size:inherit;margin:0;white-space:pre;word-wrap:normal;line-height:inherit;color:inherit;z-index:2;position:relative;overflow:visible}.CodeMirror-wrap pre{word-wrap:break-word;white-space:pre-wrap;word-break:normal}.CodeMirror-code pre{border-right:30px solid transparent;width:-webkit-fit-content;width:-moz-fit-content;width:fit-content}.CodeMirror-wrap .CodeMirror-code pre{border-right:0;width:auto}.CodeMirror-linebackground{position:absolute;left:0;right:0;top:0;bottom:0;z-index:0}.CodeMirror-linewidget{position:relative;z-index:2;overflow:auto}.CodeMirror-wrap .CodeMirror-scroll{overflow-x:hidden}.CodeMirror-measure{position:absolute;width:100%;height:0;overflow:hidden;visibility:hidden}.CodeMirror-measure pre{position:static}.CodeMirror div.CodeMirror-cursor{position:absolute;visibility:hidden;border-right:0;width:0}.CodeMirror-focused div.CodeMirror-cursor{visibility:visible}.CodeMirror-selected{background:#d9d9d9}.CodeMirror-focused .CodeMirror-selected{background:#d7d4f0}.cm-searching{background:#ffa;background:rgba(255,255,0,.4)}.CodeMirror span{*vertical-align:text-bottom}@media print{.CodeMirror div.CodeMirror-cursor{visibility:hidden}}body{overflow-y:hidden;background:#fff}header{position:relative;z-index:2}#editor-main-panel{border-radius:0}#editor-main-panel .panel-heading{border-radius:0}#content-layout{min-height:0;padding:0;width:100%}#editor-wrap{position:absolute;top:57px;left:0;bottom:0;right:0;z-index:1;padding:0}#preview{border-left:1px solid #C5C5C5;float:none;background:#fff;-webkit-transform:translateZ(0);-ms-transform:translateZ(0);transform:translateZ(0)}#preview .preview-label{display:block;padding:5px 20px;background:#eee}#preview .field-checkbox+.preview-content{display:none}#preview .preview-checkbox{margin-right:8px}#preview .preview-radio{margin-right:8px}#preview .has-error .preview-label{background:#FAC1C1;border-top-color:#FD2222}.preview-content{padding:5px 20px}.preview-input{width:100%;padding:12px 15px;font-size:14px;color:#333;text-shadow:1px 1px 0 #FFF;background:#FFF;border:1px solid #DDD;border-radius:4px;box-shadow:inset 0 1px 5px #EEE}.preview-input:focus{outline:0;border-color:#B8B8B8}.preview-textarea{width:100%;max-width:100%}.preview-radio-container{font-weight:400}#editor-form{display:none}#main{outline:1px solid #C5C5C5;overflow-x:hidden;-webkit-transform:translateZ(0);-ms-transform:translateZ(0);transform:translateZ(0)}.editor-main{width:50%;height:100%;float:left;overflow-y:auto}.add-layout{position:relative;top:13px;margin:0 40px;padding-top:10px;text-align:center;opacity:0;-webkit-transition:.3s opacity .1s;transition:.3s opacity .1s}#preview:hover .add-layout{opacity:1}.add-layout:hover:before{border-color:#797979}.add-layout:hover .plus{color:#797979}.add-layout:before{content:"";position:absolute;left:0;top:1px;border-top:2px solid #C5C5C5;display:block;width:100%}.add-layout .plus{position:relative;display:inline-block;width:20px;height:23px;top:-20px;font-size:26px;line-height:1;color:#A5A5A5;background:#fff;cursor:pointer;user-drag:none;-webkit-user-drag:none;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none}.add-layout .plus:hover{text-decoration:none}.layout-list{position:relative;top:-10px}.layout-list>a{display:inline-block;margin:0 5px 10px}.layout-list>a:hover{outline:2px solid #C5C5C5}.editor-widget{display:block;position:absolute;top:4px;left:20px;padding:7px 9px;margin-left:-27px;margin-top:7px;border:1px solid #878787;border-radius:3px;background:#FFF;font-size:.9em;z-index:2}.editor-widget:before{content:"";border:7px solid transparent;border-bottom-color:#878787;position:absolute;top:-14px;left:20px}.editor-widget:after{content:"";border:6px solid transparent;border-bottom-color:#fff;position:absolute;top:-12px;left:21px}.editor-plugin-wrapper{position:absolute;width:100%;height:100%;top:0;left:0;background:#fff;background:rgba(200,200,200,.54);text-align:center;z-index:200;overflow-y:auto}.editor-plugin{margin-top:50px;display:inline-block;text-align:left;width:auto}.editor-geogebra-plugin .panel-body{width:80%}.ui-resizable{position:relative}.ui-resizable+.panel-footer{padding-right:35px}.ui-resizable-handle{position:absolute;top:auto;bottom:-29px;right:10px;width:16px;height:16px;color:#000;font-size:16px}.spoiler-content{display:none}.CodeMirror-linewidget{z-index:5;overflow:visible}.CodeMirror-code .cm-injection,.CodeMirror-code .cm-link,.CodeMirror-code .cm-image,.CodeMirror-code .cm-math,.CodeMirror-code .cm-inline-math{color:#f08080}@-webkit-keyframes codemirrorActivation{0%{background-color:#FDF8D5}35%{backround-color:#FDF8D5}100%{background-color:#FFF}}@keyframes codemirrorActivation{0%{background-color:#FDF8D5}35%{backround-color:#FDF8D5}100%{background-color:#FFF}}.CodeMirror.activated{-webkit-animation:codemirrorActivation;animation:codemirrorActivation;-webkit-animation-duration:1.4s;animation-duration:1.4s}.wrs_editor img{max-width:initial}.gwt-MenuBarPopup,.gwt-DialogBox,.gwt-PopupPanel{z-index:350}strong>.mathInline{display:inline;border:1px solid #ddd;padding:8px;border-radius:4px;background-color:#F8F8F8}em>.mathInline{display:inline;border:1px solid #f3f3f3;padding:4px;border-radius:4px;background-color:#F8F8F8}strong>.math{display:block;border:1px solid #ddd;padding:8px;border-radius:4px;margin:10px 0;background-color:#F8F8F8}em>.math{display:block;border:1px solid #f3f3f3;padding:4px;border-radius:4px;margin:10px 0;background-color:#F8F8F8}
+/* BASICS */
+
+/* line 3, ../../source/styles/editor/_codemirror.scss */
+
+.CodeMirror {
+  /* Set height, width, borders, and global font properties here */
+  font-family: monospace;
+  height: 300px;
+}
+
+/* line 9, ../../source/styles/editor/_codemirror.scss */
+
+.CodeMirror-scroll {
+  /* Set scrolling behaviour here */
+  overflow: auto;
+}
+
+/* PADDING */
+
+/* line 16, ../../source/styles/editor/_codemirror.scss */
+
+.CodeMirror-lines {
+  padding: 4px 0;
+  /* Vertical padding around content */
+}
+
+/* line 20, ../../source/styles/editor/_codemirror.scss */
+
+.CodeMirror pre {
+  padding: 0 4px;
+  /* Horizontal padding of content */
+}
+
+/* line 24, ../../source/styles/editor/_codemirror.scss */
+
+.CodeMirror-scrollbar-filler,
+.CodeMirror-gutter-filler {
+  background-color: white;
+  /* The little square between H and V scrollbars */
+}
+
+/* GUTTER */
+
+/* line 30, ../../source/styles/editor/_codemirror.scss */
+
+.CodeMirror-gutters {
+  border-right: 1px solid #ddd;
+  background-color: #f7f7f7;
+  white-space: nowrap;
+}
+
+/* line 39, ../../source/styles/editor/_codemirror.scss */
+
+.CodeMirror-linenumber {
+  padding: 0 3px 0 5px;
+  min-width: 20px;
+  text-align: right;
+  color: #999;
+}
+
+/* CURSOR */
+
+/* line 48, ../../source/styles/editor/_codemirror.scss */
+
+.CodeMirror div.CodeMirror-cursor {
+  border-left: 1px solid black;
+  z-index: 3;
+}
+
+/* Shown when moving in bi-directional text */
+
+/* line 54, ../../source/styles/editor/_codemirror.scss */
+
+.CodeMirror div.CodeMirror-secondarycursor {
+  border-left: 1px solid silver;
+}
+
+/* line 58, ../../source/styles/editor/_codemirror.scss */
+
+.CodeMirror.cm-keymap-fat-cursor div.CodeMirror-cursor {
+  width: auto;
+  border: 0;
+  background: #7e7;
+  z-index: 1;
+}
+
+/* Can style cursor different in overwrite (non-insert) mode */
+
+/* line 69, ../../source/styles/editor/_codemirror.scss */
+
+.cm-tab {
+  display: inline-block;
+}
+
+/* DEFAULT THEME */
+
+/* line 75, ../../source/styles/editor/_codemirror.scss */
+
+.cm-s-default .cm-keyword {
+  color: #708;
+}
+
+/* line 79, ../../source/styles/editor/_codemirror.scss */
+
+.cm-s-default .cm-atom {
+  color: #219;
+}
+
+/* line 83, ../../source/styles/editor/_codemirror.scss */
+
+.cm-s-default .cm-number {
+  color: #164;
+}
+
+/* line 87, ../../source/styles/editor/_codemirror.scss */
+
+.cm-s-default .cm-def {
+  color: #00f;
+}
+
+/* line 91, ../../source/styles/editor/_codemirror.scss */
+
+.cm-s-default .cm-variable {
+  color: black;
+}
+
+/* line 95, ../../source/styles/editor/_codemirror.scss */
+
+.cm-s-default .cm-variable-2 {
+  color: #05a;
+}
+
+/* line 99, ../../source/styles/editor/_codemirror.scss */
+
+.cm-s-default .cm-variable-3 {
+  color: #085;
+}
+
+/* line 103, ../../source/styles/editor/_codemirror.scss */
+
+.cm-s-default .cm-property {
+  color: black;
+}
+
+/* line 107, ../../source/styles/editor/_codemirror.scss */
+
+.cm-s-default .cm-operator {
+  color: black;
+}
+
+/* line 111, ../../source/styles/editor/_codemirror.scss */
+
+.cm-s-default .cm-comment {
+  color: #a50;
+}
+
+/* line 115, ../../source/styles/editor/_codemirror.scss */
+
+.cm-s-default .cm-string {
+  color: #a11;
+}
+
+/* line 119, ../../source/styles/editor/_codemirror.scss */
+
+.cm-s-default .cm-string-2 {
+  color: #f50;
+}
+
+/* line 123, ../../source/styles/editor/_codemirror.scss */
+
+.cm-s-default .cm-meta {
+  color: #555;
+}
+
+/* line 127, ../../source/styles/editor/_codemirror.scss */
+
+.cm-s-default .cm-qualifier {
+  color: #555;
+}
+
+/* line 131, ../../source/styles/editor/_codemirror.scss */
+
+.cm-s-default .cm-builtin {
+  color: #30a;
+}
+
+/* line 135, ../../source/styles/editor/_codemirror.scss */
+
+.cm-s-default .cm-bracket {
+  color: #997;
+}
+
+/* line 139, ../../source/styles/editor/_codemirror.scss */
+
+.cm-s-default .cm-tag {
+  color: #170;
+}
+
+/* line 143, ../../source/styles/editor/_codemirror.scss */
+
+.cm-s-default .cm-attribute {
+  color: #00c;
+}
+
+/* line 147, ../../source/styles/editor/_codemirror.scss */
+
+.cm-s-default .cm-header {
+  color: blue;
+}
+
+/* line 151, ../../source/styles/editor/_codemirror.scss */
+
+.cm-s-default .cm-quote {
+  color: #090;
+}
+
+/* line 155, ../../source/styles/editor/_codemirror.scss */
+
+.cm-s-default .cm-hr {
+  color: #999;
+}
+
+/* line 159, ../../source/styles/editor/_codemirror.scss */
+
+.cm-s-default .cm-link {
+  color: #00c;
+}
+
+/* line 163, ../../source/styles/editor/_codemirror.scss */
+
+.cm-negative {
+  color: #d44;
+}
+
+/* line 167, ../../source/styles/editor/_codemirror.scss */
+
+.cm-positive {
+  color: #292;
+}
+
+/* line 171, ../../source/styles/editor/_codemirror.scss */
+
+.cm-header,
+.cm-strong {
+  font-weight: bold;
+}
+
+/* line 175, ../../source/styles/editor/_codemirror.scss */
+
+.cm-em {
+  font-style: italic;
+}
+
+/* line 179, ../../source/styles/editor/_codemirror.scss */
+
+.cm-link {
+  text-decoration: underline;
+}
+
+/* line 183, ../../source/styles/editor/_codemirror.scss */
+
+.cm-s-default .cm-error {
+  color: #f00;
+}
+
+/* line 187, ../../source/styles/editor/_codemirror.scss */
+
+.cm-invalidchar {
+  color: #f00;
+}
+
+/* line 191, ../../source/styles/editor/_codemirror.scss */
+
+div.CodeMirror span.CodeMirror-matchingbracket {
+  color: #0f0;
+}
+
+/* line 195, ../../source/styles/editor/_codemirror.scss */
+
+div.CodeMirror span.CodeMirror-nonmatchingbracket {
+  color: #f22;
+}
+
+/* line 199, ../../source/styles/editor/_codemirror.scss */
+
+.CodeMirror-activeline-background {
+  background: #e8f2ff;
+}
+
+/* STOP */
+
+/* The rest of this file contains styles related to the mechanics of
+   the editor. You probably shouldn't touch them. */
+
+/* line 208, ../../source/styles/editor/_codemirror.scss */
+
+.CodeMirror {
+  line-height: 1;
+  position: relative;
+  overflow: hidden;
+  background: white;
+  color: black;
+}
+
+/* line 216, ../../source/styles/editor/_codemirror.scss */
+
+.CodeMirror-scroll {
+  /* 30px is the magic margin used to hide the element's real scrollbars */
+  /* See overflow: hidden in .CodeMirror */
+  margin-bottom: -30px;
+  margin-right: -30px;
+  padding-bottom: 30px;
+  padding-right: 30px;
+  height: 100%;
+  outline: none;
+  /* Prevent dragging from highlighting the element */
+  position: relative;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+}
+
+/* line 230, ../../source/styles/editor/_codemirror.scss */
+
+.CodeMirror-sizer {
+  position: relative;
+}
+
+/* The fake, visible scrollbars. Used to force redraw during scrolling
+   before actuall scrolling happens, thus preventing shaking and
+   flickering artifacts. */
+
+/* line 237, ../../source/styles/editor/_codemirror.scss */
+
+.CodeMirror-vscrollbar,
+.CodeMirror-hscrollbar,
+.CodeMirror-scrollbar-filler,
+.CodeMirror-gutter-filler {
+  position: absolute;
+  z-index: 6;
+  display: none;
+}
+
+/* line 243, ../../source/styles/editor/_codemirror.scss */
+
+.CodeMirror-vscrollbar {
+  right: 0;
+  top: 0;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+
+/* line 250, ../../source/styles/editor/_codemirror.scss */
+
+.CodeMirror-hscrollbar {
+  bottom: 0;
+  left: 0;
+  overflow-y: hidden;
+  overflow-x: scroll;
+}
+
+/* line 257, ../../source/styles/editor/_codemirror.scss */
+
+.CodeMirror-scrollbar-filler {
+  right: 0;
+  bottom: 0;
+}
+
+/* line 262, ../../source/styles/editor/_codemirror.scss */
+
+.CodeMirror-gutter-filler {
+  left: 0;
+  bottom: 0;
+}
+
+/* line 267, ../../source/styles/editor/_codemirror.scss */
+
+.CodeMirror-gutters {
+  position: absolute;
+  left: 0;
+  top: 0;
+  padding-bottom: 30px;
+  z-index: 3;
+}
+
+/* line 275, ../../source/styles/editor/_codemirror.scss */
+
+.CodeMirror-gutter {
+  white-space: normal;
+  height: 100%;
+  -moz-box-sizing: content-box;
+  box-sizing: content-box;
+  padding-bottom: 30px;
+  margin-bottom: -32px;
+  display: inline-block;
+  /* Hack to make IE7 behave */
+  *zoom: 1;
+  *display: inline;
+}
+
+/* line 288, ../../source/styles/editor/_codemirror.scss */
+
+.CodeMirror-gutter-elt {
+  position: absolute;
+  cursor: default;
+  z-index: 4;
+}
+
+/* line 294, ../../source/styles/editor/_codemirror.scss */
+
+.CodeMirror-lines {
+  cursor: text;
+}
+
+/* line 298, ../../source/styles/editor/_codemirror.scss */
+
+.CodeMirror pre {
+  /* Reset some styles that the rest of the page might have set */
+  border-radius: 0;
+  border-width: 0;
+  background: transparent;
+  font-family: inherit;
+  font-size: inherit;
+  margin: 0;
+  white-space: pre;
+  word-wrap: normal;
+  line-height: inherit;
+  color: inherit;
+  z-index: 2;
+  position: relative;
+  overflow: visible;
+}
+
+/* line 317, ../../source/styles/editor/_codemirror.scss */
+
+.CodeMirror-wrap pre {
+  word-wrap: break-word;
+  white-space: pre-wrap;
+  word-break: normal;
+}
+
+/* line 323, ../../source/styles/editor/_codemirror.scss */
+
+.CodeMirror-code pre {
+  border-right: 30px solid transparent;
+  width: -webkit-fit-content;
+  width: -moz-fit-content;
+  width: fit-content;
+}
+
+/* line 330, ../../source/styles/editor/_codemirror.scss */
+
+.CodeMirror-wrap .CodeMirror-code pre {
+  border-right: none;
+  width: auto;
+}
+
+/* line 335, ../../source/styles/editor/_codemirror.scss */
+
+.CodeMirror-linebackground {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 0;
+}
+
+/* line 344, ../../source/styles/editor/_codemirror.scss */
+
+.CodeMirror-linewidget {
+  position: relative;
+  z-index: 2;
+  overflow: auto;
+}
+
+/* line 353, ../../source/styles/editor/_codemirror.scss */
+
+.CodeMirror-wrap .CodeMirror-scroll {
+  overflow-x: hidden;
+}
+
+/* line 357, ../../source/styles/editor/_codemirror.scss */
+
+.CodeMirror-measure {
+  position: absolute;
+  width: 100%;
+  height: 0;
+  overflow: hidden;
+  visibility: hidden;
+}
+
+/* line 365, ../../source/styles/editor/_codemirror.scss */
+
+.CodeMirror-measure pre {
+  position: static;
+}
+
+/* line 369, ../../source/styles/editor/_codemirror.scss */
+
+.CodeMirror div.CodeMirror-cursor {
+  position: absolute;
+  visibility: hidden;
+  border-right: none;
+  width: 0;
+}
+
+/* line 376, ../../source/styles/editor/_codemirror.scss */
+
+.CodeMirror-focused div.CodeMirror-cursor {
+  visibility: visible;
+}
+
+/* line 380, ../../source/styles/editor/_codemirror.scss */
+
+.CodeMirror-selected {
+  background: #d9d9d9;
+}
+
+/* line 384, ../../source/styles/editor/_codemirror.scss */
+
+.CodeMirror-focused .CodeMirror-selected {
+  background: #d7d4f0;
+}
+
+/* line 388, ../../source/styles/editor/_codemirror.scss */
+
+.cm-searching {
+  background: #ffa;
+  background: rgba(255, 255, 0, 0.4);
+}
+
+/* IE7 hack to prevent it from returning funny offsetTops on the spans */
+
+/* line 394, ../../source/styles/editor/_codemirror.scss */
+
+.CodeMirror span {
+  *vertical-align: text-bottom;
+}
+
+@media print {
+  /* Hide the cursor when printing */
+
+  /* line 400, ../../source/styles/editor/_codemirror.scss */
+
+  .CodeMirror div.CodeMirror-cursor {
+    visibility: hidden;
+  }
+}
+
+/* line 5, ../../source/styles/editor/_layout.scss */
+
+body {
+  overflow-y: hidden;
+  background: white;
+}
+
+/* line 10, ../../source/styles/editor/_layout.scss */
+
+header {
+  position: relative;
+  z-index: 2;
+}
+
+/* line 16, ../../source/styles/editor/_layout.scss */
+
+#editor-main-panel {
+  border-radius: 0px;
+}
+
+/* line 18, ../../source/styles/editor/_layout.scss */
+
+#editor-main-panel .panel-heading {
+  border-radius: 0px;
+}
+
+/* line 33, ../../source/styles/editor/_layout.scss */
+
+#content-layout {
+  min-height: 0;
+  padding: 0;
+  width: 100%;
+}
+
+/* line 39, ../../source/styles/editor/_layout.scss */
+
+#editor-wrap {
+  position: absolute;
+  top: 57px;
+  left: 0;
+  bottom: 0px;
+  right: 0;
+  z-index: 1;
+  padding: 0;
+}
+
+/* line 49, ../../source/styles/editor/_layout.scss */
+
+#preview {
+  border-left: 1px solid #C5C5C5;
+  float: none;
+  background: white;
+  -webkit-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  transform: translateZ(0);
+}
+
+/* line 58, ../../source/styles/editor/_layout.scss */
+
+#preview .preview-label {
+  display: block;
+  padding: 5px 20px 5px 20px;
+  background: #eee;
+}
+
+/* line 67, ../../source/styles/editor/_layout.scss */
+
+#preview .field-checkbox + .preview-content {
+  display: none;
+}
+
+/* line 72, ../../source/styles/editor/_layout.scss */
+
+#preview .preview-checkbox {
+  margin-right: 8px;
+}
+
+/* line 76, ../../source/styles/editor/_layout.scss */
+
+#preview .preview-radio {
+  margin-right: 8px;
+}
+
+/* line 85, ../../source/styles/editor/_layout.scss */
+
+#preview .has-error .preview-label {
+  background: #FAC1C1;
+  border-top-color: #FD2222;
+}
+
+/* line 92, ../../source/styles/editor/_layout.scss */
+
+.preview-content {
+  padding: 5px 20px 5px 20px;
+}
+
+/* line 96, ../../source/styles/editor/_layout.scss */
+
+.preview-input {
+  width: 100%;
+  padding: 12px 15px;
+  font-size: 14px;
+  color: #333;
+  text-shadow: 1px 1px 0 #FFF;
+  background: #FFF;
+  border: 1px solid #DDD;
+  border-radius: 4px;
+  box-shadow: inset 0 1px 5px #EEE;
+}
+
+/* line 107, ../../source/styles/editor/_layout.scss */
+
+.preview-input:focus {
+  outline: none;
+  border-color: #B8B8B8;
+}
+
+/* line 113, ../../source/styles/editor/_layout.scss */
+
+.preview-textarea {
+  width: 100%;
+  max-width: 100%;
+}
+
+/* line 118, ../../source/styles/editor/_layout.scss */
+
+.preview-radio-container {
+  font-weight: normal;
+}
+
+/* line 122, ../../source/styles/editor/_layout.scss */
+
+#editor-form {
+  display: none;
+}
+
+/* line 126, ../../source/styles/editor/_layout.scss */
+
+#main {
+  outline: 1px solid #C5C5C5;
+  overflow-x: hidden;
+  -webkit-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  transform: translateZ(0);
+}
+
+/* line 133, ../../source/styles/editor/_layout.scss */
+
+.editor-main {
+  width: 50%;
+  height: 100%;
+  float: left;
+  overflow-y: auto;
+}
+
+/* line 140, ../../source/styles/editor/_layout.scss */
+
+.add-layout {
+  position: relative;
+  top: 13px;
+  margin: 0 40px;
+  padding-top: 10px;
+  text-align: center;
+  opacity: 0;
+  -webkit-transition: 0.3s opacity 0.1s;
+  transition: 0.3s opacity 0.1s;
+}
+
+/* line 152, ../../source/styles/editor/_layout.scss */
+
+#preview:hover .add-layout {
+  opacity: 1;
+}
+
+/* line 157, ../../source/styles/editor/_layout.scss */
+
+.add-layout:hover:before {
+  border-color: #797979;
+}
+
+/* line 161, ../../source/styles/editor/_layout.scss */
+
+.add-layout:hover .plus {
+  color: #797979;
+}
+
+/* line 166, ../../source/styles/editor/_layout.scss */
+
+.add-layout:before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 1px;
+  border-top: 2px solid #C5C5C5;
+  display: block;
+  width: 100%;
+}
+
+/* line 176, ../../source/styles/editor/_layout.scss */
+
+.add-layout .plus {
+  position: relative;
+  display: inline-block;
+  width: 20px;
+  height: 23px;
+  top: -20px;
+  font-size: 26px;
+  line-height: 1;
+  color: #A5A5A5;
+  background: white;
+  cursor: pointer;
+  user-drag: none;
+  -webkit-user-drag: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* line 194, ../../source/styles/editor/_layout.scss */
+
+.add-layout .plus:hover {
+  text-decoration: none;
+}
+
+/* line 200, ../../source/styles/editor/_layout.scss */
+
+.layout-list {
+  position: relative;
+  top: -10px;
+}
+
+/* line 204, ../../source/styles/editor/_layout.scss */
+
+.layout-list > a {
+  display: inline-block;
+  margin: 0 5px 10px;
+}
+
+/* line 208, ../../source/styles/editor/_layout.scss */
+
+.layout-list > a:hover {
+  outline: 2px solid #C5C5C5;
+}
+
+/* line 214, ../../source/styles/editor/_layout.scss */
+
+.editor-widget {
+  display: block;
+  position: absolute;
+  top: 4px;
+  left: 20px;
+  padding: 7px 9px;
+  margin-left: -27px;
+  margin-top: 7px;
+  border: 1px solid #878787;
+  border-radius: 3px;
+  background: #FFF;
+  font-size: 0.9em;
+  z-index: 2;
+}
+
+/* line 231, ../../source/styles/editor/_layout.scss */
+
+.editor-widget:before {
+  content: "";
+  border: 7px solid transparent;
+  border-bottom-color: #878787;
+  position: absolute;
+  top: -14px;
+  left: 20px;
+}
+
+/* line 239, ../../source/styles/editor/_layout.scss */
+
+.editor-widget:after {
+  content: "";
+  border: 6px solid transparent;
+  border-bottom-color: white;
+  position: absolute;
+  top: -12px;
+  left: 21px;
+}
+
+/* line 249, ../../source/styles/editor/_layout.scss */
+
+.editor-plugin-wrapper {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background: white;
+  background: rgba(200, 200, 200, 0.54);
+  text-align: center;
+  z-index: 200;
+  overflow-y: auto;
+}
+
+/* line 265, ../../source/styles/editor/_layout.scss */
+
+.editor-plugin {
+  margin-top: 50px;
+  display: inline-block;
+  text-align: left;
+  width: auto;
+}
+
+/* line 273, ../../source/styles/editor/_layout.scss */
+
+.editor-geogebra-plugin .panel-body {
+  width: 80%;
+}
+
+/* jquery.ui resizable */
+
+/* line 279, ../../source/styles/editor/_layout.scss */
+
+.ui-resizable {
+  position: relative;
+}
+
+/* line 283, ../../source/styles/editor/_layout.scss */
+
+.ui-resizable + .panel-footer {
+  padding-right: 35px;
+}
+
+/* line 289, ../../source/styles/editor/_layout.scss */
+
+.ui-resizable-handle {
+  position: absolute;
+  top: auto;
+  bottom: -29px;
+  right: 10px;
+  width: 16px;
+  height: 16px;
+  color: black;
+  font-size: 16px;
+}
+
+/* SPOILERS */
+
+/* line 303, ../../source/styles/editor/_layout.scss */
+
+.spoiler-content {
+  display: none;
+}
+
+/* Codemirror specific */
+
+/* line 308, ../../source/styles/editor/_layout.scss */
+
+.CodeMirror-linewidget {
+  z-index: 5;
+  overflow: visible;
+}
+
+/* line 314, ../../source/styles/editor/_layout.scss */
+
+.CodeMirror-code .cm-injection,
+.CodeMirror-code .cm-link,
+.CodeMirror-code .cm-image,
+.CodeMirror-code .cm-math,
+.CodeMirror-code .cm-inline-math {
+  color: lightcoral;
+}
+
+@-webkit-keyframes codemirrorActivation {
+  0% {
+    background-color: #FDF8D5;
+  }
+
+  35% {
+    backround-color: #FDF8D5;
+  }
+
+  100% {
+    background-color: #FFFFFF;
+  }
+}
+
+@keyframes codemirrorActivation {
+  0% {
+    background-color: #FDF8D5;
+  }
+
+  35% {
+    backround-color: #FDF8D5;
+  }
+
+  100% {
+    background-color: #FFFFFF;
+  }
+}
+
+/* line 335, ../../source/styles/editor/_layout.scss */
+
+.CodeMirror.activated {
+  -webkit-animation: codemirrorActivation;
+  animation: codemirrorActivation;
+  -webkit-animation-duration: 1.4s;
+  animation-duration: 1.4s;
+}
+
+/* Wiris plugin specific */
+
+/* line 342, ../../source/styles/editor/_layout.scss */
+
+.wrs_editor img {
+  max-width: initial;
+}
+
+/* Geogebra plugin specific */
+
+/* line 348, ../../source/styles/editor/_layout.scss */
+
+.gwt-MenuBarPopup,
+.gwt-DialogBox,
+.gwt-PopupPanel {
+  z-index: 350;
+}
+
+/* line 1, ../../source/styles/editor/_mathjax.scss */
+
+strong > .mathInline {
+  display: inline;
+  border: 1px solid #dddddd;
+  padding: 8px;
+  border-radius: 4px;
+  background-color: #F8F8F8;
+}
+
+/* line 9, ../../source/styles/editor/_mathjax.scss */
+
+em > .mathInline {
+  display: inline;
+  border: 1px solid #f3f3f3;
+  padding: 4px;
+  border-radius: 4px;
+  background-color: #F8F8F8;
+}
+
+/* line 17, ../../source/styles/editor/_mathjax.scss */
+
+strong > .math {
+  display: block;
+  border: 1px solid #dddddd;
+  padding: 8px;
+  border-radius: 4px;
+  margin: 10px 0px;
+  background-color: #F8F8F8;
+}
+
+/* line 27, ../../source/styles/editor/_mathjax.scss */
+
+em > .math {
+  display: block;
+  border: 1px solid #f3f3f3;
+  padding: 4px;
+  border-radius: 4px;
+  margin: 10px 0px;
+  background-color: #F8F8F8;
+}

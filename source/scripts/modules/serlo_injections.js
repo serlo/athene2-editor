@@ -8,7 +8,7 @@
  * @link        https://github.com/serlo-org/athene2 for the canonical source repository
  */
 
-/*global define, require, window, Modernizr*/
+/*global define, require, window, Modernizr, GGBApplet*/
 require(['http://www.geogebratube.org/scripts/deployggb.js']);
 
 define(['jquery', 'common', 'translator', 'content'], function ($, Common, t) {
@@ -22,7 +22,7 @@ define(['jquery', 'common', 'translator', 'content'], function ($, Common, t) {
         //gtApplets = {},
         //geogebraTubeScriptSource = 'http://www.geogebratube.org/scripts/deployggb.js',
         gtAppletsCount = 0,
-        $geogebraTubeTemplate = $('<embed style="width:600px; height:400px" />');
+        $geogebraTubeTemplate = $('<div style="width:100%; overflow:hidden"></div>');
 
     // terrible geogebra oninit handler..
     // that doesnt work.....
