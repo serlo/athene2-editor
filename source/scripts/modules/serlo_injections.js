@@ -22,7 +22,7 @@ define(['jquery', 'common', 'translator', 'content'], function ($, Common, t) {
         //gtApplets = {},
         //geogebraTubeScriptSource = 'http://www.geogebratube.org/scripts/deployggb.js',
         gtAppletsCount = 0,
-        $geogebraTubeTemplate = $('<embed style="width:600px; height:400px" />');
+        $geogebraTubeTemplate = $('<div style="width:100% overflow:hidden"></div>');
 
     // terrible geogebra oninit handler..
     // that doesnt work.....
@@ -76,9 +76,6 @@ define(['jquery', 'common', 'translator', 'content'], function ($, Common, t) {
 
             function initGeogebraTube() {
                 //console.log(href.substr(0, 34));
-                if (href.substr(0, 34) !== "http://tube.geogebra.org/student/m") {
-                    return false;
-                }
                 var gtAppletID = 'gtApplet' + gtAppletsCount, applet,
                     $clone = $geogebraTubeTemplate.clone();
 
@@ -102,7 +99,6 @@ define(['jquery', 'common', 'translator', 'content'], function ($, Common, t) {
                 }, 500);
 
                 // web();
-                return true;
             }
 
             function notSupportedYet($context) {
@@ -116,26 +112,28 @@ define(['jquery', 'common', 'translator', 'content'], function ($, Common, t) {
                     contentType: contentType
                 };
 
-                // check if it is geogebra xml
-                if (! initGeogebraTube()) {
-                    if (data.documentElement && data.documentElement.nodeName === 'geogebra') {
-                        initGeogebraApplet(data.documentElement.outerHTML);
-                    } else if (contentType === 'image/jpeg' || contentType === 'image/png') {
-                        $that.html('<img src="' + href + '" title="' + title + '" />');
-                    } else {
-                        try {
-                            data = JSON.parse(data);
-                            if (data.response) {
-                                $that.html(data.response);
-                                Common.trigger('new context', $that);
-                            } else {
-                                notSupportedYet($that);
-                            }
-                        } catch (e) {
+                // check if it is geogebra
+                var hrefSplit = href.split('/');
+                if (href[2] === 'tube.geogebra.org' && href[3] === 'student' && href[4].substr(0, 1) == "m"){
+                    initGeogebraTube();
+                } else if (data.documentElement && data.documentElement.nodeName === 'geogebra') {
+                    initGeogebraApplet(data.documentElement.outerHTML);
+                } else if (contentType === 'image/jpeg' || contentType === 'image/png') {
+                    $that.html('<img src="' + href + '" title="' + title + '" />');
+                } else {
+                    try {
+                        data = JSON.parse(data);
+                        if (data.response) {
+                            $that.html('<div class="panel panel-default"><div class="panel-body">' + data.response + '</div></div>');
+                            Common.trigger('new context', $that);
+                        } else {
                             notSupportedYet($that);
                         }
+                    } catch (e) {
+                        notSupportedYet($that);
                     }
                 }
+                
             }
 
             if (cache[href]) {
