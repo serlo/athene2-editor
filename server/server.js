@@ -91,8 +91,76 @@ function render(input, callback) {
             output += '</div>';
         }
 
+        var mjAPI = startMathJax();
+        handleMathJax(mjAPI, output);
+
         callback(output);
     }
+}
+
+function startMathJax(){
+    var mjAPI = require("MathJax-node/lib/mj-single");
+    mjAPI.config({
+        MathJax: {
+            SVG: {
+                font: "STIX-Web"
+            },
+            tex2jax: {
+                preview: ["[math]"],
+                processEscapes: true,
+                processClass: ['math'],
+                inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+                displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+                skipTags: ["script","noscript","style","textarea","pre","code"]
+            },
+            TeX: {
+                noUndefined: {disabled: true},
+                Macros: {
+                    mbox: ['{\\text{#1}}',1],
+                    mb: ['{\\mathbf{#1}}',1],
+                    mc: ['{\\mathcal{#1}}',1],
+                    mi: ['{\\mathit{#1}}',1],
+                    mr: ['{\\mathrm{#1}}',1],
+                    ms: ['{\\mathsf{#1}}',1],
+                    mt: ['{\\mathtt{#1}}',1]
+                }
+            }
+        }
+    });
+    mjAPI.start();
+    return mjAPI;
+}
+
+function handleMathJax(mjAPI, document){
+    var params = {
+        "format": "TeX",
+        "math": "b = a + c",
+        "svg":true,
+        "mml":false,
+        "png":false,
+        "speakText": true,
+        "speakRuleset": "mathspeak",
+        "speakStyle": "default",
+        "ex": 6,
+        "width": 1000000,
+        "linebreaks": false
+    };
+
+    var jsdom = require('jsdom');
+
+    var renderMath = function (index, mathelement) {
+        var mathText = mathelement.innerHTML;
+        console.log("Zu rendern: " + mathText);
+        params.math = mathText;
+        mjAPI.typeset(params, function(result){
+            console.log("Ergebnis: " + result);
+
+        });
+    };
+    jsdom.env(document, ["http://code.jquery.com/jquery.js"], function(errors, window){
+        window.$('.math').each(renderMath);
+        window.$('.mathInLIne').each(renderMath);
+    });
 }
 
 server = dnode(function (remote, connection) {
