@@ -94,7 +94,6 @@ define([
                 } else if (href[2] === 'tube.geogebra.org' && href[3] === 'student' && href[4]) {
 
                     that.trigger('toggle-plugin', 'geogebratube-injection', token, href.join('/'));
-                    
                 } else {
                     // normal injections get treated as
                     // default injections
@@ -107,9 +106,6 @@ define([
                 availablePlugins = [{
                     name: t('Normal'),
                     key: 'default-injection'
-                }, {
-                    name: t('Geogebra'),
-                    key: 'geogebra-injection'
                 }, {
                     name: t('GeogebraTube'),
                     key: 'geogebratube-injection'
