@@ -1,7 +1,7 @@
 Athene2 Editor
 ==============
 
-You'll need [NodeJS](http://nodejs.org) and Ruby installed. Also make sure that bower and grunt are installed:
+You'll need [NodeJS](http://nodejs.org) and [Ruby gems](https://www.ruby-lang.org) installed. Also make sure that bower and grunt are installed:
 
 ```
 npm install bower -g
@@ -19,4 +19,4 @@ bower install
 grunt dev
 ```
 
-Finally, open the Editor by opening the `index.html` in your browser (served by a webserver like apache2).
+Open [http://localhost:9001](localhost:9001)
