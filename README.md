@@ -19,4 +19,4 @@ bower install
 grunt dev
 ```
 
-Open [http://localhost:9001](localhost:9001)
+Open [localhost:9001](http://localhost:9001)
