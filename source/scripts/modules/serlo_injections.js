@@ -75,30 +75,26 @@ define(['jquery', 'common', 'translator', 'content'], function ($, Common, t) {
             }
 
             function initGeogebraTube() {
-                //console.log(href.substr(0, 34));
-                var gtAppletID = 'gtApplet' + gtAppletsCount, applet,
+                var gtAppletID = 'gtApplet' + gtAppletsCount, applet, hrefSplit,
                     $clone = $geogebraTubeTemplate.clone();
 
-                //if (gtAppletsCount === 0)
-                //    require([geogebraTubeScriptSource]);
-                gtAppletsCount += 1;
+                gtAppletsCount++;
 
                 $clone.attr('id', gtAppletID);
 
                 $that.html($clone);
 
-                applet = new GGBApplet({material_id: href.substr(34)}, true);
+                hrefSplit = href.split('/');
+                applet = new GGBApplet({material_id: hrefSplit[4].substr(1)}, true);
 
                 applet.inject(gtAppletID, 'preferHTML5');
 
-                setTimeout(function () {
-                    $clone.find("div:first").css("transform", "none");
-                }, 2000);
-                setTimeout(function () {
-                    $clone.find("div:first").css("transform", "none");
-                }, 500);
-
-                // web();
+                transform = function () {
+                    $clone.parent().width($clone.find("div:first").width() * $clone.find("div:first > article").attr("data-param-scale"));
+                    $clone.parent().height($clone.find("div:first").height() * $clone.find("div:first > article").attr("data-param-scale"));
+                };
+                setTimeout(transform, 20000);
+                setTimeout(transform, 5000);
             }
 
             function notSupportedYet($context) {
@@ -114,7 +110,7 @@ define(['jquery', 'common', 'translator', 'content'], function ($, Common, t) {
 
                 // check if it is geogebra
                 var hrefSplit = href.split('/');
-                if (href[2] === 'tube.geogebra.org' && href[3] === 'student' && href[4].substr(0, 1) == "m"){
+                if (hrefSplit[2] === 'tube.geogebra.org' && hrefSplit[3] === 'student' && hrefSplit[4]){
                     initGeogebraTube();
                 } else if (data.documentElement && data.documentElement.nodeName === 'geogebra') {
                     initGeogebraApplet(data.documentElement.outerHTML);
