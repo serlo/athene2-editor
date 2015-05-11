@@ -110,7 +110,7 @@ define(['jquery', 'common', 'translator', 'content'], function ($, Common, t) {
 
                 // check if it is geogebra
                 var hrefSplit = href.split('/');
-                if (hrefSplit[2] === 'tube.geogebra.org' && hrefSplit[3] === 'student' && hrefSplit[4]){
+                if (hrefSplit[2] === 'tube.geogebra.org' && hrefSplit[3] === 'student' && hrefSplit[4] !== undefined){
                     initGeogebraTube();
                 } else if (data.documentElement && data.documentElement.nodeName === 'geogebra') {
                     initGeogebraApplet(data.documentElement.outerHTML);

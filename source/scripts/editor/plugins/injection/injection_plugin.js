@@ -91,7 +91,7 @@ define([
                             Common.genericError();
                             that.trigger('close');
                         });//   http://tube.geogebra.org/student/m117646
-                } else if (href[2] === 'tube.geogebra.org' && href[3] === 'student' && href[4]) {
+                } else if (href[2] === 'tube.geogebra.org' && href[3] === 'student' && href[4] !== undefined) {
 
                     that.trigger('toggle-plugin', 'geogebratube-injection', token, href.join('/'));
                 } else {
