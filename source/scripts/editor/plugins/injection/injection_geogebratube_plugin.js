@@ -66,6 +66,17 @@ define([
 
         GeogebraTubeInjectionPlugin.prototype.setAndValidateContent = function () {
             var href = $('.href', this.$el).val();
+            if (href.substr(0, 4) != "ggt/") {
+                var l,
+                    hrefSplit = href.split("/");
+                l = hrefSplit[hrefSplit.length - 1];
+                if (l.substr(0, 1) == "m")
+                    href = parseInt(l.substr(1));
+                else
+                    href = parseInt(l);
+                if (href !== NaN)
+                    href = "ggt/" + href;
+            }
 
             this.data.content = '>[' + $('.title', this.$el).val() + '](' + href + ')';
         };

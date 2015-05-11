@@ -75,18 +75,16 @@ define(['jquery', 'common', 'translator', 'content'], function ($, Common, t) {
             }
 
             function initGeogebraTube() {
-                var gtAppletID = 'gtApplet' + gtAppletsCount, applet, hrefSplit,
+                var transform, gtAppletID = 'gtApplet' + gtAppletsCount, applet,
                     $clone = $geogebraTubeTemplate.clone();
 
                 gtAppletsCount++;
 
                 $clone.attr('id', gtAppletID);
-
                 $that.html($clone);
 
-                hrefSplit = href.split('/');
-                applet = new GGBApplet({material_id: hrefSplit[4].substr(1)}, true);
-
+                // material id is just the number at the end of a link
+                applet = new GGBApplet({material_id: href.substr(5)}, true);
                 applet.inject(gtAppletID, 'preferHTML5');
 
                 transform = function () {
@@ -108,11 +106,7 @@ define(['jquery', 'common', 'translator', 'content'], function ($, Common, t) {
                     contentType: contentType
                 };
 
-                // check if it is geogebra
-                var hrefSplit = href.split('/');
-                if (hrefSplit[2] === 'tube.geogebra.org' && hrefSplit[3] === 'student' && hrefSplit[4] !== undefined){
-                    initGeogebraTube();
-                } else if (data.documentElement && data.documentElement.nodeName === 'geogebra') {
+                if (data.documentElement && data.documentElement.nodeName === 'geogebra') {
                     initGeogebraApplet(data.documentElement.outerHTML);
                 } else if (contentType === 'image/jpeg' || contentType === 'image/png') {
                     $that.html('<img src="' + href + '" title="' + title + '" />');
@@ -136,6 +130,8 @@ define(['jquery', 'common', 'translator', 'content'], function ($, Common, t) {
                 handleResponse(cache[href].data, cache[href].contentType);
             }
 
+            // by default load injections from the server
+            // this fails for GeoGebraTube -> .error( ...
             $.ajax(href)
                 .success(function () {
                     handleResponse(arguments[0], arguments[2].getResponseHeader('Content-Type'));
@@ -150,8 +146,12 @@ define(['jquery', 'common', 'translator', 'content'], function ($, Common, t) {
                         require([geogebraScriptSource]);
                     }
                 })
+                // This error could mean that the injection is of type GeoGebraTube
                 .error(function () {
-                    Common.log('Could not load injection');
+                    Common.log('Could not load injection from Serlo server');
+                    if (href.substr(0, 5) === "/ggt/") {
+                        initGeogebraTube();
+                    }
                 });
         });
     };
