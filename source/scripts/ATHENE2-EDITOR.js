@@ -392,6 +392,7 @@ require([
     'texteditor_plugin_injection',
     'texteditor_plugin_default_injection',
     'texteditor_plugin_geogebra_injection',
+    'deployggb',
     'texteditor_plugin_geogebratube_injection'
 ],
     function (
