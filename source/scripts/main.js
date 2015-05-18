@@ -81,6 +81,7 @@ require.config({
         "texteditor_plugin_injection" : "editor/plugins/injection/injection_plugin",
         "texteditor_plugin_default_injection" : "editor/plugins/injection/injection_default_plugin",
         "texteditor_plugin_geogebra_injection" : "editor/plugins/injection/injection_geogebra_plugin",
+        "deployggb" : "thirdparty/deployggb",
         "texteditor_plugin_geogebratube_injection" : "editor/plugins/injection/injection_geogebratube_plugin"
     },
     shim: {

@@ -1,5 +1,6 @@
 node_modules
 source/bower_components
+npm-debug.log
 .sass-cache
 .tmp
 .grunt

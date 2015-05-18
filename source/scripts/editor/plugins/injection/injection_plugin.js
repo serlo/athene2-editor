@@ -90,8 +90,8 @@ define([
                         .error(function () {
                             Common.genericError();
                             that.trigger('close');
-                        });
-                } else if (href[0] === 'http:' && href[2] === 'tube.geogebra.org' && href[3] === 'student' && href[4]) {
+                        });//   /ggt/123456
+                } else if (href[0] == "ggt") {
                     that.trigger('toggle-plugin', 'geogebratube-injection', token, href.join('/'));
                 } else {
                     // normal injections get treated as

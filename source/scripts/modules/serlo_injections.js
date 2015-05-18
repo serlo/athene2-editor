@@ -9,9 +9,8 @@
  */
 
 /*global define, require, window, Modernizr, GGBApplet*/
-require(['http://www.geogebratube.org/scripts/deployggb.js']);
 
-define(['jquery', 'common', 'translator', 'content'], function ($, Common, t) {
+define(['jquery', 'common', 'translator', 'deployggb', 'content'], function ($, Common, t) {
     "use strict";
     var Injections,
         cache = {},
@@ -22,7 +21,7 @@ define(['jquery', 'common', 'translator', 'content'], function ($, Common, t) {
         //gtApplets = {},
         //geogebraTubeScriptSource = 'http://www.geogebratube.org/scripts/deployggb.js',
         gtAppletsCount = 0,
-        $geogebraTubeTemplate = $('<div style="width:100%; overflow:hidden"></div>');
+        $geogebraTubeTemplate = $('<div class="hidden-sm hidden-xs" style="transform-origin:top left"></div><a class="hidden-md hidden-lg">hi</a>');
 
     // terrible geogebra oninit handler..
     // that doesnt work.....
@@ -75,34 +74,29 @@ define(['jquery', 'common', 'translator', 'content'], function ($, Common, t) {
             }
 
             function initGeogebraTube() {
-                //console.log(href.substr(0, 34));
-                if (href.substr(0, 34) !== "http://tube.geogebra.org/student/m") {
-                    return false;
-                }
-                var gtAppletID = 'gtApplet' + gtAppletsCount, applet,
+                var transform, scale, gtAppletID = 'gtApplet' + gtAppletsCount, applet,
                     $clone = $geogebraTubeTemplate.clone();
 
-                //if (gtAppletsCount === 0)
-                //    require([geogebraTubeScriptSource]);
-                gtAppletsCount += 1;
+                gtAppletsCount++;
 
                 $clone.attr('id', gtAppletID);
-
                 $that.html($clone);
 
-                applet = new GGBApplet({material_id: href.substr(34)}, true);
-
+                // material id is just the number at the end of a link
+                applet = new GGBApplet({material_id: href.substr(5)}, true);
                 applet.inject(gtAppletID, 'preferHTML5');
 
-                setTimeout(function () {
-                    $clone.find("div:first").css("transform", "none");
-                }, 2000);
-                setTimeout(function () {
-                    $clone.find("div:first").css("transform", "none");
-                }, 500);
-
-                // web();
-                return true;
+                transform = function () {
+                    setTimeout(transform, 1000);
+                    scale = $clone.parent().width() / ($clone.find("div:first").width() * $clone.find("div:first > article").attr("data-param-scale"));
+                    $($clone[0]).css("transform", "scale(" + scale + ")");
+                    //$clone.first().css("position", "relative");
+                    $($clone[0]).height($clone.find("div:first").height() * scale * $clone.find("div:first > article").attr("data-param-scale"));
+                    $($clone[0]).parent().height("100%");
+                };
+                transform();
+                $($clone[1]).attr("href", "http://tube.geogebra.org/student/m" + href.substr(5));
+                $($clone[1]).text(title);
             }
 
             function notSupportedYet($context) {
@@ -116,32 +110,32 @@ define(['jquery', 'common', 'translator', 'content'], function ($, Common, t) {
                     contentType: contentType
                 };
 
-                // check if it is geogebra xml
-                if (! initGeogebraTube()) {
-                    if (data.documentElement && data.documentElement.nodeName === 'geogebra') {
-                        initGeogebraApplet(data.documentElement.outerHTML);
-                    } else if (contentType === 'image/jpeg' || contentType === 'image/png') {
-                        $that.html('<img src="' + href + '" title="' + title + '" />');
-                    } else {
-                        try {
-                            data = JSON.parse(data);
-                            if (data.response) {
-                                $that.html(data.response);
-                                Common.trigger('new context', $that);
-                            } else {
-                                notSupportedYet($that);
-                            }
-                        } catch (e) {
+                if (data.documentElement && data.documentElement.nodeName === 'geogebra') {
+                    initGeogebraApplet(data.documentElement.outerHTML);
+                } else if (contentType === 'image/jpeg' || contentType === 'image/png') {
+                    $that.html('<img src="' + href + '" title="' + title + '" />');
+                } else {
+                    try {
+                        data = JSON.parse(data);
+                        if (data.response) {
+                            $that.html('<div class="panel panel-default"><div class="panel-body">' + data.response + '</div></div>');
+                            Common.trigger('new context', $that);
+                        } else {
                             notSupportedYet($that);
                         }
+                    } catch (e) {
+                        notSupportedYet($that);
                     }
                 }
+                
             }
 
             if (cache[href]) {
                 handleResponse(cache[href].data, cache[href].contentType);
             }
 
+            // by default load injections from the server
+            // this fails for GeoGebraTube -> .error( ...
             $.ajax(href)
                 .success(function () {
                     handleResponse(arguments[0], arguments[2].getResponseHeader('Content-Type'));
@@ -156,8 +150,12 @@ define(['jquery', 'common', 'translator', 'content'], function ($, Common, t) {
                         require([geogebraScriptSource]);
                     }
                 })
+                // This error could mean that the injection is of type GeoGebraTube
                 .error(function () {
-                    Common.log('Could not load injection');
+                    Common.log('Could not load injection from Serlo server');
+                    if (href.substr(0, 5) === "/ggt/") {
+                        initGeogebraTube();
+                    }
                 });
         });
     };
