@@ -1,0 +1,797 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="ec3f2b4e-512c-4ed4-a1ae-1cfc6842a2b3" name="Default" comment="">
+      <change type="DELETED" beforePath="$PROJECT_DIR$/build/bower_components/modernizr/modernizr.js" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/bower.json" afterPath="$PROJECT_DIR$/bower.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/styles/editor.css" afterPath="$PROJECT_DIR$/build/styles/editor.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/scripts/editor.js" afterPath="$PROJECT_DIR$/build/scripts/editor.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/styles/main.css" afterPath="$PROJECT_DIR$/build/styles/main.css" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/package.json" afterPath="$PROJECT_DIR$/package.json" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/bower_components/requirejs/require.js" afterPath="$PROJECT_DIR$/build/bower_components/requirejs/require.js" />
+    </list>
+    <ignored path="athene2-editor.iws" />
+    <ignored path=".idea/workspace.xml" />
+    <option name="TRACKING_ENABLED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ChangesViewManager" flattened_view="true" show_ignored="false" />
+  <component name="CreatePatchCommitExecutor">
+    <option name="PATCH_PATH" value="" />
+  </component>
+  <component name="DaemonCodeAnalyzer">
+    <disable_hints />
+  </component>
+  <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
+  <component name="FavoritesManager">
+    <favorites_list name="athene2-editor" />
+  </component>
+  <component name="FileEditorManager">
+    <leaf>
+      <file leaf-file-name="ATHENE2-EDITOR.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/source/scripts/ATHENE2-EDITOR.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="517" column="23" selection-start="18422" selection-end="18422" vertical-scroll-proportion="0.0" vertical-offset="7755" max-vertical-offset="8985">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="require.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/build/bower_components/requirejs/require.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="0" column="3" selection-start="3" selection-end="3" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="225">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="package.json" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/package.json">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="9" column="22" selection-start="310" selection-end="310" vertical-scroll-proportion="0.052083332" vertical-offset="105" max-vertical-offset="825">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Gruntfile.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/Gruntfile.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="315" column="19" selection-start="10781" selection-end="10781" vertical-scroll-proportion="0.0" vertical-offset="4725" max-vertical-offset="6360">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="bower.json" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/bower.json">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="2" column="20" selection-start="50" selection-end="50" vertical-scroll-proportion="-1.25" vertical-offset="0" max-vertical-offset="405">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="index.html" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/index.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="0" column="0" selection-start="0" selection-end="23" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1200">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="main.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/source/scripts/main.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="81" column="52" selection-start="4317" selection-end="4317" vertical-scroll-proportion="0.0" vertical-offset="1215" max-vertical-offset="2250">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="wiris_plugin.js" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/source/scripts/editor/plugins/wiris/wiris_plugin.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="100" column="35" selection-start="3062" selection-end="3062" vertical-scroll-proportion="0.0" vertical-offset="1500" max-vertical-offset="1665">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
+  </component>
+  <component name="FindManager">
+    <FindUsagesManager>
+      <setting name="OPEN_NEW_TAB" value="false" />
+    </FindUsagesManager>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="fuuu" />
+      </map>
+    </option>
+  </component>
+  <component name="IdeDocumentHistory">
+    <option name="changedFiles">
+      <list>
+        <option value="$PROJECT_DIR$/source/styles/partials/_serlo_search.scss" />
+        <option value="$PROJECT_DIR$/source/scripts/editor/showdown/extensions/htmlstrip.js" />
+        <option value="$PROJECT_DIR$/source/scripts/editor/showdown/extensions/strikethrough.js" />
+        <option value="$PROJECT_DIR$/source/scripts/editor/showdown/extensions/atusername.js" />
+        <option value="$PROJECT_DIR$/source/scripts/editor/showdown/extensions/atUsername.js" />
+        <option value="$PROJECT_DIR$/source/scripts/main.js" />
+        <option value="$PROJECT_DIR$/source/styles/partials/_serlo_top_menu.scss" />
+        <option value="$PROJECT_DIR$/server/server.js" />
+        <option value="$PROJECT_DIR$/source/bower_components/showdown/src/showdown.js" />
+        <option value="$PROJECT_DIR$/source/scripts/editor/showdown/extensions/html_strip.js" />
+        <option value="$PROJECT_DIR$/source/styles/editor/_layout.scss" />
+        <option value="$PROJECT_DIR$/source/styles/partials/_serlo_header.scss" />
+        <option value="$PROJECT_DIR$/source/styles/thirdparty/_jasny_bootstrap.scss" />
+        <option value="$PROJECT_DIR$/source/styles/_shame.scss" />
+        <option value="$PROJECT_DIR$/source/scripts/editor/plugins/injection/bkp_injection_geogebra_plugin.js" />
+        <option value="$PROJECT_DIR$/source/scripts/editor/plugins/injection/injection_geogebra_plugin.js" />
+        <option value="$PROJECT_DIR$/editor/geogebra-editor.html" />
+        <option value="$PROJECT_DIR$/source/scripts/editor/plugins/wiris/wiris_plugin.js" />
+        <option value="$PROJECT_DIR$/source/scripts/editor/plugins/image/image_plugin.js" />
+        <option value="$PROJECT_DIR$/source/scripts/editor/serlo_layout_row.js" />
+        <option value="$PROJECT_DIR$/source/scripts/editor/showdown/extensions/spoiler.js" />
+        <option value="$PROJECT_DIR$/source/scripts/modules/serlo_spoiler.js" />
+        <option value="$PROJECT_DIR$/source/scripts/editor/plugins/serlo_texteditor_plugin.js" />
+        <option value="$PROJECT_DIR$/source/scripts/editor/serlo_texteditor_helper.js" />
+        <option value="$PROJECT_DIR$/index.html" />
+        <option value="$PROJECT_DIR$/source/styles/content.scss" />
+        <option value="$PROJECT_DIR$/source/styles/partials/_serlo_main_menu.scss" />
+        <option value="$PROJECT_DIR$/source/scripts/ATHENE2-EDITOR.js" />
+        <option value="$PROJECT_DIR$/source/scripts/modules/serlo_injections.js" />
+        <option value="$PROJECT_DIR$/source/styles/main.scss" />
+        <option value="$PROJECT_DIR$/source/scripts/editor/plugins/injection/injection_plugin.js" />
+        <option value="$PROJECT_DIR$/index2.html" />
+        <option value="$PROJECT_DIR$/build/bower_components/requirejs/require.js" />
+        <option value="$PROJECT_DIR$/bower.json" />
+        <option value="$PROJECT_DIR$/package.json" />
+      </list>
+    </option>
+  </component>
+  <component name="PhpWorkspaceProjectConfiguration" backward_compatibility_performed="true" />
+  <component name="ProjectFrameBounds">
+    <option name="x" value="3600" />
+    <option name="y" value="23" />
+    <option name="width" value="1680" />
+    <option name="height" value="1027" />
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="false">
+    <OptionsSetting value="true" id="Add" />
+    <OptionsSetting value="true" id="Remove" />
+    <OptionsSetting value="true" id="Checkout" />
+    <OptionsSetting value="true" id="Update" />
+    <OptionsSetting value="true" id="Status" />
+    <OptionsSetting value="true" id="Edit" />
+    <ConfirmationsSetting value="0" id="Add" />
+    <ConfirmationsSetting value="0" id="Remove" />
+  </component>
+  <component name="ProjectReloadState">
+    <option name="STATE" value="0" />
+  </component>
+  <component name="ProjectView">
+    <navigator currentView="ProjectPane" proportions="" version="1" splitterProportion="0.5">
+      <flattenPackages />
+      <showMembers />
+      <showModules />
+      <showLibraryContents />
+      <hideEmptyPackages />
+      <abbreviatePackageNames />
+      <autoscrollToSource />
+      <autoscrollFromSource />
+      <sortByType />
+    </navigator>
+    <panes>
+      <pane id="ProjectPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="athene2-editor" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="athene2-editor" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="athene2-editor" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="athene2-editor" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="athene2-editor" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="source" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="athene2-editor" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="athene2-editor" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="server" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="athene2-editor" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="athene2-editor" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="build" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="athene2-editor" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="athene2-editor" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="build" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="bower_components" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="requirejs" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="athene2-editor" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="athene2-editor" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="build" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="bower_components" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
+      <pane id="Scope" />
+    </panes>
+  </component>
+  <component name="PropertiesComponent">
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="FullScreen" value="false" />
+    <property name="LayoutCode.rearrangeEntries" value="false" />
+    <property name="options.lastSelected" value="com.ansorgit.plugins.bash.settings.BashProjectSettingsConfigurable" />
+    <property name="options.splitter.main.proportions" value="0.3" />
+    <property name="options.splitter.details.proportions" value="0.2" />
+    <property name="options.searchVisible" value="true" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth0" value="197" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder0" value="0" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth1" value="199" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder1" value="1" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth2" value="202" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder2" value="2" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatWidth3" value="997" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_flatOrder3" value="3" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth0" value="197" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder0" value="0" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth1" value="199" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder1" value="1" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth2" value="202" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder2" value="2" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeWidth3" value="997" />
+    <property name="FileHistory.git4idea.history.GitHistoryProvider_treeOrder3" value="3" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/scripts" />
+      <recent name="$PROJECT_DIR$/source/styles/thirdparty" />
+      <recent name="$PROJECT_DIR$/source/styles/fonts" />
+      <recent name="$PROJECT_DIR$/build/styles/fonts" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="PHPUnitRunConfigurationType" factoryName="PHPUnit">
+      <TestRunner />
+      <method />
+    </configuration>
+    <configuration default="true" type="PhpLocalRunConfigurationType" factoryName="PHP Console">
+      <method />
+    </configuration>
+    <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug" singleton="true">
+      <method />
+    </configuration>
+    <configuration default="true" type="PhpUnitRemoteRunConfigurationType" factoryName="PHPUnit on Server">
+      <method />
+    </configuration>
+    <list size="0" />
+  </component>
+  <component name="ShelveChangesManager" show_recycled="false" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="ec3f2b4e-512c-4ed4-a1ae-1cfc6842a2b3" name="Default" comment="" />
+      <created>1396783470242</created>
+      <updated>1396783470242</updated>
+    </task>
+    <task id="LOCAL-00001" summary="Not sure the blog thingy is neccessary for geogebra uploads">
+      <created>1397494796900</created>
+      <updated>1397494796900</updated>
+    </task>
+    <task id="LOCAL-00002" summary="CamelCase is ruining multi-platform stuff. One thing works on linux, the other does on windows. From now on, all files must always be *lower case* and separated with underscores (_) to prevent this from happening again">
+      <created>1397495770810</created>
+      <updated>1397495770810</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Version bump to 0.1.24">
+      <created>1397495799331</created>
+      <updated>1397495799331</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Wow, forgot to update server.js. Bump to 0.1.25">
+      <created>1397496038645</created>
+      <updated>1397496038645</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Minor code rewrite">
+      <created>1397650139716</created>
+      <updated>1397650139716</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Minor heading font-size change">
+      <created>1398964634392</created>
+      <updated>1398964634392</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Closes https://github.com/serlo-org/athene2/issues/602">
+      <created>1401806953428</created>
+      <updated>1401806953428</updated>
+    </task>
+    <task id="LOCAL-00008" summary="Improved editor layout, improved spoiler layout, removed unnecessary plugins, version bump">
+      <created>1405843454182</created>
+      <updated>1405843454182</updated>
+    </task>
+    <task id="LOCAL-00009" summary="Fixed typography messup">
+      <created>1405846693525</created>
+      <updated>1405846693525</updated>
+    </task>
+    <task id="LOCAL-00010" summary="Minor typography fix, added missing files to git">
+      <created>1405868272679</created>
+      <updated>1405868272679</updated>
+    </task>
+    <task id="LOCAL-00011" summary="Minor css fix">
+      <created>1405874394656</created>
+      <updated>1405874394656</updated>
+    </task>
+    <task id="LOCAL-00012" summary="Minor css fix">
+      <created>1405880960935</created>
+      <updated>1405880960935</updated>
+    </task>
+    <task id="LOCAL-00013" summary="Closes https://github.com/serlo-org/athene2/issues/656">
+      <created>1405927372872</created>
+      <updated>1405927372872</updated>
+    </task>
+    <task id="LOCAL-00014" summary="Solves an issue where images in tables would be too wide">
+      <created>1407668570037</created>
+      <updated>1407668570037</updated>
+    </task>
+    <task id="LOCAL-00015" summary="Build update">
+      <created>1407668619287</created>
+      <updated>1407668619287</updated>
+    </task>
+    <task id="LOCAL-00016" summary="Closes https://github.com/serlo-org/athene2/issues/735">
+      <created>1419000559545</created>
+      <updated>1419000559545</updated>
+    </task>
+    <task id="LOCAL-00017" summary="Closes https://github.com/serlo-org/athene2/issues/707">
+      <created>1419003944088</created>
+      <updated>1419003944088</updated>
+    </task>
+    <task id="LOCAL-00018" summary="Closes an https issue with wiris and allows svg uploads">
+      <created>1423062257516</created>
+      <updated>1423062257516</updated>
+    </task>
+    <task id="LOCAL-00019" summary="Version push">
+      <created>1423062329671</created>
+      <updated>1423062329671</updated>
+    </task>
+    <task id="LOCAL-00020" summary="Use font-awesome instead of glyphicons">
+      <created>1425058452612</created>
+      <updated>1425058452612</updated>
+    </task>
+    <task id="LOCAL-00021" summary="Use font-awesome instead of glyphicons">
+      <created>1425058947989</created>
+      <updated>1425058947989</updated>
+    </task>
+    <task id="LOCAL-00022" summary="Use font-awesome instead of glyphicons">
+      <created>1425059000434</created>
+      <updated>1425059000434</updated>
+    </task>
+    <task id="LOCAL-00023" summary="dsfgserzrshg">
+      <created>1426701692259</created>
+      <updated>1426701692259</updated>
+    </task>
+    <task id="LOCAL-00024" summary="Merge branch 'master' of https://github.com/serlo-org/athene2-editor into dev-redesign&#10;&#10;Conflicts:&#10;&#9;build/bower_components/requirejs/require.js&#10;&#9;build/scripts/editor.js&#10;">
+      <created>1426701898209</created>
+      <updated>1426701898209</updated>
+    </task>
+    <task id="LOCAL-00025" summary="Cleanup">
+      <created>1430480913339</created>
+      <updated>1430480913339</updated>
+    </task>
+    <task id="LOCAL-00026" summary="Cleanup">
+      <created>1430480952907</created>
+      <updated>1430480952907</updated>
+    </task>
+    <option name="localTasksCounter" value="27" />
+    <servers />
+  </component>
+  <component name="TodoView" selected-index="0">
+    <todo-panel id="selected-file">
+      <are-packages-shown value="false" />
+      <are-modules-shown value="false" />
+      <flatten-packages value="false" />
+      <is-autoscroll-to-source value="false" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="false" />
+      <are-modules-shown value="false" />
+      <flatten-packages value="false" />
+      <is-autoscroll-to-source value="false" />
+    </todo-panel>
+    <todo-panel id="default-changelist">
+      <are-packages-shown value="false" />
+      <are-modules-shown value="false" />
+      <flatten-packages value="false" />
+      <is-autoscroll-to-source value="false" />
+    </todo-panel>
+  </component>
+  <component name="ToolWindowManager">
+    <frame x="3600" y="23" width="1680" height="1027" extended-state="6" />
+    <editor active="false" />
+    <layout>
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32882884" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
+      <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Terminal" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32834226" sideWeight="0.32967034" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32977587" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.31746033" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.38207045" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.38207045" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
+      <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.39615384" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
+      <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
+      <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.39977092" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
+    </layout>
+  </component>
+  <component name="Vcs.Log.UiProperties">
+    <option name="RECENTLY_FILTERED_USER_GROUPS">
+      <collection />
+    </option>
+  </component>
+  <component name="VcsContentAnnotationSettings">
+    <option name="myLimit" value="2678400000" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <option name="CHECK_CODE_SMELLS_BEFORE_PROJECT_COMMIT" value="false" />
+    <option name="myTodoPanelSettings">
+      <TodoPanelSettings />
+    </option>
+    <MESSAGE value="Not sure the blog thingy is neccessary for geogebra uploads" />
+    <MESSAGE value="Fix the camelcase stuff once and for all" />
+    <MESSAGE value="CamelCase is ruining multi-platform stuff. One thing works on linux, the other does on windows. From now on, all files must always be *lower case* and separated with underscores (_) to prevent this from happening again" />
+    <MESSAGE value="Version bump to 0.1.24" />
+    <MESSAGE value="Wow, forgot to update server.js. Bump to 0.1.25" />
+    <MESSAGE value="Minor code rewrite" />
+    <MESSAGE value="Minor heading font-size change" />
+    <MESSAGE value="Closes https://github.com/serlo-org/athene2/issues/602" />
+    <MESSAGE value="Improved editor layout, improved spoiler layout, removed unnecessary plugins, version bump" />
+    <MESSAGE value="Fixed typography messup" />
+    <MESSAGE value="Minor typography fix, added missing files to git" />
+    <MESSAGE value="Minor css fix" />
+    <MESSAGE value="Closes https://github.com/serlo-org/athene2/issues/656" />
+    <MESSAGE value="Solves an issue where images in tables would be too wide" />
+    <MESSAGE value="Build update" />
+    <MESSAGE value="Closes https://github.com/serlo-org/athene2/issues/735" />
+    <MESSAGE value="Closes https://github.com/serlo-org/athene2/issues/707" />
+    <MESSAGE value="Closes an https issue with wiris and allows svg uploads" />
+    <MESSAGE value="Version push" />
+    <MESSAGE value="Use font-awesome instead of glyphicons" />
+    <MESSAGE value="dsfgserzrshg" />
+    <MESSAGE value="Merge branch 'master' of https://github.com/serlo-org/athene2-editor into dev-redesign&#10;&#10;Conflicts:&#10;&#9;build/bower_components/requirejs/require.js&#10;&#9;build/scripts/editor.js&#10;" />
+    <MESSAGE value="Cleanup" />
+    <option name="LAST_COMMIT_MESSAGE" value="Cleanup" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <option name="time" value="2" />
+    </breakpoint-manager>
+  </component>
+  <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/source/styles/base/_variables.scss">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="7" column="11" selection-start="102" selection-end="113" vertical-scroll-proportion="-2.142857" vertical-offset="0" max-vertical-offset="810" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/source/styles/base/_bootstrap-override.scss">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="7" column="12" selection-start="169" selection-end="169" vertical-scroll-proportion="-2.142857" vertical-offset="0" max-vertical-offset="390" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/source/styles/editor/_layout.scss">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="300" column="14" selection-start="4184" selection-end="4184" vertical-scroll-proportion="-1.3673469" vertical-offset="4433" max-vertical-offset="5355" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/source/styles/modules/_alerts.scss">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="822" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/source/scripts/modules/serlo_supporter.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="809" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/source/styles/base/_typography.scss">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="822" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/source/styles/partials/_serlo_header.scss">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="59" column="8" selection-start="845" selection-end="845" vertical-scroll-proportion="0.0" vertical-offset="885" max-vertical-offset="1095" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/source/styles/_shame.scss">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="5" column="1" selection-start="110" selection-end="110" vertical-scroll-proportion="0.0" vertical-offset="75" max-vertical-offset="165" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/source/styles/editor.scss">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="-0.0" vertical-offset="0" max-vertical-offset="135" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/source/scripts/editor/serlo_editor_previewer.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="-2.096976" vertical-offset="2011" max-vertical-offset="2970" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/source/scripts/codemirror/mode/markdown/markdown.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="36" column="30" selection-start="1172" selection-end="1172" vertical-scroll-proportion="0.0" vertical-offset="165" max-vertical-offset="8355" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/source/scripts/editor/templates/plugins/injection/injection_plugin_geogebra.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="17" column="6" selection-start="1133" selection-end="1133" vertical-scroll-proportion="0.0" vertical-offset="255" max-vertical-offset="345" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/source/scripts/editor/serlo_layout_add.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="810" max-vertical-offset="1740" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/source/scripts/editor/serlo_parser.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="15" column="18" selection-start="433" selection-end="433" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="330" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/source/scripts/editor/plugins/injection/injection_default_plugin.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1260" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/source/scripts/editor/plugins/injection/injection_geogebra_plugin.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="184" column="29" selection-start="5861" selection-end="5867" vertical-scroll-proportion="0.0" vertical-offset="2385" max-vertical-offset="3990" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/source/bower_components/blueimp-file-upload/js/jquery.fileupload-ui.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="62" column="29" selection-start="2107" selection-end="2107" vertical-scroll-proportion="0.0" vertical-offset="602" max-vertical-offset="10440" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/source/bower_components/jquery/src/ajax.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="221" column="15" selection-start="6127" selection-end="6134" vertical-scroll-proportion="0.0" vertical-offset="3315" max-vertical-offset="12915" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.jshintrc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="660" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/editor/geogebra-editor.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="6" column="41" selection-start="159" selection-end="159" vertical-scroll-proportion="0.0" vertical-offset="90" max-vertical-offset="390" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/source/scripts/editor/plugins/serlo_texteditor_plugin_manager.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1110" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/source/scripts/editor/plugins/image/image_plugin.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="22" column="0" selection-start="560" selection-end="561" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2175" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/source/scripts/editor/serlo_layout_row.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="51" column="38" selection-start="1628" selection-end="1628" vertical-scroll-proportion="0.5667244" vertical-offset="438" max-vertical-offset="1605" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/source/scripts/modules/serlo_spoiler.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="11" column="53" selection-start="348" selection-end="348" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="420" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/source/scripts/editor/plugins/serlo_texteditor_plugin.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="56" column="75" selection-start="1640" selection-end="1640" vertical-scroll-proportion="0.0" vertical-offset="648" max-vertical-offset="1455" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/source/styles/content.scss">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="86" column="16" selection-start="1515" selection-end="1532" vertical-scroll-proportion="0.0" vertical-offset="904" max-vertical-offset="1995" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/source/styles/partials/_serlo_main_menu.scss">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="147" column="7" selection-start="2564" selection-end="2564" vertical-scroll-proportion="0.0" vertical-offset="2029" max-vertical-offset="3300" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/source/scripts/editor/serlo_texteditor_helper.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="185" column="4" selection-start="5782" selection-end="5782" vertical-scroll-proportion="0.0" vertical-offset="2758" max-vertical-offset="4185" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.bowerrc">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="2" column="0" selection-start="43" selection-end="44" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="120" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/server/server.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="86" column="38" selection-start="2976" selection-end="2976" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1530" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/source/styles/main.scss">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="32" column="30" selection-start="1038" selection-end="1038" vertical-scroll-proportion="0.0" vertical-offset="69" max-vertical-offset="630" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/source/scripts/editor/plugins/injection/injection_plugin.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="101" column="0" selection-start="3823" selection-end="3823" vertical-scroll-proportion="0.0" vertical-offset="1305" max-vertical-offset="2235" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/source/scripts/editor/templates/plugin.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="565" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/source/scripts/editor/showdown/extensions/spoiler.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="12" column="138" selection-start="515" selection-end="515" vertical-scroll-proportion="0.0" vertical-offset="35" max-vertical-offset="600" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/source/scripts/editor/templates/plugins/default.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="624">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/source/scripts/editor/templates/plugins/wiris/wiris_plugin.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="0" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="611">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/source/scripts/ATHENE2-EDITOR.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="517" column="23" selection-start="18422" selection-end="18422" vertical-scroll-proportion="0.0" vertical-offset="7755" max-vertical-offset="8985">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/source/scripts/main.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="81" column="52" selection-start="4317" selection-end="4317" vertical-scroll-proportion="0.0" vertical-offset="1215" max-vertical-offset="2250">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/source/scripts/editor/plugins/wiris/wiris_plugin.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="100" column="35" selection-start="3062" selection-end="3062" vertical-scroll-proportion="0.0" vertical-offset="1111" max-vertical-offset="1665">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="0" selection-start="0" selection-end="23" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="1200">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Gruntfile.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="315" column="19" selection-start="10781" selection-end="10781" vertical-scroll-proportion="0.0" vertical-offset="4516" max-vertical-offset="6360">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/build/bower_components/requirejs/require.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="0" column="3" selection-start="3" selection-end="3" vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="225">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/bower.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="2" column="20" selection-start="50" selection-end="50" vertical-scroll-proportion="-1.25" vertical-offset="0" max-vertical-offset="405">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/package.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="9" column="22" selection-start="310" selection-end="310" vertical-scroll-proportion="0.052083332" vertical-offset="105" max-vertical-offset="825">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+  </component>
+</project>
+
