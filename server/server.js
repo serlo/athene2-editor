@@ -92,9 +92,7 @@ function render(input, callback) {
         }
 
         var mjAPI = startMathJax();
-        handleMathJax(mjAPI, output);
-
-        callback(output);
+        handleMathJax(mjAPI, output, callback);
     }
 }
 
@@ -109,7 +107,7 @@ function startMathJax(){
                 preview: ["[math]"],
                 processEscapes: true,
                 processClass: ['math'],
-                inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+                //inlineMath: [ ['\\%\\%','\\%\\%'], ["\\(","\\)"] ],
                 displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
                 skipTags: ["script","noscript","style","textarea","pre","code"]
             },
@@ -131,10 +129,10 @@ function startMathJax(){
     return mjAPI;
 }
 
-function handleMathJax(mjAPI, document){
+function handleMathJax(mjAPI, document, cb){
     var params = {
         "format": "TeX",
-        "math": "b = a + c",
+        "math": "",
         "svg":true,
         "mml":false,
         "png":false,
@@ -142,24 +140,55 @@ function handleMathJax(mjAPI, document){
         "speakRuleset": "mathspeak",
         "speakStyle": "default",
         "ex": 6,
-        "width": 1000000,
-        "linebreaks": false
+        "width": 10,
+        "linebreaks": true
     };
 
     var jsdom = require('jsdom');
 
-    var renderMath = function (index, mathelement) {
-        var mathText = mathelement.innerHTML;
-        console.log("Zu rendern: " + mathText);
-        params.math = mathText;
-        mjAPI.typeset(params, function(result){
-            console.log("Ergebnis: " + result);
+    var async = require('async');
+    var asyncTasks = [];
 
+    var pushRenderTask = function(index, mathelement){
+        asyncTasks.push(function(pushCallback){
+            var mathText = mathelement.innerHTML;
+            console.log("Zu rendern: " + mathText);
+
+            if (match = mathText.match(/^\$\$(.*)\$\$$/)) {
+                params.format = "TeX";
+                params.math = match[1];
+            } else if (match = mathText.match(/^%%(.*)%%$/)) {
+                params.format = "inline-TeX";
+                params.math = match[1];
+            } else{
+                return;
+            }
+
+            mjAPI.typeset(params,function(result){
+                console.log("Ergebnis: " + result);
+                mathelement.innerHTML = result.svg;
+                pushCallback();
+            });
         });
     };
+
     jsdom.env(document, ["http://code.jquery.com/jquery.js"], function(errors, window){
-        window.$('.math').each(renderMath);
-        window.$('.mathInLIne').each(renderMath);
+        if(errors === null){
+            window.$('.math').each(pushRenderTask);
+            window.$('.mathInLIne').each(pushRenderTask);
+
+            if(asyncTasks.length>0){
+                async.parallel(asyncTasks, function(){
+                    cb(window.document.body.innerHTML);
+                });
+            } else {
+                cb(window.document.body.innerHTML);
+            }
+        } else {
+            console.log("Fehler: " + errors);
+            cb(document);
+        }
+
     });
 }
 
