@@ -70,12 +70,14 @@ define([
                 var l,
                     hrefSplit = href.split("/");
                 l = hrefSplit[hrefSplit.length - 1];
-                if (l.substr(0, 1) == "m")
+                if (l.substr(0, 1) == "m") {
                     href = parseInt(l.substr(1));
-                else
+                } else {
                     href = parseInt(l);
-                if (href !== NaN)
+                }
+                if (href !== NaN) {
                     href = "ggt/" + href;
+                }
             }
 
             this.data.content = '>[' + $('.title', this.$el).val() + '](' + href + ')';
