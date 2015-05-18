@@ -140,13 +140,13 @@ function handleMathJax(mjAPI, document, cb){
         "speakRuleset": "mathspeak",
         "speakStyle": "default",
         "ex": 6,
-        "width": 10,
-        "linebreaks": true
+        "width": 100000000,
+        "linebreaks": false
     };
 
     var jsdom = require('jsdom');
 
-    var async = require('async');
+    var async = require('grunt-contrib-compass/node_modules/async');
     var asyncTasks = [];
 
     var pushRenderTask = function(index, mathelement){
@@ -175,7 +175,7 @@ function handleMathJax(mjAPI, document, cb){
     jsdom.env(document, ["http://code.jquery.com/jquery.js"], function(errors, window){
         if(errors === null){
             window.$('.math').each(pushRenderTask);
-            window.$('.mathInLIne').each(pushRenderTask);
+            window.$('.mathInLine').each(pushRenderTask);
 
             if(asyncTasks.length>0){
                 async.parallel(asyncTasks, function(){
@@ -188,7 +188,6 @@ function handleMathJax(mjAPI, document, cb){
             console.log("Fehler: " + errors);
             cb(document);
         }
-
     });
 }
 
