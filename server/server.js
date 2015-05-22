@@ -9,10 +9,44 @@
 
 var dnode = require('dnode'),
     Showdown = require('showdown'),
+    jsdom = require('jsdom'),
+    async = require('async'),
+    HtmlEntities = require('html-entities').AllHtmlEntities,
+    htmlEntities = new HtmlEntities(),
     converter,
     server,
     port = 7070,
-    host = '127.0.0.1';
+    host = '127.0.0.1',
+    mjAPI = require('MathJax-node/lib/mj-single');
+
+mjAPI.config({
+    MathJax: {
+        SVG: {
+            font: 'STIX-Web'
+        },
+        tex2jax: {
+            preview: ['[math]'],
+            processEscapes: true,
+            processClass: ['math'],
+            //inlineMath: [ ['\\%\\%','\\%\\%'], ['\\(','\\)'] ],
+            displayMath: [['$$', '$$'], ['\\[', '\\]']],
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        },
+        TeX: {
+            noUndefined: {disabled: true},
+            Macros: {
+                mbox: ['{\\text{#1}}', 1],
+                mb: ['{\\mathbf{#1}}', 1],
+                mc: ['{\\mathcal{#1}}', 1],
+                mi: ['{\\mathit{#1}}', 1],
+                mr: ['{\\mathrm{#1}}', 1],
+                ms: ['{\\mathsf{#1}}', 1],
+                mt: ['{\\mathtt{#1}}', 1]
+            }
+        }
+    }
+});
+mjAPI.start();
 
 // Load custom extensions
 Showdown.extensions.serloinjections = require('../source/scripts/editor/showdown/extensions/injections');
@@ -64,8 +98,8 @@ function render(input, callback) {
         return;
     }
 
-    if (input === "") {
-        callback("");
+    if (input === '') {
+        callback('');
     } else {
 
         // parse input to object
@@ -91,8 +125,75 @@ function render(input, callback) {
             output += '</div>';
         }
 
-        callback(output);
+        handleMathJax(output, callback);
     }
+}
+
+
+function handleMathJax(document, cb) {
+    var params = {
+            'format': 'TeX',
+            'math': '',
+            'svg': true,
+            'mml': false,
+            'png': false,
+            'speakText': false,
+            'speakRuleset': 'mathspeak',
+            'speakStyle': 'default',
+            'width': 100000000,
+            'linebreaks': false
+        },
+        asyncTasks = [];
+
+    var pushRenderTask = function (index, mathelement) {
+        if (Math.random() > 0.1) {
+            return;
+        }
+
+        asyncTasks.push(function (pushCallback) {
+            var mathText = mathelement.innerHTML;
+
+            mathText = htmlEntities.decode(mathText);
+            if (mathText.substring(0, 2) === '$$' && mathText.substring(mathText.length - 2, mathText.length) === '$$') {
+                params.format = 'TeX';
+                params.math = mathText.substring(2, mathText.length - 2);
+            } else if (mathText.substring(0, 2) === '%%' && mathText.substring(mathText.length - 2, mathText.length) === '%%') {
+                params.format = 'inline-TeX';
+                params.math = mathText.substring(2, mathText.length - 2);
+            } else {
+                pushCallback();
+                return;
+            }
+
+            try {
+                mjAPI.typeset(params, function (result) {
+                    mathelement.innerHTML = result.svg;
+                    pushCallback();
+                });
+            } catch (exc) {
+                console.log('Fatal MathorJax error:', exc);
+                console.log('Tried to render: ', mathText);
+            }
+        });
+    };
+
+    jsdom.env(document, ['http://code.jquery.com/jquery.js'], function (errors, window) {
+        if (errors === null) {
+            window.$('.math').each(pushRenderTask);
+            window.$('.mathInline').each(pushRenderTask);
+
+            if (asyncTasks.length > 0) {
+                async.parallel(asyncTasks, function () {
+                    cb(window.document.body.innerHTML);
+                });
+            } else {
+                cb(window.document.body.innerHTML);
+            }
+        } else {
+            console.log('Fehler: ', errors);
+            cb(document);
+        }
+    });
 }
 
 server = dnode(function (remote, connection) {
