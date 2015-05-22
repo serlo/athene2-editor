@@ -116,8 +116,7 @@ function render(input, callback) {
 
         output = '';
 
-        for (i = 0, l = data.length; i < l; i++
-            ) {
+        for (i = 0, l = data.length; i < l; i++) {
             row = data[i];
             output += '<div class="r">';
             for (j = 0, lj = row.length; j < lj; j++
@@ -130,8 +129,8 @@ function render(input, callback) {
             output += '</div>';
         }
 
-        // if (Math.random() <= 0.1) {
-        if (true) {
+        if (Math.random() <= 0.1) {
+        // if (true) {
             handleMathJax(output, callback);
         } else {
             callback(output);
@@ -196,6 +195,7 @@ function handleMathJax(document, cb) {
     if (asyncTasks.length > 0) {
         async.parallel(asyncTasks, function () {
             cb($.html());
+            global.gc();
         });
     } else {
         cb(document);
