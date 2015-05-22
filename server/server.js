@@ -29,7 +29,10 @@ mjAPI.config({
             processEscapes: true,
             processClass: ['math'],
             //inlineMath: [ ['\\%\\%','\\%\\%'], ['\\(','\\)'] ],
-            displayMath: [['$$', '$$'], ['\\[', '\\]']],
+            displayMath: [
+                ['$$', '$$'],
+                ['\\[', '\\]']
+            ],
             skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
         },
         TeX: {
@@ -116,7 +119,8 @@ function render(input, callback) {
         for (i = 0, l = data.length; i < l; i++) {
             row = data[i];
             output += '<div class="r">';
-            for (j = 0, lj = row.length; j < lj; j++) {
+            for (j = 0, lj = row.length; j < lj; j++
+                ) {
                 column = row[j];
                 output += '<div class="c' + column.col + '">';
                 output += converter.makeHtml(column.content);
@@ -125,10 +129,13 @@ function render(input, callback) {
             output += '</div>';
         }
 
-        handleMathJax(output, callback);
+        if (Math.random() > 0.1) {
+            handleMathJax(output, callback);
+        } else {
+            callback(output);
+        }
     }
 }
-
 
 function handleMathJax(document, cb) {
     var params = {
@@ -143,39 +150,36 @@ function handleMathJax(document, cb) {
             'width': 100000000,
             'linebreaks': false
         },
-        asyncTasks = [];
+        asyncTasks = [],
+        pushRenderTask = function (index, mathelement) {
+            asyncTasks.push(function (pushCallback) {
+                var mathText = mathelement.innerHTML;
 
-    var pushRenderTask = function (index, mathelement) {
-        if (Math.random() > 0.1) {
-            return;
-        }
-
-        asyncTasks.push(function (pushCallback) {
-            var mathText = mathelement.innerHTML;
-
-            mathText = htmlEntities.decode(mathText);
-            if (mathText.substring(0, 2) === '$$' && mathText.substring(mathText.length - 2, mathText.length) === '$$') {
-                params.format = 'TeX';
-                params.math = mathText.substring(2, mathText.length - 2);
-            } else if (mathText.substring(0, 2) === '%%' && mathText.substring(mathText.length - 2, mathText.length) === '%%') {
-                params.format = 'inline-TeX';
-                params.math = mathText.substring(2, mathText.length - 2);
-            } else {
-                pushCallback();
-                return;
-            }
-
-            try {
-                mjAPI.typeset(params, function (result) {
-                    mathelement.innerHTML = result.svg;
+                mathText = htmlEntities.decode(mathText);
+                if (mathText.substring(0, 2) === '$$' && mathText.substring(mathText.length - 2,
+                    mathText.length) === '$$') {
+                    params.format = 'TeX';
+                    params.math = mathText.substring(2, mathText.length - 2);
+                } else if (mathText.substring(0, 2) === '%%' && mathText.substring(mathText.length - 2,
+                    mathText.length) === '%%') {
+                    params.format = 'inline-TeX';
+                    params.math = mathText.substring(2, mathText.length - 2);
+                } else {
                     pushCallback();
-                });
-            } catch (exc) {
-                console.log('Fatal MathorJax error:', exc);
-                console.log('Tried to render: ', mathText);
-            }
-        });
-    };
+                    return;
+                }
+
+                try {
+                    mjAPI.typeset(params, function (result) {
+                        mathelement.innerHTML = result.svg;
+                        pushCallback();
+                    });
+                } catch (exc) {
+                    console.log('Fatal MathorJax error:', exc);
+                    console.log('Tried to render: ', mathText);
+                }
+            });
+        };
 
     jsdom.env(document, ['http://code.jquery.com/jquery.js'], function (errors, window) {
         if (errors === null) {
