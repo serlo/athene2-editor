@@ -9,7 +9,7 @@
 
 var dnode = require('dnode'),
     Showdown = require('showdown'),
-    jsdom = require('jsdom'),
+    cheerio = require('cheerio'),
     async = require('async'),
     HtmlEntities = require('html-entities').AllHtmlEntities,
     htmlEntities = new HtmlEntities(),
@@ -116,7 +116,8 @@ function render(input, callback) {
 
         output = '';
 
-        for (i = 0, l = data.length; i < l; i++) {
+        for (i = 0, l = data.length; i < l; i++
+            ) {
             row = data[i];
             output += '<div class="r">';
             for (j = 0, lj = row.length; j < lj; j++
@@ -129,7 +130,8 @@ function render(input, callback) {
             output += '</div>';
         }
 
-        if (Math.random() > 0.1) {
+        // if (Math.random() <= 0.1) {
+        if (true) {
             handleMathJax(output, callback);
         } else {
             callback(output);
@@ -151,9 +153,10 @@ function handleMathJax(document, cb) {
             'linebreaks': false
         },
         asyncTasks = [],
-        pushRenderTask = function (index, mathelement) {
+        pushRenderTask = function () {
+            var self = $(this);
             asyncTasks.push(function (pushCallback) {
-                var mathText = mathelement.innerHTML;
+                var mathText = self.html();
 
                 mathText = htmlEntities.decode(mathText);
                 if (mathText.substring(0, 2) === '$$' && mathText.substring(mathText.length - 2,
@@ -171,7 +174,7 @@ function handleMathJax(document, cb) {
 
                 try {
                     mjAPI.typeset(params, function (result) {
-                        mathelement.innerHTML = result.svg;
+                        self.html(result.svg);
                         pushCallback();
                     });
                 } catch (exc) {
@@ -181,23 +184,22 @@ function handleMathJax(document, cb) {
             });
         };
 
-    jsdom.env(document, ['http://code.jquery.com/jquery.js'], function (errors, window) {
-        if (errors === null) {
-            window.$('.math').each(pushRenderTask);
-            window.$('.mathInline').each(pushRenderTask);
+    try {
+        var $ = cheerio.load(document);
+    } catch (exc) {
+        console.log('Error while building dom: ', exc);
+        cb(document);
+        return;
+    }
 
-            if (asyncTasks.length > 0) {
-                async.parallel(asyncTasks, function () {
-                    cb(window.document.body.innerHTML);
-                });
-            } else {
-                cb(window.document.body.innerHTML);
-            }
-        } else {
-            console.log('Fehler: ', errors);
-            cb(document);
-        }
-    });
+    $('.math, .mathInline').each(pushRenderTask);
+    if (asyncTasks.length > 0) {
+        async.parallel(asyncTasks, function () {
+            cb($.html());
+        });
+    } else {
+        cb(document);
+    }
 }
 
 server = dnode(function (remote, connection) {
