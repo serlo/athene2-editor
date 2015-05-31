@@ -129,12 +129,7 @@ function render(input, callback) {
             output += '</div>';
         }
 
-        if (Math.random() <= 0.1) {
-        // if (true) {
-            handleMathJax(output, callback);
-        } else {
-            callback(output);
-        }
+        handleMathJax(output, callback);
     }
 }
 
