@@ -134,23 +134,29 @@ function render(input, callback) {
 }
 
 function handleMathJax(document, cb) {
-    var params = {
-            'format': 'TeX',
-            'math': '',
-            'svg': true,
-            'mml': false,
-            'png': false,
-            'speakText': false,
-            'speakRuleset': 'mathspeak',
-            'speakStyle': 'default',
-            'width': 100000000,
-            'linebreaks': false
+
+    var widthBreakpoints = {
+            c24: 90, c18: 70, c16: 60, c15: 55,
+            c14: 52, c12: 45, c11: 41, c9: 30,
+            c8: 27, c6: 20, c4: 15},
+        params = {
+            format: 'TeX',
+            math: '',
+            svg: true,
+            mml: false,
+            png: false,
+            speakText: false,
+            speakRuleset: 'mathspeak',
+            speakStyle: 'default',
+            width: 100000000,
+            linebreaks: true
         },
         asyncTasks = [],
         pushRenderTask = function () {
             var self = $(this);
             asyncTasks.push(function (pushCallback) {
                 var mathText = self.html();
+                params.width = widthBreakpoints[self.closest('.c24, .c18, .c16, .c15, .c14, .c12, .c11, .c9, .c8, .c6, .c4').attr('class')];
 
                 mathText = htmlEntities.decode(mathText);
                 if (mathText.substring(0, 2) === '$$' && mathText.substring(mathText.length - 2,
