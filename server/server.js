@@ -155,8 +155,7 @@ function handleMathJax(document, cb) {
         pushRenderTask = function () {
             var self = $(this);
             asyncTasks.push(function (pushCallback) {
-                var mathText = self.html(),
-                    widthSet = false;
+                var mathText = self.html();
                 params.width = widthBreakpoints[self.closest('.c24, .c18, .c16, .c15, .c14, .c12, .c11, .c9, .c8, .c6, .c4').attr('class')];
 
                 mathText = htmlEntities.decode(mathText);
@@ -193,11 +192,11 @@ function handleMathJax(document, cb) {
         return;
     }
 
-    $('.math,.mathInline').each(pushRenderTask);
+    $('.math, .mathInline').each(pushRenderTask);
     if (asyncTasks.length > 0) {
         async.parallel(asyncTasks, function () {
             cb($.html());
-//            global.gc();
+            global.gc();
         });
     } else {
         cb(document);
