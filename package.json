@@ -7,7 +7,7 @@
     "url": "https://github.com/serlo-org/athene2-editor"
   },
   "description": "Athene2 Markdown Editor - Further information will be available soon",
-  "version": "0.2.33",
+  "version": "0.2.34",
   "contributors": [
     {
       "name": "arekkas"
@@ -19,7 +19,11 @@
     "MathJax-node": "~0.3.0",
     "async": "~1.0.0",
     "html-entities": "~1.1.2",
-    "cheerio": "^0.19.0"
+    "cheerio": "^0.19.0",
+  "jsdom": "3.1.1",
+  "speech-rule-engine": "*",
+  "yargs": "*",
+  "MathJax": "https://github.com/mathjax/MathJax/tarball/mathjax-node-2.5.1"
   },
   "devDependencies": {
     "grunt": "~0.4.1",

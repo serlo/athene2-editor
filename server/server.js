@@ -17,39 +17,7 @@ var dnode = require('dnode'),
     server,
     port = 7070,
     host = '127.0.0.1',
-    mjAPI = require('MathJax-node/lib/mj-single');
-
-mjAPI.config({
-    MathJax: {
-        SVG: {
-            font: 'STIX-Web'
-        },
-        tex2jax: {
-            preview: ['[math]'],
-            processEscapes: true,
-            processClass: ['math'],
-            //inlineMath: [ ['\\%\\%','\\%\\%'], ['\\(','\\)'] ],
-            displayMath: [
-                ['$$', '$$'],
-                ['\\[', '\\]']
-            ],
-            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-        },
-        TeX: {
-            noUndefined: {disabled: true},
-            Macros: {
-                mbox: ['{\\text{#1}}', 1],
-                mb: ['{\\mathbf{#1}}', 1],
-                mc: ['{\\mathcal{#1}}', 1],
-                mi: ['{\\mathit{#1}}', 1],
-                mr: ['{\\mathrm{#1}}', 1],
-                ms: ['{\\mathsf{#1}}', 1],
-                mt: ['{\\mathtt{#1}}', 1]
-            }
-        }
-    }
-});
-mjAPI.start();
+    M = require('./lib/mj-single-concurrent');
 
 // Load custom extensions
 Showdown.extensions.serloinjections = require('../source/scripts/editor/showdown/extensions/injections');
@@ -83,9 +51,9 @@ converter = new Showdown.converter({
 // converter.config.math = true;
 // converter.config.stripHTML = true;
 
-// **render** 
+// **render**
 // @param {String} input Json string,
-// containing Serlo Flavored Markdown (sfm) 
+// containing Serlo Flavored Markdown (sfm)
 // structured for layout.
 // @param {Function} callback
 function render(input, callback) {
@@ -134,23 +102,29 @@ function render(input, callback) {
 }
 
 function handleMathJax(document, cb) {
-    var params = {
-            'format': 'TeX',
-            'math': '',
-            'svg': true,
-            'mml': false,
-            'png': false,
-            'speakText': false,
-            'speakRuleset': 'mathspeak',
-            'speakStyle': 'default',
-            'width': 100000000,
-            'linebreaks': false
+    var widthBreakpoints = {
+            c24: 90, c18: 70, c16: 60, c15: 55,
+            c14: 52, c12: 45, c11: 41, c9: 30,
+            c8: 27, c6: 20, c4: 15},
+        params = {
+            format: 'TeX',
+            math: '',
+            svg: true,
+            mml: false,
+            png: false,
+            speakText: false,
+            speakRuleset: 'mathspeak',
+            speakStyle: 'default',
+            width: 100000000,
+            linebreaks: true
         },
         asyncTasks = [],
+        mjAPI =  new M(),
         pushRenderTask = function () {
             var self = $(this);
             asyncTasks.push(function (pushCallback) {
                 var mathText = self.html();
+                params.width = widthBreakpoints[self.closest('.c24, .c18, .c16, .c15, .c14, .c12, .c11, .c9, .c8, .c6, .c4').attr('class')];
 
                 mathText = htmlEntities.decode(mathText);
                 if (mathText.substring(0, 2) === '$$' && mathText.substring(mathText.length - 2,
@@ -178,6 +152,38 @@ function handleMathJax(document, cb) {
             });
         };
 
+    mjAPI.config({
+        MathJax: {
+            SVG: {
+                font: 'STIX-Web'
+            },
+            tex2jax: {
+                preview: ['[math]'],
+                processEscapes: true,
+                processClass: ['math'],
+                //inlineMath: [ ['\\%\\%','\\%\\%'], ['\\(','\\)'] ],
+                displayMath: [
+                    ['$$', '$$'],
+                    ['\\[', '\\]']
+                ],
+                skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+            },
+            TeX: {
+                noUndefined: {disabled: true},
+                Macros: {
+                    mbox: ['{\\text{#1}}', 1],
+                    mb: ['{\\mathbf{#1}}', 1],
+                    mc: ['{\\mathcal{#1}}', 1],
+                    mi: ['{\\mathit{#1}}', 1],
+                    mr: ['{\\mathrm{#1}}', 1],
+                    ms: ['{\\mathsf{#1}}', 1],
+                    mt: ['{\\mathtt{#1}}', 1]
+                }
+            }
+        }
+    });
+    mjAPI.start();
+
     try {
         var $ = cheerio.load(document);
     } catch (exc) {
@@ -190,7 +196,7 @@ function handleMathJax(document, cb) {
     if (asyncTasks.length > 0) {
         async.parallel(asyncTasks, function () {
             cb($.html());
-            global.gc();
+            //global.gc();
         });
     } else {
         cb(document);
