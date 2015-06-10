@@ -196,7 +196,7 @@ function handleMathJax(document, cb) {
     if (asyncTasks.length > 0) {
         async.parallel(asyncTasks, function () {
             cb($.html());
-            //global.gc();
+            global.gc();
         });
     } else {
         cb(document);
