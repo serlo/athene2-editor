@@ -14,7 +14,7 @@ var dnode = require('dnode'),
     HtmlEntities = require('html-entities').AllHtmlEntities,
     htmlEntities = new HtmlEntities(),
     converter,
-    waitForMathJaxTime = 1100,
+    waitForMathJaxTime = process.env.MATHJAX_TIMEOUT || 10 * 1000,
     server,
     port = 7070,
     host = '127.0.0.1';
