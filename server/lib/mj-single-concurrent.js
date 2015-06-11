@@ -69,7 +69,7 @@ MathJaxSingle = function () {
         speakRuleset: "mathspeak",      // set speech ruleset (default (chromevox rules), mathspeak)
         speakStyle: "default",          // set speech style (mathspeak:  default, brief, sbrief)
 
-        timeout: 10 * 1000,             // 10 second timeout before restarting MathJax
+        timeout: 10 * 1000             // 10 second timeout before restarting MathJax
     };
 
     //
@@ -789,6 +789,10 @@ MathJaxSingle = function () {
     //
     this.start = function () {
         RestartMathJax()
+    };
+
+    this.stop = function() {
+        window.close();
     };
 
     //

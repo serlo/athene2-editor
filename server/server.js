@@ -14,10 +14,10 @@ var dnode = require('dnode'),
     HtmlEntities = require('html-entities').AllHtmlEntities,
     htmlEntities = new HtmlEntities(),
     converter,
+    waitForMathJaxTime = 1100,
     server,
     port = 7070,
-    host = '127.0.0.1',
-    M = require('./lib/mj-single-concurrent');
+    host = '127.0.0.1';
 
 // Load custom extensions
 Showdown.extensions.serloinjections = require('../source/scripts/editor/showdown/extensions/injections');
@@ -61,7 +61,7 @@ function render(input, callback) {
         data,
         row,
         column,
-        i, l, j, lj;
+        i, l, j, lj, mjt = {timeout: null};
 
     // callback(output, Exception, ErrorMessage);
     if (input === undefined) {
@@ -84,7 +84,8 @@ function render(input, callback) {
 
         output = '';
 
-        for (i = 0, l = data.length; i < l; i++) {
+        for (i = 0, l = data.length; i < l; i++
+            ) {
             row = data[i];
             output += '<div class="r">';
             for (j = 0, lj = row.length; j < lj; j++
@@ -97,11 +98,17 @@ function render(input, callback) {
             output += '</div>';
         }
 
-        handleMathJax(output, callback);
+        mjt.timeout = setTimeout(function () {
+            mjt.timeout = null;
+            callback(output);
+        }, waitForMathJaxTime);
+        handleMathJax(output, callback, mjt);
     }
 }
 
-function handleMathJax(document, cb) {
+function handleMathJax(document, cb, mjt) {
+    var M = require('./lib/mj-single-concurrent');
+    delete require.cache[require.resolve('./lib/mj-single-concurrent')];
     var widthBreakpoints = {
             c24: 90, c18: 70, c16: 60, c15: 55,
             c14: 52, c12: 45, c11: 41, c9: 30,
@@ -119,12 +126,13 @@ function handleMathJax(document, cb) {
             linebreaks: true
         },
         asyncTasks = [],
-        mjAPI =  new M(),
+        mjAPI = new M(),
         pushRenderTask = function () {
             var self = $(this);
             asyncTasks.push(function (pushCallback) {
                 var mathText = self.html();
-                params.width = widthBreakpoints[self.closest('.c24, .c18, .c16, .c15, .c14, .c12, .c11, .c9, .c8, .c6, .c4').attr('class')];
+                params.width =
+                    widthBreakpoints[self.closest('.c24, .c18, .c16, .c15, .c14, .c12, .c11, .c9, .c8, .c6, .c4').attr('class')];
 
                 mathText = htmlEntities.decode(mathText);
                 if (mathText.substring(0, 2) === '$$' && mathText.substring(mathText.length - 2,
@@ -195,7 +203,11 @@ function handleMathJax(document, cb) {
     $('.math, .mathInline').each(pushRenderTask);
     if (asyncTasks.length > 0) {
         async.parallel(asyncTasks, function () {
-            cb($.html());
+            if (mjt.timeout !== null) {
+                clearTimeout(mjt.timeout);
+                cb($.html());
+            }
+            mjAPI.stop();
             global.gc();
         });
     } else {

@@ -13,29 +13,32 @@ d.on('remote', function (remote) {
     runTests(remote);
 });
 
-function runTests(remote) {
+function runTests(remote, rcb) {
     timestampsStart[i] = new Date().getTime();
     var calls = Math.pow(i, 2) + 1,
         asyncTasks = [];
     console.log('Starting up %d requests', calls);
-    for (var j = 0; j <= calls; j++
-        ) {
-        asyncTasks.push(function (pushCallback) {
+    for (var j = 0; j <= calls; j++) {
+        asyncTasks.push(function (acb) {
             remote.render(getNewJSON(), function (output, exception, message) {
-                pushCallback();
+                if (exception) {
+                    console.log(exception, exception);
+                }
+                console.log(output);
+                acb();
             });
         });
     }
-    async.parallel(asyncTasks, function () {
+    async.parallelLimit(asyncTasks, 5, function () {
         timestampsEnd[i] = new Date().getTime();
         console.log('Time used for %d call(s): %d ms. Average time: %d ms. Loop: %d', calls,
             timestampsEnd[i] - timestampsStart[i], (timestampsEnd[i] - timestampsStart[i]) / calls, i);
-        if (i <= 4) {
+        if (i <= 5) {
             i++;
             runTests(remote);
         } else {
             console.log('Exiting');
-            process.exit();
+            d.end();
         }
     });
 }
