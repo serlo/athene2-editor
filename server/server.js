@@ -99,6 +99,7 @@ function render(input, callback) {
         }
 
         mjt.timeout = setTimeout(function () {
+            console.log('MathJax: had to fall back.');
             mjt.timeout = null;
             callback(output);
         }, waitForMathJaxTime);
