@@ -207,7 +207,7 @@ function render(input, callback) {
 
                 $('.math, .mathInline').each(pushRenderTask);
                 if (asyncTasks.length > 0) {
-                    async.parallelLimit(asyncTasks, 5, function () {
+                    async.parallelLimit(asyncTasks, 800, function () {
                         if (mjt.timeout !== null) {
                             clearTimeout(mjt.timeout);
                             cb($.html());
