@@ -24,7 +24,7 @@ function runTests(remote, rcb) {
                 if (exception) {
                     console.log(exception, exception);
                 }
-                console.log(output);
+                //console.log(output);
                 acb();
             });
         });
