@@ -98,6 +98,9 @@ function render(input, callback) {
             output += '</div>';
         }
 
+        callback(output);
+
+        /*
         mjt.timeout = setTimeout(function () {
             console.log('MathJax: had to fall back.');
             mjt.timeout = null;
@@ -113,7 +116,7 @@ function render(input, callback) {
             console: console,
             handleMathJax: function (document, cb, mjt) {
                 var M = require('./lib/mj-single-concurrent');
-                // delete require.cache[require.resolve('./lib/mj-single-concurrent')];
+                delete require.cache[require.resolve('./lib/mj-single-concurrent')];
                 var widthBreakpoints = {
                         c24: 90, c18: 70, c16: 60, c15: 55,
                         c14: 52, c12: 45, c11: 41, c9: 30,
@@ -222,7 +225,7 @@ function render(input, callback) {
         };
         vm.createContext(sandbox);
         vm.runInNewContext('handleMathJax(output, callback, mjt);', sandbox, {timeout: waitForMathJaxTime});
-        //vm.runInContext('console.log(output);handleMathjax(document, cb, mjt);', sandbox);
+        //vm.runInContext('console.log(output);handleMathjax(document, cb, mjt);', sandbox);*/
     }
 }
 
