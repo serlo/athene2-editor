@@ -125,14 +125,14 @@ module.exports = function (grunt) {
             dist: {
                 options: {
                     banner: '/**\n' +
-                        ' * \n' +
-                        ' * Athene2 Editor - v0.2.4 \n' +
-                        ' *\n' +
-                        ' * @license LGPL-3.0\n' +
-                        ' * @license http://opensource.org/licenses/LGPL-3.0 The GNU Lesser General Public License, version 3.0\n' +
-                        ' * @link https://github.com/serlo-org/athene2 for the canonical source repository\n' +
-                        ' * @copyright Copyright (c) 2013 Gesellschaft für freie Bildung e.V. (http://www.open-education.eu/)\n' +
-                        ' */\n',
+                    ' * \n' +
+                    ' * Athene2 Editor - v0.2.4 \n' +
+                    ' *\n' +
+                    ' * @license LGPL-3.0\n' +
+                    ' * @license http://opensource.org/licenses/LGPL-3.0 The GNU Lesser General Public License, version 3.0\n' +
+                    ' * @link https://github.com/serlo-org/athene2 for the canonical source repository\n' +
+                    ' * @copyright Copyright (c) 2013 Gesellschaft für freie Bildung e.V. (http://www.open-education.eu/)\n' +
+                    ' */\n',
                     output: {
                         beautify: false
                     },
@@ -213,11 +213,13 @@ module.exports = function (grunt) {
                 src: 'require.js'
             },
             modernizr: {
-                expand: true,
-                dot: true,
-                cwd: '<%= serlo.app %>/bower_components/modernizr',
-                dest: '<%= serlo.dist %>/bower_components/modernizr',
-                src: 'modernizr.js'
+                dist: {
+                    expand: true,
+                    dot: true,
+                    cwd: '<%= serlo.app %>/bower_components/modernizr',
+                    dest: '<%= serlo.dist %>/bower_components/modernizr',
+                    src: 'modernizr.js'
+                }
             }
         },
         i18n: {
@@ -225,14 +227,18 @@ module.exports = function (grunt) {
             dest: '<%= serlo.app %>/scripts/modules/serlo_i18n.js'
         },
         modernizr: {
-            devFile: '<%= serlo.app %>/bower_components/modernizr/modernizr.js',
-            outputFile: '<%= serlo.dist %>/bower_components/modernizr/modernizr.js',
-            files: [
-                '<%= serlo.dist %>/scripts/{,*/}*.js',
-                '<%= serlo.dist %>/styles/{,*/}*.css',
-                '!<%= serlo.dist %>/scripts/vendor/*'
-            ],
-            uglify: true
+            dist: {
+                devFile: '<%= serlo.app %>/bower_components/modernizr/modernizr.js',
+                outputFile: '<%= serlo.dist %>/bower_components/modernizr/modernizr.js',
+                files: {
+                    src: [
+                        '<%= serlo.dist %>/scripts/{,*/}*.js',
+                        '<%= serlo.dist %>/styles/{,*/}*.css',
+                        '!<%= serlo.dist %>/scripts/vendor/*'
+                    ]
+                },
+                uglify: true
+            }
         },
         concurrent: {
             server: [
