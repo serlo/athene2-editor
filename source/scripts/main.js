@@ -45,7 +45,7 @@ require.config({
         "markdownmode" : "codemirror/mode/sfm/sfm",
         "searchcursor" : "codemirror/addon/search/searchcursor",
 
-        "injections": "modules/serlo_injections",
+        // "injections": "modules/serlo_injections",
 
         // "showdown": "libs/showdown",
         "showdown": "../bower_components/showdown/src/showdown",
