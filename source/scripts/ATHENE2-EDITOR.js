@@ -77,13 +77,13 @@ define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events', 'content', 'shortcut
                 }
 
                 // init injections
-                if ($context.parents('.injection').length) {
+                /*if ($context.parents('.injection').length) {
                     $context.parents('.injection').Injections();
                 } else if ($context.hasClass('injection')) {
                     $context.Injections();
                 } else {
                     $('.injection', $context).Injections();
-                }
+                }*/
             });
 
             return this.updateSettings(settings);
