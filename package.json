@@ -22,7 +22,7 @@
         "cheerio": "^0.19.0",
         "jsdom": "3.1.1",
         "speech-rule-engine": "*",
-        "yargs": "*",
+        "yargs": "*"
     },
     "devDependencies": {
         "grunt": "~0.4.1",
