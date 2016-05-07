@@ -47,7 +47,7 @@ define("ATHENE2-EDITOR", ['jquery', 'underscore', 'events', 'content', 'shortcut
                     // Let's save the current Token startPos as a reference
                     prevStartPos = token.state.startPos;
 
-                    // Now call this function again 
+                    // Now call this function again
                     pos.line++;
                     pos.ch = 1;
                     return loop(pos, maxLines, token, false);

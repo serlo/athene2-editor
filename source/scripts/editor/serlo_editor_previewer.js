@@ -31,7 +31,7 @@ define(['formfield', 'events', 'jquery'], function (Field, eventScope, $) {
         if ($form.children().length) {
             self.formFields = [];
 
-            $('input,textarea,select', $form).each(function () {
+            $('input,textarea,select,button', $form).each(function () {
                 var field,
                     $label,
                     type = self.getFieldType(this);
@@ -127,6 +127,16 @@ define(['formfield', 'events', 'jquery'], function (Field, eventScope, $) {
                 break;
             default:
                 type = 'Input';
+                break;
+            }
+            break;
+        case 'BUTTON':
+            switch (field.type) {
+            case 'submit':
+                self.submit = field;
+                break;
+            default:
+                type = 'Button';
                 break;
             }
             break;
