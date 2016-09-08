@@ -74,11 +74,11 @@
   .spoiler-teaser {
     cursor:        pointer;
     position:      relative;
-    padding-right: 35px;
+    padding-left:  40px;
     .fa {
       position: absolute;
-      top:      15px;
-      right:    15px;
+      top:      13px;
+      left:     15px;
     }
   }
 }
