@@ -404,24 +404,33 @@ require([
         if (typeof MathJax !== 'undefined') {
             MathJax.Hub.Config({
                 displayAlign: 'left',
-                extensions: ["tex2jax.js"],
-                jax: ["input/TeX", "output/HTML-CSS"],
+                extensions: ['tex2jax.js', 'fast-preview.js'],
+                jax: ['input/TeX', 'output/SVG', 'output/CommonHTML'],
                 skipStartupTypeset: true,
                 tex2jax: {
                     inlineMath: [
-                        ["%%", "%%"]
-                    ]
+                        ['%%', '%%']
+                    ],
+                    displayMath: [
+                        ["$$", "$$"]
+                    ],
                 },
-                "HTML-CSS": {
+                'HTML-CSS': {
                     scale: 100,
                     linebreaks: {
                         automatic: true
-                    }
+                    },
+                    preferredFont: 'STIX'
                 },
                 SVG: {
                     linebreaks: {
                         automatic: true
-                    }
+                    },
+                    font: 'STIX-Web'
+                },
+                showProcessingMessages: false,
+                TeX: {
+                    extensions: ['mhchem.js']
                 }
             });
         }
