@@ -10,7 +10,7 @@
 
         filter = function (text) {
             return text.replace(findSpoilers, function (original, title, content) {
-                return '<div class="spoiler panel panel-default"><div class="spoiler-teaser panel-heading"><icon class="fa fa-caret-square-o-down" />' + title + '</div><div class="spoiler-content panel-body">' + content + '</div></div>';
+                return '<div class="spoiler panel panel-default"><div class="spoiler-teaser panel-heading"><span class="fa fa-caret-square-o-down"></span>' + title + '</div><div class="spoiler-content panel-body">' + content + '</div></div>';
             });
         };
 
@@ -18,7 +18,7 @@
             type: 'output',
             filter: filter
         }];
-    }
+    };
     // Client-side export
     if (typeof define === 'function' && define.amd) {
         define('showdown_spoiler', ['showdown'], function (Showdown) {
