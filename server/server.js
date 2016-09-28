@@ -235,4 +235,4 @@ server = dnode(function (remote, connection) {
     this.render = render;
 });
 
-server.listen(port, host);
+server.listen(port);
