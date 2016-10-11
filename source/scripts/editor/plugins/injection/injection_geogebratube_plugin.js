@@ -71,13 +71,11 @@ define([
                     hrefSplit = href.split("/");
                 l = hrefSplit[hrefSplit.length - 1];
                 if (l.substr(0, 1) == "m") {
-                    href = parseInt(l.substr(1));
+                    href = l.substr(1);
                 } else {
-                    href = parseInt(l);
+                    href = l;
                 }
-                if (href !== NaN) {
-                    href = "ggt/" + href;
-                }
+                href = "ggt/" + href;
             }
 
             this.data.content = '>[' + $('.title', this.$el).val() + '](' + href + ')';
