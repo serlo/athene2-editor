@@ -54,9 +54,17 @@
     "load-grunt-tasks": "~0.1.0",
     "connect-livereload": "~0.2.0",
     "time-grunt": "~0.1.1",
-    "grunt-file-process": "~0.2.2"
+    "grunt-file-process": "~0.2.2",
+    "npm-run-all": "^4.0.2",
+    "grunt-cli": "^1.2.0",
+    "bower": "^1.8.0"
   },
   "engines": {
     "node": "0.10.*"
+  },
+  "scripts": {
+    "postinstall": "npm-run-all bower build",
+    "bower": "bower install",
+    "build": "grunt build"
   }
 }
