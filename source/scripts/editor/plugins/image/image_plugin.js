@@ -86,6 +86,20 @@ define([
             // the upload form
             that.$upload = $('#fileupload', that.$el);
 
+            that.$upload.bind('fileuploadsubmit', function (e, data) {
+                var $csrf = $('input[name="csrf"]');
+                data.formData = that.$upload.serializeArray();
+                if ($csrf) {
+                    data.formData.push({
+                        name: 'csrf',
+                        value: $csrf.val()
+                    });
+                } else {
+                    that.$uploadStatus.text(t('An error occured: %s', 'Form not valid'));
+                    return false;
+                }
+            });
+
             // initialize fileupload
             that.$upload.fileupload(_.extend({}, that.fileuploadOptions, {
                 add: function (e, data) {
